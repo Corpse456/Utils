@@ -4,44 +4,31 @@
 
 package parsers;
 
-import java.util.ArrayList;
-
-import fileOperation.ReaderFromFile;
-import fileOperation.WriterToFile;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TextFromHtml {
-
-    //private static final String FROM = "<p>";
-
-    public static void main (String[] args) {
-	ReaderFromFile reader = new ReaderFromFile(TextFromHtml.class.getClassLoader().getResource("6.txt"));
-	String stroka = "";
-	ArrayList<String> list = new ArrayList<String>();
-
-	do {
-	    stroka = reader.readLine();
-	} while (!stroka.contains("<h2>Name Ц Nickname</h2>"));
-
-	while (reader.isReady()) {
-	    stroka = reader.readLine();
-	    if (!stroka.isEmpty()) {
-		for (int i = 0; i < stroka.length() - 1; i++) {
-		    if (stroka.charAt(i) == '>' && Character.isAlphabetic(stroka.charAt(i + 1))) {
-			//int start = stroka.indexOf(FROM) + FROM.length();
-			int start = i + 1;
-			int end = start;
-			while (Character.isAlphabetic(stroka.charAt(++end)));
-			list.add(stroka.substring(start, end));
-		    }
-		}
-	    }
+    /**
+     * @param html - содержимое html страницы
+     * @param from - левая граница текста
+     * @param to - права граница текста
+     * @return 
+     */
+    public String extractor(String htmlText, String from, String to) {
+	String text = "Not find";
+	System.out.println(htmlText.contains(from));
+	System.out.println(htmlText.contains(to));
+	String pattern = from + ".+" + to;
+	Pattern p = Pattern.compile(pattern);
+	Matcher m = p.matcher(htmlText);
+	if (m.find()) {
+	    System.out.println("have");
+	    text = htmlText.substring(m.start(), m.end());
+	    return text;
 	}
-	reader.close();
-	WriterToFile write = new WriterToFile("C:/EngWoman.txt");
-	for (int i = 0; i < list.size(); i++) {
-	    write.writeLine(list.get(i));
-	}
-	write.close();
-	System.out.println(list);
+	return text;
+    }
+    
+    public static void jopa() {
     }
 }
