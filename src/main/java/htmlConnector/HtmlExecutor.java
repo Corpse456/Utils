@@ -45,12 +45,9 @@ public class HtmlExecutor {
     }
     
     public static void main(String[] args) {
-	String find = new HtmlExecutor().findInGoogle("Википедия Metal.Gear.Solid.V.Phantom.Pain.RUS.ENG.MULTi8.RePack-VickNet");
-	WriterToFile writer = new WriterToFile("C:/1.html");
+	String find = new HtmlExecutor().contentExecutor("https://ru.wikipedia.org/wiki/Metal_Gear_Solid_V:_The_Phantom_Pain");
+	WriterToFile writer = new WriterToFile("C:/3.html");
 	writer.write(find);
 	writer.close();
-	TextFromHtml text = new TextFromHtml();
-	String newText = text.extractor(find, "href=\"/url?url=https://ru.wikipedia.org/wiki", " — <b>Википедия</b></a>");;
-	System.out.println(newText);
     }
 }

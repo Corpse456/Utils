@@ -1,39 +1,72 @@
 package fileListings;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import fileOperation.WriterToFile;
+import htmlConnector.HtmlExecutor;
 
 public class Catalogs {
     
-    private static final String DiscLetter = "g:";
-    private static List<String> folders = new ArrayList<>();
+    private final String DISC_LETTER;
+    private final String PATH;
     
-    public static void main(String[] args) {
-	WriterToFile writer = new WriterToFile("d://Games.exe//" + "One.csv");
-	File disc = new File(DiscLetter);
+    public Catalogs (String disc, String path) {
+	DISC_LETTER = disc;
+	PATH = path;
+    }
+
+    public boolean createList () {
+	WriterToFile writer = new WriterToFile(PATH);
+	File disc = new File(DISC_LETTER);
 	
 	writer.write(discAtributes(disc));
+
 	for (File f : disc.listFiles()) {
 	    if (isGameFolder(f)) {
-		folders.add(f.getName());
+		goodNameApplier(f);
 		writer.writeLine(f.getName() + ";" + calculateSize(f));
 	    }
 	}
 	writer.close();
-	System.out.println("Done");
+	return true;
+    }
+    
+    private void goodNameApplier (File f) {
+	HtmlExecutor exec = new HtmlExecutor();
+	String googleAnswer = exec.findInGoogle(f.getName());
+	if (googleAnswer.contains("href=\"/url?url=https://ru.wikipedia.org/wiki")) {
+	    String newName = wikiExecutor(exec, googleAnswer);
+	}
+	
     }
 
-    private static String discAtributes(File disc) {
+    private String wikiExecutor (HtmlExecutor exec, String googleAnswer) {
+	int start = googleAnswer.indexOf("href=\"/url?url=https://ru.wikipedia.org/wiki") + "href=\"/url?url=".length();
+	int end = googleAnswer.indexOf(" — <b>Википедия</b></a>");
+	String link = googleAnswer.substring(start, end);
+	link = link.substring(0,link.indexOf("&amp"));
+	String wikiContent = exec.contentExecutor(link);
+	WriterToFile f = new WriterToFile("C:/3.html");
+	f.write(wikiContent);
+	return null;
+    }
+
+    /**
+     * @param disc имя диска, для которого требуется распечатать атрибуты
+     * @return
+     */
+    public String discAtributes(File disc) {
 	String string = disc.getPath() + "\r\n";
 	string += disc.getFreeSpace() + "\r\n";
 	string += disc.getTotalSpace() + "\r\n";
 	return string;
     }
 
-    private static long calculateSize(File f) {
+    /**
+     * @param f - файл или папка, для которго необходимо посчитать размер
+     * @return
+     */
+    public long calculateSize(File f) {
 	long size = 0;
 	if (f.listFiles() != null) {
 	    for(File f1 : f.listFiles()) {
@@ -44,7 +77,7 @@ public class Catalogs {
 	return size;
     }
 
-    private static boolean isGameFolder(File f) {
+    private boolean isGameFolder(File f) {
 	if (!f.isDirectory()) return false;
 	if ("$RECYCLE.BIN".equals(f.getName()) || "System Volume Information".equals(f.getName())) return false;
 	return true;

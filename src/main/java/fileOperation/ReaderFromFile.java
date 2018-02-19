@@ -58,6 +58,18 @@ public class ReaderFromFile {
 	    return "";
 	}
     }
+    
+    /**
+     *  Считывает весь файл в один String
+     * @return 
+     */
+    public String readAll () {
+	StringBuilder content = new StringBuilder();
+	while(isReady()) {
+	    content.append(readLine() + "\n");
+	}
+	return content.toString();
+    }
 
     /**
      * @return Считывает символ из файла

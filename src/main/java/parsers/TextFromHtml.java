@@ -15,20 +15,19 @@ public class TextFromHtml {
      * @return 
      */
     public String extractor(String htmlText, String from, String to) {
-	String text = "Not find";
-	System.out.println(htmlText.contains(from));
-	System.out.println(htmlText.contains(to));
-	String pattern = from + ".+" + to;
+	String pattern = "(" + from + ")(.+?)(" + to + ")";
 	Pattern p = Pattern.compile(pattern);
 	Matcher m = p.matcher(htmlText);
 	if (m.find()) {
-	    System.out.println("have");
-	    text = htmlText.substring(m.start(), m.end());
-	    return text;
+	    return m.group(2);
 	}
-	return text;
+	return null;
     }
-    
-    public static void jopa() {
+
+    public static void main (String[] args) {
+	TextFromHtml tx = new TextFromHtml();
+	String in = tx.extractor("регулярные выражения это круто регулярные выражения это круто регулярные выражения это круто якороль Я СЕГОДНЯ ЕЛ БАНАНЫ якороль регулярные выражения это круто"
+		, "(якороль)", "(якороль)");
+	System.out.println(in);
     }
 }
