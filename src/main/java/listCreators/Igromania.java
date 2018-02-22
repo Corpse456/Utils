@@ -1,6 +1,6 @@
 package listCreators;
 
-//import fileOperation.WriterToFile;
+import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
 
 public class Igromania {
@@ -9,10 +9,11 @@ public class Igromania {
 	for (int i = 1; i < 2; i++) {
 	    HtmlExecutor exec = new HtmlExecutor();
 	    String content = exec.contentExecutor(PATH + i + "/1/");
-	    System.out.println(content);
-	    /*WriterToFile writer = new WriterToFile("C:/2.html");
+	    //System.out.println(content);
+	    WriterToFile writer = new WriterToFile("C:/Igromania.html");
 	    writer.write(content);
-	    writer.close();*/
+	    writer.close();
+	    System.out.println("Done");
 	}
     }
 }

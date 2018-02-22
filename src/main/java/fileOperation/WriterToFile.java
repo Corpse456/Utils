@@ -100,6 +100,13 @@ public class WriterToFile {
     public void write(int i) {
 	write(i + "");
     }
+    
+    /**
+     * @param content - элемент класса StringBuilder
+     */
+    public void write (StringBuilder content) {
+	write(content.toString());
+    }
 
     /**
      * @param map

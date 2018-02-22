@@ -36,6 +36,8 @@ public class Catalogs {
 	String googleAnswer = exec.findInGoogle(f.getName());
 	if (googleAnswer.contains("href=\"/url?url=https://ru.wikipedia.org/wiki")) {
 	    String newName = wikiExecutor(exec, googleAnswer);
+	    String replace = f.getAbsolutePath().replace(f.getName(), newName);
+	    f.renameTo(new File(replace));
 	}
 	
     }
