@@ -16,18 +16,20 @@ public class Catalogs {
     }
 
     public boolean createList() {
-        WriterToFile writer = new WriterToFile(PATH);
-        File disc = new File(DISC_LETTER);
-
-        writer.write(discAtributes(disc));
-
-        for (File f : disc.listFiles()) {
-            if (isGameFolder(f)) {
-                goodNameApplier(f);
-                writer.writeLine(f.getName() + ";" + calculateSize(f));
+        try {
+            WriterToFile writer = new WriterToFile(PATH);
+            File disc = new File(DISC_LETTER);
+            writer.write(discAtributes(disc));
+            for (File f : disc.listFiles()) {
+                if (isGameFolder(f)) {
+                    goodNameApplier(f);
+                    writer.writeLine(f.getName() + ";" + calculateSize(f));
+                }
             }
+            writer.close();
+        } catch (Exception e) {
+            return false;
         }
-        writer.close();
         return true;
     }
 

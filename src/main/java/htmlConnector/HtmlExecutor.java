@@ -14,8 +14,7 @@ public class HtmlExecutor {
     private String cookie = null;
 
     /**
-     * @param path
-     *            URL требуемого ресурса
+     * @param path URL требуемого ресурса
      * @return
      */
     public String contentExecutor(String path) {
@@ -25,8 +24,7 @@ public class HtmlExecutor {
             URL site = new URL(path);
             connection = (HttpURLConnection) site.openConnection();
             connection.setRequestMethod("GET");
-            if (cookie != null)
-                connection.setRequestProperty("Cookie", cookie);
+            if (cookie != null) connection.setRequestProperty("Cookie", cookie);
             connection.setRequestProperty("User-Agent",
                     "Opera/9.80 (Windows NT 6.1; U; en) Presto/2.9.168 Version/11.52");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
@@ -52,8 +50,7 @@ public class HtmlExecutor {
     }
 
     /**
-     * @param answer
-     *            cookie, прописанныев ответе сайта, если их нет, подставить
+     * @param answer cookie, прописанныев ответе сайта, если их нет, подставить
      *            стандартныую строку
      * @return
      */

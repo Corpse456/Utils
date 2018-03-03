@@ -101,10 +101,8 @@ public class ReaderFromFile {
      */
     public void close() {
         try {
-            if (bufferedReader != null)
-                bufferedReader.close();
-            if (reader != null)
-                reader.close();
+            if (bufferedReader != null) bufferedReader.close();
+            if (reader != null) reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

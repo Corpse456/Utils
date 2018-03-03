@@ -32,8 +32,7 @@ public class WriterToFile {
      * 
      */
     private void writerCreator() {
-        if (!file.isFile() || file.exists())
-            createFile();
+        if (!file.isFile() || file.exists()) createFile();
         try {
             writer = new FileWriter(file);
         } catch (IOException e) {
@@ -68,24 +67,21 @@ public class WriterToFile {
     }
 
     /**
-     * @param str
-     *            Добавляемая в файл строка
+     * @param str Добавляемая в файл строка
      */
     public void writeLine(String str) {
         write(str + "\r\n");
     }
 
     /**
-     * @param i
-     *            - int, добавляемый в файл
+     * @param i - int, добавляемый в файл
      */
     public void writeLine(int i) {
         write(i + "\r\n");
     }
 
     /**
-     * @param str
-     *            Добавляемая в файл строка
+     * @param str Добавляемая в файл строка
      */
     public void write(String str) {
         try {
@@ -97,8 +93,7 @@ public class WriterToFile {
     }
 
     /**
-     * @param i
-     *            - Добавляемый в файл int
+     * @param i - Добавляемый в файл int
      */
     public void write(int i) {
         write(i + "");
@@ -124,10 +119,8 @@ public class WriterToFile {
      */
     public void close() {
         try {
-            if (bufferedWriter != null)
-                bufferedWriter.close();
-            if (writer != null)
-                writer.close();
+            if (bufferedWriter != null) bufferedWriter.close();
+            if (writer != null) writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

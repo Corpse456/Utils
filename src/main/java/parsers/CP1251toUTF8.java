@@ -24,8 +24,7 @@ public class CP1251toUTF8 {
         for (int i = 0; i < string.length(); i++) {
             if (alphabet.containsKey(string.charAt(i) + "")) {
                 convertedString.append(alphabet.get(string.charAt(i) + ""));
-            } else
-                convertedString.append(string.charAt(i) + "");
+            } else convertedString.append(string.charAt(i) + "");
         }
         return convertedString.toString();
     }
