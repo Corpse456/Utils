@@ -11,34 +11,34 @@ import fileOperation.ReaderFromFile;
 import fileOperation.WriterToFile;
 
 public class WithoutCoincidence {
-    
+
     private static final String FILE2 = "rusWoman2.txt";
     private static final String FILE1 = "rusWoman1.txt";
-    private static TreeSet<String> list = new TreeSet<String>(); 
+    private static TreeSet<String> list = new TreeSet<String>();
     private static ReaderFromFile reader;
 
-    public static void main (String[] args) {
-	reader = new ReaderFromFile(WithoutCoincidence.class.getClassLoader().getResource(FILE1));
-	addToList();
-	reader = new ReaderFromFile(WithoutCoincidence.class.getClassLoader().getResource(FILE2));
-	addToList();
-	reader.close();
-	System.out.println(list);
-	WriterToFile writer = new WriterToFile("C:/rusWoman.txt");
-	Iterator<String> iterator = list.iterator();
-	while (iterator.hasNext()) {
-	    writer.writeLine(iterator.next());
-	}
-	writer.close();
+    public static void main(String[] args) {
+        reader = new ReaderFromFile(WithoutCoincidence.class.getClassLoader().getResource(FILE1));
+        addToList();
+        reader = new ReaderFromFile(WithoutCoincidence.class.getClassLoader().getResource(FILE2));
+        addToList();
+        reader.close();
+        System.out.println(list);
+        WriterToFile writer = new WriterToFile("C:/rusWoman.txt");
+        Iterator<String> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            writer.writeLine(iterator.next());
+        }
+        writer.close();
     }
 
     /**
      * @param list
      * @param reader
      */
-    private static void addToList () {
-	while (reader.isReady()) {
-	    list.add(reader.readLine());
-	}
+    private static void addToList() {
+        while (reader.isReady()) {
+            list.add(reader.readLine());
+        }
     }
 }
