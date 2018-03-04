@@ -100,16 +100,18 @@ public class WriterToFile {
     }
 
     /**
-     * @param map
+     * @param map добавляемая в файл 
+     */
+    public <N> void write(List<N> list) {
+        for (N n : list) {
+            writeLine(n.toString());
+        }
+    }
+    /**
+     * @param map добавляемая в файл 
      */
     public <C, N> void write(Map<C, N> map) {
         for (Entry<C, N> entry : map.entrySet()) {
-            writeLine(entry.getKey() + ": " + entry.getValue());
-        }
-    }
-
-    public <C, N> void write(List<Entry<C, N>> list) {
-        for (Entry<C, N> entry : list) {
             writeLine(entry.getKey() + ": " + entry.getValue());
         }
     }

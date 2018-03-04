@@ -25,8 +25,7 @@ public class HtmlExecutor {
             connection = (HttpURLConnection) site.openConnection();
             connection.setRequestMethod("GET");
             if (cookie != null) connection.setRequestProperty("Cookie", cookie);
-            connection.setRequestProperty("User-Agent",
-                    "Opera/9.80 (Windows NT 6.1; U; en) Presto/2.9.168 Version/11.52");
+            connection.setRequestProperty("User-Agent","Opera/9.80 (Windows NT 6.1; U; en) Presto/2.9.168 Version/11.52");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 
             String inputLine = "";
@@ -39,8 +38,7 @@ public class HtmlExecutor {
         }
         String answer = content.toString();
 
-        // если сайт требует куки, попытаться взять их из ответа сайта и отправить
-        // запрос повторно
+        // если сайт требует куки, попытаться взять их из ответа сайта и отправить запрос повторно
         if (answer.contains("To visit this site requires javascript and cookies of your browser.") && cookie == null) {
             cookie = cookieExtractor(answer);
             return contentExecutor(path);
@@ -50,9 +48,8 @@ public class HtmlExecutor {
     }
 
     /**
-     * @param answer cookie, прописанныев ответе сайта, если их нет, подставить
-     *            стандартныую строку
-     * @return
+     * @param answer ответе сайта, c прописанными куки
+     * @return извлечённая строка куки
      */
     private String cookieExtractor(String answer) {
         int start = answer.indexOf("cookie=\"") + "cookie=\"".length();
