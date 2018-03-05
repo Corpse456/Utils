@@ -134,7 +134,7 @@ public class DataWriter {
     }
     
     /**
-     *  Закрывает поток ввода
+     *  Закрывает поток вывода
      */
     public void close () {
         try {

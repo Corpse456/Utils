@@ -155,7 +155,7 @@ public class DataReader {
     }
 
     /**
-     * Закрывает поток вывода
+     * Закрывает поток ввода
      */
     public void close () {
         try {
