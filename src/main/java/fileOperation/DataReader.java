@@ -93,7 +93,7 @@ public class DataReader {
             reader.close();
         } catch (IOException e) {
             System.out.println("Can't read number");
-            return Double.MAX_VALUE;
+            return Double.NaN;
         }
         return number;
     }
