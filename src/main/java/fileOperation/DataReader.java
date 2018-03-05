@@ -32,7 +32,6 @@ public class DataReader {
         int number;
         try {
             number = reader.readInt();
-            reader.close();
         } catch (IOException e) {
             System.out.println("Can't read number");
             return Integer.MAX_VALUE;
@@ -66,7 +65,6 @@ public class DataReader {
                 break;
             }
         }
-        reader.close();
         return list;
     }
 
@@ -90,7 +88,6 @@ public class DataReader {
         double number;
         try {
             number = reader.readDouble();
-            reader.close();
         } catch (IOException e) {
             System.out.println("Can't read number");
             return Double.NaN;
@@ -124,7 +121,6 @@ public class DataReader {
                 break;
             }
         }
-        reader.close();
         return list;
     }
 
@@ -155,15 +151,17 @@ public class DataReader {
     }
 
     private String readChars() throws IOException {
-        StringBuilder text = new StringBuilder();
-        while (true) {
-            try {
-                text.append(reader.readChar());
-            } catch (EOFException e) {
-                break;
-            }
+        return reader.readUTF();
+    }
+
+    /**
+     * Закрывает поток вывода
+     */
+    public void close () {
+        try {
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        reader.close();
-        return text.toString();
     }
 }

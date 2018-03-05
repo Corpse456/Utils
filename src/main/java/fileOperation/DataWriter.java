@@ -32,7 +32,6 @@ public class DataWriter {
     public boolean write(int number) {
         try {
             writer.writeInt(number);
-            writer.close();
         } catch (IOException e) {
             System.out.println("Can't write number");
             return false;
@@ -49,7 +48,6 @@ public class DataWriter {
             for (int i = 0; i < numbers.length; i++) {
                 writer.writeInt(numbers[i]);
             }
-            writer.close();
         } catch (IOException e) {
             System.out.println("Can't write some number");
             return false;
@@ -67,7 +65,6 @@ public class DataWriter {
             while (iterator.hasNext()) {
                 writer.writeInt(iterator.next());
             }
-            writer.close();
         } catch (IOException e) {
             System.out.println("Can't write some number");
             return false;
@@ -82,7 +79,6 @@ public class DataWriter {
     public boolean write(double number) {
         try {
             writer.writeDouble(number);
-            writer.close();
         } catch (IOException e) {
             System.out.println("Can't write number");
             return false;
@@ -99,7 +95,6 @@ public class DataWriter {
             for (int i = 0; i < numbers.length; i++) {
                 writer.writeDouble(numbers[i]);
             }
-            writer.close();
         } catch (IOException e) {
             System.out.println("Can't write some number");
             return false;
@@ -117,7 +112,6 @@ public class DataWriter {
             while (iterator.hasNext()) {
                 writer.writeDouble(iterator.next());
             }
-            writer.close();
         } catch (IOException e) {
             System.out.println("Can't write some number");
             return false;
@@ -131,12 +125,22 @@ public class DataWriter {
      */
     public boolean write(String text) {
         try {
-            writer.writeChars(text);
-            writer.close();
+            writer.writeUTF(text);
         } catch (IOException e) {
             System.out.println("Can't write text");
             return false;
         }
         return true;
+    }
+    
+    /**
+     *  Закрывает поток ввода
+     */
+    public void close () {
+        try {
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
