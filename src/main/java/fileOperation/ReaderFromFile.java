@@ -7,9 +7,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @author Corpse
+ * @author Alexander Neznaev
  *
  */
 public class ReaderFromFile {
@@ -18,7 +20,7 @@ public class ReaderFromFile {
     private BufferedReader bufferedReader;
 
     /**
-     * @param path
+     * @param path - путь к файлу в виде строки
      */
     public ReaderFromFile(String path) {
         file = new File(path);
@@ -26,13 +28,16 @@ public class ReaderFromFile {
     }
 
     /**
-     * @param file
+     * @param file объект File, который необхоимо считать
      */
     public ReaderFromFile(File file) {
         this.file = file;
         rederCreator();
     }
 
+    /**
+     * @param url путь к файлу в виде URL
+     */
     public ReaderFromFile(URL url) {
         file = new File(url.getFile());
         rederCreator();
@@ -48,7 +53,9 @@ public class ReaderFromFile {
     }
 
     /**
-     * @return Считывает строку из файла
+     * Считывает строку из файла
+     * 
+     * @return String со строкой
      */
     public String readLine() {
         try {
@@ -62,7 +69,7 @@ public class ReaderFromFile {
     /**
      * Считывает весь файл в один String
      * 
-     * @return
+     * @return String сразу со всем текстом файла
      */
     public String readAll() {
         StringBuilder content = new StringBuilder();
@@ -70,6 +77,19 @@ public class ReaderFromFile {
             content.append(readLine() + "\n");
         }
         return content.toString();
+    }
+    
+    /**
+     * Cчитывает сразу весь текст файла разбивая его построчно в List<String>
+     * 
+     * @return List String со всем содержимым фала построчно
+     */
+    public List<String> readAllAsLIst () {
+        List<String> content = new ArrayList<>();
+        while (isReady()) {
+            content.add(readLine());
+        }
+        return content;
     }
 
     /**
@@ -85,6 +105,8 @@ public class ReaderFromFile {
     }
 
     /**
+     * Проверяет дальнейшую возможность чтения
+     * 
      * @return true, если доступны строки для чтения
      */
     public boolean isReady() {
