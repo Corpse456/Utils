@@ -110,9 +110,9 @@ public class WriterToFile {
     /**
      * @param map добавляемая в файл 
      */
-    public <C, N> void write(Map<C, N> map) {
+    public <C, N> void write(Map<C, N> map, String separator) {
         for (Entry<C, N> entry : map.entrySet()) {
-            writeLine(entry.getKey() + ": " + entry.getValue());
+            writeLine(entry.getKey() + separator + entry.getValue());
         }
     }
 
