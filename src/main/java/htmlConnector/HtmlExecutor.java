@@ -5,16 +5,33 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import fileOperation.WriterToFile;
 import parsers.CP1251toUTF8;
+import parsers.ExcerptFromText;
 
 public class HtmlExecutor {
 
+    private String encoding = "UTF-8";
     private HttpURLConnection connection;
     private String cookie = null;
+    
 
     /**
-     * @param path URL требуемого ресурса
+     * @param path - URL требуемого ресурса
+     * @param encoding - кодировка
+     * @return
+     */
+    public String contentExecutor(String path, String encoding) {
+        this.encoding = encoding;
+        return contentExecutor(path);
+    }
+    
+    /**
+     * @param path - URL требуемого ресурса
      * @return
      */
     public String contentExecutor(String path) {
@@ -25,8 +42,8 @@ public class HtmlExecutor {
             connection = (HttpURLConnection) site.openConnection();
             connection.setRequestMethod("GET");
             if (cookie != null) connection.setRequestProperty("Cookie", cookie);
-            connection.setRequestProperty("User-Agent","Opera/9.80 (Windows NT 6.1; U; en) Presto/2.9.168 Version/11.52");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+            connection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), encoding));
 
             String inputLine = "";
             while ((inputLine = reader.readLine()) != null) {
@@ -64,10 +81,37 @@ public class HtmlExecutor {
         this.cookie = cookie;
     }
 
-    public String findInGoogle(String text) {
+    /**
+     * @param text - текст, который необходимо найти в гугл
+     * @return - Map описаний ссылок и самих сссылок (title, link)
+     */
+    public Map<String, String> findInGoogle(String text) {
         text = text.replaceAll(" ", "+");
         CP1251toUTF8 converter = new CP1251toUTF8();
         text = converter.convert(text);
-        return contentExecutor("https://www.google.by/search?q=" + text);
+        
+        String answer = contentExecutor("https://www.google.by/search?q=" + text);
+        
+        ExcerptFromText excerpt = new ExcerptFromText();
+        List<String> links = excerpt.extractExcerptsFromText(answer, "<h3 class=\"r\">", "</h3>");
+        
+        Map<String, String> titleAndLinks= new HashMap<>();
+        for (String s : links) {
+            List<String> linkList = excerpt.extractExcerptsFromText(s, "<a href=\"", "\"");
+            String link = !linkList.isEmpty() ? linkList.get(0) : ""; 
+            
+            List<String> titleList = excerpt.extractExcerptsFromText(s, ">", "</a>");
+            String title = !titleList.isEmpty() ? titleList.get(0) : "";
+            
+            if (!link.isEmpty()) titleAndLinks.put(title , link);
+        }
+        return titleAndLinks;
+    }
+    
+    public static void main(String[] args) {
+        Map<String, String> finded = new HtmlExecutor().findInGoogle("порно");
+        WriterToFile writer = new WriterToFile("C:/results.csv");
+        writer.write(finded, ",");;
+        writer.close();
     }
 }

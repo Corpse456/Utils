@@ -1,5 +1,6 @@
 package listCreators;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,6 +9,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import fileOperation.ReaderFromFile;
 import fileOperation.WriterToFile;
 import parsers.ExcerptFromText;
 
@@ -21,10 +23,14 @@ public class LinksFromSkypeDilogs {
     private ConcurrentLinkedQueue<Integer> queue = new ConcurrentLinkedQueue<>();
     private int count = 0;
 
-    private Map<String, String> extractLinksAndTitle(String path, String from, String startString, String to, String endString) {
+    public Map<String, String> extractLinks(String path, String from, String startString, String to, String endString) {
         ExcerptFromText excerpt = new ExcerptFromText();
         List<String> links = excerpt.extractExcerptsFromFile(path, from, startString, to, endString);
 
+        return extractTitle(links);
+    }
+
+    public Map<String, String> extractTitle(List<String> links) {
         for (String link : links) {
             if (link.contains("login.skype.com")) continue;
             queue.add(1);
@@ -48,17 +54,22 @@ public class LinksFromSkypeDilogs {
             }).start();
         }
         while (!queue.isEmpty());
-        System.out.println(result.size());
+        
         return result;
     }
 
     public static void main(String[] args) {
-        LinksFromSkypeDilogs links = new LinksFromSkypeDilogs();
-        Map<String, String> linkss = links.extractLinksAndTitle("C:/SkypeChatHistory.csv", ">http", ">", "<", "<");
-
-        WriterToFile writer = new WriterToFile("C:/result.csv");
-        writer.write(linkss, "~");
+        List <String> links = new ArrayList<>();
+        ReaderFromFile reader = new ReaderFromFile("C:/links.txt");
+        
+        while (reader.isReady()) {
+            String[] split = reader.readLine().split("~");
+            links.add(split[1]);
+        }
+        
+        WriterToFile writer = new WriterToFile("C:result.csv");
+        Map<String, String> titleLinks = new LinksFromSkypeDilogs().extractTitle(links);
+        writer.write(titleLinks , "~");
         writer.close();
-        System.out.println("Done");
     }
 }

@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fileOperation.ReaderFromFile;
+import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
 
 public class ExcerptFromText {
@@ -21,7 +22,7 @@ public class ExcerptFromText {
      */
     public String TitleFromHtmlPage (String content) {
         List <String> list = extractExcerptsFromText(content, "<title>", "<title>", "</title>", "</title>");
-        String title = list.isEmpty() ? list.get(0) : "";
+        String title = !list.isEmpty() ? list.get(0) : "";
         return title;
     }
     
@@ -31,7 +32,7 @@ public class ExcerptFromText {
      */
     public String TitleFromLink (String path) {
         List <String> list = extractExcerptsFromURL(path, "<title>", "<title>", "</title>", "</title>");
-        String title = list.size() > 0 ? list.get(0) : "";
+        String title = !list.isEmpty() ? list.get(0) : "";
         return title;
     }
     
@@ -99,6 +100,16 @@ public class ExcerptFromText {
     /**
      * @param path
      * @param from
+     * @param to
+     * @return
+     */
+    public List<String> extractExcerptsFromURL (String path, String from, String to) {        
+        return extractExcerptsFromURL(path, from, from, to, to);
+    }
+    
+    /**
+     * @param path
+     * @param from
      * @param startString
      * @param to
      * @param endString
@@ -116,7 +127,7 @@ public class ExcerptFromText {
         int end = endString.length(); 
         List<String> matches = new ArrayList<>();
         
-        String pattern = from + "[^(" + to + ")]+" + to;
+        String pattern = from + "(.|\n)*?" + to;
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(content);
         

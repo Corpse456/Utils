@@ -1,6 +1,8 @@
 package fileListings;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Map;
 
 import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
@@ -15,6 +17,9 @@ public class Catalogs {
         PATH = path;
     }
 
+    /**
+     * @return
+     */
     public boolean createList() {
         try {
             WriterToFile writer = new WriterToFile(PATH);
@@ -33,25 +38,28 @@ public class Catalogs {
         return true;
     }
 
+    /**
+     * @param f
+     */
     private void goodNameApplier(File f) {
         HtmlExecutor exec = new HtmlExecutor();
-        String googleAnswer = exec.findInGoogle(f.getName());
-        if (googleAnswer.contains("href=\"/url?url=https://ru.wikipedia.org/wiki")) {
-            String newName = wikiExecutor(exec, googleAnswer);
-            String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName);
-            f.renameTo(new File(newNameAndPath));
-        }
+        Map<String, String> googleAnswer = exec.findInGoogle("Википедия " + f.getName());
 
+        Collection<String> entrySet = googleAnswer.values();
+        
+        for (String link : entrySet) {
+            if (link.contains("https://ru.wikipedia.org/wiki")) {
+                String newName = wikiExecutor(link);
+                String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName);
+                f.renameTo(new File(newNameAndPath));
+                break;
+            }
+        }
     }
 
-    private String wikiExecutor(HtmlExecutor exec, String googleAnswer) {
-        int start = googleAnswer.indexOf("href=\"/url?url=https://ru.wikipedia.org/wiki") + "href=\"/url?url=".length();
-        int end = googleAnswer.indexOf(" — <b>Википедия</b></a>");
-        String link = googleAnswer.substring(start, end);
-        link = link.substring(0, link.indexOf("&amp"));
-        String wikiContent = exec.contentExecutor(link);
-        WriterToFile f = new WriterToFile("C:/3.html");
-        f.write(wikiContent);
+    private String wikiExecutor(String link) {
+        HtmlExecutor exec = new HtmlExecutor();
+        exec.contentExecutor(link);
         return null;
     }
 
@@ -88,7 +96,10 @@ public class Catalogs {
     }
     
     public static void main(String[] args) {
-        Catalogs catalogs = new Catalogs("g:", "d://Games.exe//One.csv");
-        if (catalogs.createList()) System.out.println("Done");
+        new Catalogs("", "").goodNameApplier(new File("C:/Клиника"));
+        
+        
+        /*Catalogs catalogs = new Catalogs("g:", "d://Games.exe//One.csv");
+        if (catalogs.createList()) System.out.println("Done");*/
     }
 }
