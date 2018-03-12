@@ -2,10 +2,12 @@ package fileListings;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
+import parsers.ExcerptFromText;
 
 public class Catalogs {
 
@@ -27,8 +29,8 @@ public class Catalogs {
             writer.write(discAtributes(disc));
             for (File f : disc.listFiles()) {
                 if (isGameFolder(f)) {
-                    goodNameApplier(f);
-                    writer.writeLine(f.getName() + ";" + calculateSize(f));
+                    String date = goodNameApplier(f);
+                    writer.writeLine(f.getName() + "," + calculateSize(f) + "," + date);
                 }
             }
             writer.close();
@@ -39,28 +41,38 @@ public class Catalogs {
     }
 
     /**
-     * @param f
+     * @param f - имя папки, для которой необходимо найти имя
+     * @return дата выпуска игры
      */
-    private void goodNameApplier(File f) {
+    private String goodNameApplier(File f) {
         HtmlExecutor exec = new HtmlExecutor();
         Map<String, String> googleAnswer = exec.findInGoogle("Википедия " + f.getName());
 
-        Collection<String> entrySet = googleAnswer.values();
+        Collection<String> googleLinks = googleAnswer.values();
         
-        for (String link : entrySet) {
+        for (String link : googleLinks) {
             if (link.contains("https://ru.wikipedia.org/wiki")) {
-                String newName = wikiExecutor(link);
-                String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName);
+                String[] newName = wikiExecutor(link).split("~");
+                String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName[0]);
                 f.renameTo(new File(newNameAndPath));
-                break;
+                return newName[1];
             }
         }
+        return "";
     }
 
     private String wikiExecutor(String link) {
         HtmlExecutor exec = new HtmlExecutor();
-        exec.contentExecutor(link);
-        return null;
+        String wikiContent = exec.contentExecutor(link);
+        
+        ExcerptFromText excerpt = new ExcerptFromText();
+        String n = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" — Википедия", "");
+        
+        List<String> dateArea = excerpt.extractExcerptsFromText(wikiContent, "Дата выпуска", "</span>");
+        List<String> dates = excerpt.extractExcerptsFromText(dateArea.get(0), "\">\\d", "\">", "</a>", "</a>");
+        String date = dates.get(0) + " " + dates.get(1);
+        
+        return n + "~" + date;
     }
 
     /**
