@@ -107,13 +107,23 @@ public class WriterToFile {
             writeLine(n.toString());
         }
     }
+    
+    
     /**
      * @param map добавляемая в файл 
+     * @param separator - разделитель ключа и значения
      */
     public <C, N> void write(Map<C, N> map, String separator) {
         for (Entry<C, N> entry : map.entrySet()) {
             writeLine(entry.getKey() + separator + entry.getValue());
         }
+    }
+    
+    /**
+     * @param map добавляемая в файл 
+     */
+    public <C, N> void write(Map<C, N> map) {
+        write(map, ",");
     }
 
     /**

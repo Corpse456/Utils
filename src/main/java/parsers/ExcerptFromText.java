@@ -11,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fileOperation.ReaderFromFile;
-import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
 
 public class ExcerptFromText {
