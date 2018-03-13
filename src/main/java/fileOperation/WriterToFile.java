@@ -100,7 +100,7 @@ public class WriterToFile {
     }
 
     /**
-     * @param map добавляемая в файл 
+     * @param map добавляемая в файл
      */
     public <N> void write(List<N> list) {
         for (int i = 0; i < list.size(); i++) {
@@ -108,10 +108,9 @@ public class WriterToFile {
             else write(list.get(i).toString());
         }
     }
-    
-    
+
     /**
-     * @param map добавляемая в файл 
+     * @param map добавляемая в файл
      * @param separator - разделитель ключа и значения
      */
     public <C, N> void write(Map<C, N> map, String separator) {
@@ -119,9 +118,9 @@ public class WriterToFile {
             writeLine(entry.getKey() + separator + entry.getValue());
         }
     }
-    
+
     /**
-     * @param map добавляемая в файл 
+     * @param map добавляемая в файл
      */
     public <C, N> void write(Map<C, N> map) {
         write(map, ",");

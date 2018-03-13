@@ -56,12 +56,11 @@ public class EmptyLineAtTheEnd {
         List<String> fileLines = reader.readAllAsLIst();
         reader.close();
 
-        if (fileLines.isEmpty())
-            return;
+        if (fileLines.isEmpty()) return;
 
         if (!fileLines.get(fileLines.size() - 1).isEmpty()) {
             fileLines.add("");
-            
+
             WriterToFile writer = new WriterToFile(file);
             writer.write(fileLines);
             writer.close();
