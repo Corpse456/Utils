@@ -14,6 +14,10 @@ public class Catalogs {
     private final String DISC_LETTER;
     private final String PATH;
 
+    /**
+     * @param disc - буква диска
+     * @param path - путь для фала с именами
+     */
     public Catalogs(String disc, String path) {
         DISC_LETTER = disc;
         PATH = path;
@@ -23,8 +27,9 @@ public class Catalogs {
      * @return
      */
     public boolean createList() {
+        WriterToFile writer = null;
         try {
-            WriterToFile writer = new WriterToFile(PATH);
+            writer = new WriterToFile(PATH);
             File disc = new File(DISC_LETTER);
             writer.write(discAtributes(disc));
             for (File f : disc.listFiles()) {
@@ -33,9 +38,11 @@ public class Catalogs {
                     writer.writeLine(f.getName() + "," + calculateSize(f) + "," + date);
                 }
             }
-            writer.close();
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
+        } finally {
+            writer.close();
         }
         return true;
     }
@@ -45,16 +52,20 @@ public class Catalogs {
      * @return дата выпуска игры
      */
     private String goodNameApplier(File f) {
+        System.out.println(f.getName());
         HtmlExecutor exec = new HtmlExecutor();
         Map<String, String> googleAnswer = exec.findInGoogle("Википедия " + f.getName());
-
-        Collection<String> googleLinks = googleAnswer.values();
+        WriterToFile writer = new WriterToFile("C:/" + f.getName());
+        writer.write(googleAnswer);
+        writer.close();
         
+        Collection<String> googleLinks = googleAnswer.values();
+
         for (String link : googleLinks) {
-            if (link.contains("https://ru.wikipedia.org/wiki")) {
+            if (link.contains("wikipedia.org/wiki")) {
                 String[] newName = wikiExecutor(link).split("~");
                 String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName[0]);
-                f.renameTo(new File(newNameAndPath));
+                // f.renameTo(new File(newNameAndPath));
                 return newName[1];
             }
         }
@@ -64,14 +75,18 @@ public class Catalogs {
     private String wikiExecutor(String link) {
         HtmlExecutor exec = new HtmlExecutor();
         String wikiContent = exec.contentExecutor(link);
-        
+
         ExcerptFromText excerpt = new ExcerptFromText();
         String n = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" — Википедия", "");
-        
+
         List<String> dateArea = excerpt.extractExcerptsFromText(wikiContent, "Дата выпуска", "</span>");
+        if (dateArea.isEmpty()) {
+            System.out.println(link);
+            System.exit(0);
+        }
         List<String> dates = excerpt.extractExcerptsFromText(dateArea.get(0), "\">\\d", "\">", "</a>", "</a>");
         String date = dates.get(0) + " " + dates.get(1);
-        
+
         return n + "~" + date;
     }
 
@@ -106,12 +121,9 @@ public class Catalogs {
         if ("$RECYCLE.BIN".equals(f.getName()) || "System Volume Information".equals(f.getName())) return false;
         return true;
     }
-    
+
     public static void main(String[] args) {
-        new Catalogs("", "").goodNameApplier(new File("C:/Клиника"));
-        
-        
-        /*Catalogs catalogs = new Catalogs("g:", "d://Games.exe//One.csv");
-        if (catalogs.createList()) System.out.println("Done");*/
+        Catalogs catalogs = new Catalogs("g:", "d://Games.exe//One.csv");
+        if (catalogs.createList()) System.out.println("Done");
     }
 }

@@ -48,10 +48,10 @@ public class ExcerptFromText {
     }
     
     /**
-     * @param content
-     * @param from
-     * @param to
-     * @return
+     * @param content текст для поиска совпадений
+     * @param from - левая граница искомого фрагмента
+     * @param to - правая граница искомого фрагмента
+     * @return искомый фрагмент
      */
     public List<String> extractExcerptsFromText(String content, String from, String to) {
         return extract(content, from, from, to, to);
@@ -126,7 +126,7 @@ public class ExcerptFromText {
         int end = endString.length(); 
         List<String> matches = new ArrayList<>();
         
-        String pattern = from + "(.|\n)*?" + to;
+        String pattern = from + "([\\s\\S]*?)" + to;
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(content);
         

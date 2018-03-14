@@ -109,7 +109,7 @@ public class HtmlExecutor {
     }
     
     public static void main(String[] args) {
-        Map<String, String> finded = new HtmlExecutor().findInGoogle("порно");
+        Map<String, String> finded = new HtmlExecutor().findInGoogle("Википедия Hitman Absolution 1.0.438 [vidic]");
         WriterToFile writer = new WriterToFile("C:/results.csv");
         writer.write(finded, ",");;
         writer.close();
