@@ -27,17 +27,19 @@ public class Igromania {
         
         attr = excerpt.extractExcerptsFromText(block, "<div class=\"release_name\">", "</div>");
         System.out.println(attr.get(0));
-        attributes.add(attr.get(0));
+        if (!attr.isEmpty()) attributes.add(attr.get(0));
         
         attr = excerpt.extractExcerptsFromText(block, "<div class=\"genre\">", "</div>");
-        attributes.add(attr.get(0));
+        if (!attr.isEmpty()) attributes.add(attr.get(0));
         
         attr = excerpt.extractExcerptsFromText(block, "<div class=\"release_data\">", "</div>");
-        attributes.add(attr.get(0));
+        if (!attr.isEmpty()) attributes.add(attr.get(0));
         
-        attr = excerpt.extractExcerptsFromText(block, "<span class=\"rate_box([\\s\\S]*?)\">", "</span>");
-        attributes.add(attr.get(0));
-        attributes.add(attr.get(1));
+        attr = excerpt.extractExcerptsFromText(block, "<span class=\"rate_box rate_im\">", "</span>");
+        if (!attr.isEmpty()) attributes.add(attr.get(0));
+        
+        attr = excerpt.extractExcerptsFromText(block, "<span class=\"rate_box rate_user\">", "</span>");
+        if (!attr.isEmpty()) attributes.add(attr.get(0));
         
         return attributes;
     }
@@ -45,9 +47,9 @@ public class Igromania {
     public static void main(String[] args) {
         String PATH = "https://www.igromania.ru/games/";
         List<List<String>> games = new ArrayList<>();
- start: for (int i = 1; i < 5000; i++) {
+ start: for (int i = 1; i < 10; i++) {
             HtmlExecutor exec = new HtmlExecutor();
-            String content = exec.contentExecutor(PATH + i + "/1/");
+            String content = exec.contentExecutor(PATH + i + "/1/58/0");
             
             Igromania igromania = new Igromania();
             List<String> attribute = igromania.gameBox(content);
