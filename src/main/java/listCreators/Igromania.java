@@ -48,7 +48,7 @@ public class Igromania {
     public static void main(String[] args) {
         String PATH = "https://www.igromania.ru/games/";
         List<List<String>> games = new ArrayList<>();
- start: for (int i = 1; i < 3000; i++) {
+ start: for (int i = 1; i <= 2221; i++) {
             HtmlExecutor exec = new HtmlExecutor();
             String content = exec.contentExecutor(PATH + i + "/1/58/0/");
             
