@@ -3,6 +3,7 @@ package listCreators;
 import java.util.ArrayList;
 import java.util.List;
 
+import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
 import parsers.ExcerptFromText;
 
@@ -47,9 +48,9 @@ public class Igromania {
     public static void main(String[] args) {
         String PATH = "https://www.igromania.ru/games/";
         List<List<String>> games = new ArrayList<>();
- start: for (int i = 1; i < 10; i++) {
+ start: for (int i = 1; i < 3000; i++) {
             HtmlExecutor exec = new HtmlExecutor();
-            String content = exec.contentExecutor(PATH + i + "/1/58/0");
+            String content = exec.contentExecutor(PATH + i + "/1/58/0/");
             
             Igromania igromania = new Igromania();
             List<String> attribute = igromania.gameBox(content);
@@ -63,11 +64,13 @@ public class Igromania {
     }
 
     private static void print(List<List<String>> games) {
+        WriterToFile writer = new WriterToFile("Games.csv");
         for (List<String> list : games) {
             for (String string : list) {
-                System.out.print(string + " | ");
+                writer.write(string + "|");
             }
-            System.out.println();
+            writer.writeLine();
         }
+        writer.close();
     }
 }
