@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import fileOperation.WriterToFile;
 import parsers.CP1251toUTF8;
 import parsers.ExcerptFromText;
 
@@ -90,12 +90,12 @@ public class HtmlExecutor {
         CP1251toUTF8 converter = new CP1251toUTF8();
         text = converter.convert(text);
         
-        String answer = contentExecutor("https://www.google.by/search?q=" + text);
+        String answer = contentExecutor("https://www.google.by/search?q=" + text + "\"&num=10\"");
         
         ExcerptFromText excerpt = new ExcerptFromText();
         List<String> links = excerpt.extractExcerptsFromText(answer, "<h3 class=\"r\">", "</h3>");
-        
-        Map<String, String> titleAndLinks= new HashMap<>();
+                
+        Map<String, String> titleAndLinks= new LinkedHashMap<>();
         for (String s : links) {
             List<String> linkList = excerpt.extractExcerptsFromText(s, "<a href=\"", "\"");
             String link = !linkList.isEmpty() ? linkList.get(0) : ""; 
@@ -109,9 +109,9 @@ public class HtmlExecutor {
     }
     
     public static void main(String[] args) {
-        Map<String, String> finded = new HtmlExecutor().findInGoogle("Википедия Hitman Absolution 1.0.438 [vidic]");
-        WriterToFile writer = new WriterToFile("C:/results.csv");
-        writer.write(finded, ",");;
-        writer.close();
+        Map<String, String> finded = new HtmlExecutor().findInGoogle("Википедия Rise of the Tomb Raider by xatab");
+        for (Entry<String, String> entry : finded.entrySet()) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
     }
 }

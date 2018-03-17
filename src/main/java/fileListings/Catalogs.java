@@ -7,6 +7,7 @@ import java.util.Map;
 
 import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
+import parsers.CP1251toUTF8;
 import parsers.ExcerptFromText;
 
 public class Catalogs {
@@ -61,8 +62,9 @@ public class Catalogs {
         
         Collection<String> googleLinks = googleAnswer.values();
 
+        String series = new CP1251toUTF8().convert("(серия)");
         for (String link : googleLinks) {
-            if (link.contains("wikipedia.org/wiki")) {
+            if (link.contains("ru.wikipedia.org/wiki") && !link.contains(series)) {
                 String[] newName = wikiExecutor(link).split("~");
                 String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName[0]);
                 // f.renameTo(new File(newNameAndPath));
@@ -77,17 +79,24 @@ public class Catalogs {
         String wikiContent = exec.contentExecutor(link);
 
         ExcerptFromText excerpt = new ExcerptFromText();
-        String n = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" — Википедия", "");
+        String title = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" — Википедия", "");
 
-        List<String> dateArea = excerpt.extractExcerptsFromText(wikiContent, "Дата выпуска", "</span>");
+        List<String> dateArea = excerpt.extractExcerptsFromText(wikiContent, "Дат[аы] выпуска", "</span>");
         if (dateArea.isEmpty()) {
             System.out.println(link);
             System.exit(0);
         }
         List<String> dates = excerpt.extractExcerptsFromText(dateArea.get(0), "\">\\d", "\">", "</a>", "</a>");
-        String date = dates.get(0) + " " + dates.get(1);
+        String date = null;
+        if (!dates.isEmpty()) date = dates.get(0) + " " + dates.get(1);
+        else date = dateFromIgromania(title);
 
-        return n + "~" + date;
+        return title + "~" + date;
+    }
+
+    public String dateFromIgromania(String title) {
+        
+        return null;
     }
 
     /**
