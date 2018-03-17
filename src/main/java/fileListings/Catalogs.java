@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import fileOperation.GZIPExtractor;
 import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
 import parsers.CP1251toUTF8;
@@ -81,21 +82,22 @@ public class Catalogs {
         ExcerptFromText excerpt = new ExcerptFromText();
         String title = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" — Википедия", "");
 
-        List<String> dateArea = excerpt.extractExcerptsFromText(wikiContent, "Дат[аы] выпуска", "</span>");
-        if (dateArea.isEmpty()) {
-            System.out.println(link);
-            System.exit(0);
-        }
-        List<String> dates = excerpt.extractExcerptsFromText(dateArea.get(0), "\">\\d", "\">", "</a>", "</a>");
         String date = null;
-        if (!dates.isEmpty()) date = dates.get(0) + " " + dates.get(1);
-        else date = dateFromIgromania(title);
+        List<String> dateArea = excerpt.extractExcerptsFromText(wikiContent, "Дат[аы] выпуска", "</span>");
+        if (!dateArea.isEmpty()) {
+            List<String> dates = excerpt.extractExcerptsFromText(dateArea.get(0), "\">\\d", "\">", "</a>", "</a>");
+            if (!dates.isEmpty()) date = dates.get(0) + " " + dates.get(1);
+        }
+        if (date == null) date = dateFromIgromania(title);
 
         return title + "~" + date;
     }
 
     public String dateFromIgromania(String title) {
+        String fileName = Catalogs.class.getClassLoader().getResource("Games.csv.gz").getPath();
+        fileName = fileName.substring(1, fileName.length());
         
+        List<String> games = new GZIPExtractor().fromGzipToMemoryAsList(fileName);
         return null;
     }
 

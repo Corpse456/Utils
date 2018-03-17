@@ -5,18 +5,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 public class GZIPExtractor {
 
     private final int bufferSize = 1024;
 
-    public void unGZIP(String fileName, String newFolder) {
+    public String unGZIP(String fileName, String newFolder) {
         String newPath = newFolder + new File(fileName).getName();
-        unGZIP(newPath);
+        return unGZIP(newPath);
     }
     
-    public void unGZIP(String fileName) {
+    public String unGZIP(String fileName) {
         byte[] buffer = new byte[bufferSize];
         String newName = fileName.substring(0, fileName.lastIndexOf("."));
         
@@ -31,5 +32,28 @@ public class GZIPExtractor {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        return newName;
+    }
+    
+    public String fromGzipToMemory(String fileName) {
+        StringBuilder content= new StringBuilder();
+        List<String> contentList = fromGzipToMemoryAsList(fileName);
+        
+        for (String string : contentList) {
+            content.append(string);
+        }
+        return content.toString();
+    }
+    
+    public List<String> fromGzipToMemoryAsList(String fileName) {
+        String filePath = unGZIP(fileName);
+        
+        ReaderFromFile reader = new ReaderFromFile(filePath);
+        List<String> content = reader.readAllAsLIst();
+        reader.close();
+        
+        File file = new File(filePath);
+        file.delete();
+        return content;
     }
 }
