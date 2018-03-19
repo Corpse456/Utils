@@ -65,6 +65,7 @@ public class Catalogs {
         for (String link : googleLinks) {
             if (link.contains("wikipedia.org/wiki") && !link.contains(series)) {
                 String newName = wikiExecutor(link);
+                newName = newName.replace("(игра, ", "(");
                 String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName);
                 System.out.println(newNameAndPath);
                 // f.renameTo(new File(newNameAndPath));
