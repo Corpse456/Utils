@@ -122,7 +122,8 @@ public class Catalogs {
     }
 
     public static void main(String[] args) {
-        Catalogs catalogs = new Catalogs("g:", "D:/Games.exe/One.csv");
+        Catalogs catalogs = new Catalogs("g:", "D:/Games.exe"
+                + "/One.csv");
         if (catalogs.createList()) System.out.println("Done");
     }
 }
