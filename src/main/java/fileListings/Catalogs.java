@@ -55,9 +55,6 @@ public class Catalogs {
         System.out.println(f.getName());
         HtmlExecutor exec = new HtmlExecutor();
         Map<String, String> googleAnswer = exec.findInGoogle("Википедия " + f.getName());
-        WriterToFile writer = new WriterToFile("C:/" + f.getName());
-        writer.write(googleAnswer);
-        writer.close();
         
         Collection<String> googleLinks = googleAnswer.values();
 
@@ -66,9 +63,13 @@ public class Catalogs {
             if (link.contains("wikipedia.org/wiki") && !link.contains(series)) {
                 String newName = wikiExecutor(link);
                 newName = newName.replace("(игра, ", "(");
-                String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName);
-                System.out.println(newNameAndPath);
-                // f.renameTo(new File(newNameAndPath));
+                newName = newName.replace("[^\\w]", " ");
+                
+                if (!f.getName().equals(newName)) {
+                    String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName);
+                    System.out.println(newNameAndPath);
+                    f.renameTo(new File(newNameAndPath));
+                }
                 return;
             }
         }
@@ -121,7 +122,7 @@ public class Catalogs {
     }
 
     public static void main(String[] args) {
-        Catalogs catalogs = new Catalogs("g:", "d://Games.exe//One.csv");
+        Catalogs catalogs = new Catalogs("g:", "D:/Games.exe/One.csv");
         if (catalogs.createList()) System.out.println("Done");
     }
 }
