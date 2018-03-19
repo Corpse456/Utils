@@ -37,6 +37,6 @@ public class GZIPCreator {
     }
     
     public static void main(String[] args) {
-        new GZIPCreator().gzipIt("C:/words.txt");
+        new GZIPCreator().gzipIt("d:\\Java\\Utils\\src\\main\\resources\\Games.csv");
     }
 }

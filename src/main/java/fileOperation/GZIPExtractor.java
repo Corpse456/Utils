@@ -56,4 +56,18 @@ public class GZIPExtractor {
         file.delete();
         return content;
     }
+    
+    public static void main (String[] args) {
+        List<String> list = new GZIPExtractor().fromGzipToMemoryAsList("d:\\Java\\Utils\\src\\main\\resources\\Games.csv.gz");
+        
+        int max = 0;
+        String name = "";
+        for (String string : list) {
+            String[] split = string.split(";");
+            if (split[5].isEmpty()) {
+                System.out.println(split[0]);
+            }
+        }
+        System.out.println(max + ": " + name);
+    }
 }

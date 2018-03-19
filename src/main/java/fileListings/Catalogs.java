@@ -2,10 +2,8 @@ package fileListings;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
-import fileOperation.GZIPExtractor;
 import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
 import parsers.CP1251toUTF8;
@@ -36,8 +34,8 @@ public class Catalogs {
             writer.write(discAtributes(disc));
             for (File f : disc.listFiles()) {
                 if (isGameFolder(f)) {
-                    String date = goodNameApplier(f);
-                    writer.writeLine(f.getName() + "," + calculateSize(f) + "," + date);
+                    goodNameApplier(f);
+                    writer.writeLine(f.getName() + "," + calculateSize(f));
                 }
             }
         } catch (Exception e) {
@@ -53,7 +51,7 @@ public class Catalogs {
      * @param f - имя папки, для которой необходимо найти имя
      * @return дата выпуска игры
      */
-    private String goodNameApplier(File f) {
+    private void goodNameApplier(File f) {
         System.out.println(f.getName());
         HtmlExecutor exec = new HtmlExecutor();
         Map<String, String> googleAnswer = exec.findInGoogle("Википедия " + f.getName());
@@ -63,44 +61,32 @@ public class Catalogs {
         
         Collection<String> googleLinks = googleAnswer.values();
 
-        String series = new CP1251toUTF8().convert("(серия)");
+        String series = new CP1251toUTF8().convert("серия");
         for (String link : googleLinks) {
-            if (link.contains("ru.wikipedia.org/wiki") && !link.contains(series)) {
-                String[] newName = wikiExecutor(link).split("~");
-                String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName[0]);
+            if (link.contains("wikipedia.org/wiki") && !link.contains(series)) {
+                String newName = wikiExecutor(link);
+                String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName);
+                System.out.println(newNameAndPath);
                 // f.renameTo(new File(newNameAndPath));
-                return newName[1];
+                return;
             }
         }
-        return "";
     }
 
     private String wikiExecutor(String link) {
         HtmlExecutor exec = new HtmlExecutor();
         String wikiContent = exec.contentExecutor(link);
 
+        String title = "";
         ExcerptFromText excerpt = new ExcerptFromText();
-        String title = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" — Википедия", "");
-
-        String date = null;
-        List<String> dateArea = excerpt.extractExcerptsFromText(wikiContent, "Дат[аы] выпуска", "</span>");
-        if (!dateArea.isEmpty()) {
-            List<String> dates = excerpt.extractExcerptsFromText(dateArea.get(0), "\">\\d", "\">", "</a>", "</a>");
-            if (!dates.isEmpty()) date = dates.get(0) + " " + dates.get(1);
+        if (link.contains("ru.wikipedia.org")) {
+            title = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" — Википедия", "");
+        } else {
+            title = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" - Wikipedia", "");
         }
-        if (date == null) date = dateFromIgromania(title);
 
-        return title + "~" + date;
+        return title;
     }
-
-    public String dateFromIgromania(String title) {
-        String fileName = Catalogs.class.getClassLoader().getResource("Games.csv.gz").getPath();
-        fileName = fileName.substring(1, fileName.length());
-        
-        List<String> games = new GZIPExtractor().fromGzipToMemoryAsList(fileName);
-        return null;
-    }
-
     /**
      * @param disc - имя диска, для которого требуется распечатать атрибуты
      * @return

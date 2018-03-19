@@ -69,7 +69,7 @@ public class Igromania {
 
         attr = excerpt.extractExcerptsFromText(block, "<div class=\"release_name\">", "</div>");
         System.out.println(attr.get(0));
-        if (!attr.isEmpty()) attributes.add(attr.get(0).replaceAll("\\&\\#\\d+;", "A"));
+        if (!attr.isEmpty()) attributes.add(attr.get(0).replaceAll("\\&\\#\\d+;", "A").replaceAll(";", " "));
         else attributes.add("");
 
         attr = excerpt.extractExcerptsFromText(block, "<div class=\"genre\">", "</div>");
