@@ -9,7 +9,7 @@ import htmlConnector.HtmlExecutor;
 import parsers.CP1251toUTF8;
 import parsers.ExcerptFromText;
 
-public class Catalogs {
+public class GamesCataloging {
 
     private final String DISC_LETTER;
     private final String PATH;
@@ -18,7 +18,7 @@ public class Catalogs {
      * @param disc - буква диска
      * @param path - путь для фала с именами
      */
-    public Catalogs(String disc, String path) {
+    public GamesCataloging(String disc, String path) {
         DISC_LETTER = disc;
         PATH = path;
     }
@@ -63,7 +63,7 @@ public class Catalogs {
             if (link.contains("wikipedia.org/wiki") && !link.contains(series)) {
                 String newName = wikiExecutor(link);
                 newName = newName.replace("(игра, ", "(");
-                newName = newName.replace("[^\\w]", " ");
+                newName = newName.replaceAll("[^\\w)(]", " ").replaceAll("  ", " ");
                 
                 if (!f.getName().equals(newName)) {
                     String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName);
@@ -122,8 +122,7 @@ public class Catalogs {
     }
 
     public static void main(String[] args) {
-        Catalogs catalogs = new Catalogs("g:", "D:/Games.exe"
-                + "/One.csv");
+        GamesCataloging catalogs = new GamesCataloging("g:", "D:/Games.exe/One.csv");
         if (catalogs.createList()) System.out.println("Done");
     }
 }
