@@ -19,7 +19,7 @@ public interface DataBaseWork {
 
     /**
      * @param query - SQL query 
-     * @return
+     * @return rows and columns satisfying the request
      */
     List<List<String>> executeCustomQuery(String query);
 
