@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dataBase.DataBaseWork;
-import fileOperation.ReaderFromFile;
 
 /**
  * Operation with Postrge DB
@@ -206,20 +205,14 @@ public class PostgreSQLWork implements DataBaseWork {
     
     public static void main(String[] args) {
         PostgreSQLWork db = new PostgreSQLWork("Games");
-        //db.insert("games", "game''1", "logic", "2018-Jan-08", "5", "6", "goolge");
-        List<String> list = new ReaderFromFile("C:/Games.csv").readAllAsLIst();
         
-        long time = System.currentTimeMillis();
-        for (String string : list) {
-            boolean done = db.insertInto("games", string.split(";"));
-            if (!done) {
-                System.out.println("Hren");
-                break;
+        List<List<String>> list = db.executeCustomQuery("SELECT title FROM games WHERE rate_users > 8 and rate_im > 8 and rel_date > '2015-01-01' order by rate_users");
+        db.close();
+        
+        for (List<String> list2 : list) {
+            for (String string : list2) {
+                System.out.println(string);
             }
         }
-        
-        db.close();
-        System.out.println((System.currentTimeMillis() - time) / 1000.0);
-        System.out.println("Done!");
     }
 }
