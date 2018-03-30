@@ -1,8 +1,12 @@
 package listCreators;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
@@ -19,7 +23,6 @@ public class Igromania {
      * @return List with games and attributes
      */
     private List<List<String>> createList() {
-
         for (int i = 1; true; i++) {
             nextPage(i);
             if (count > 100) break;
@@ -68,7 +71,7 @@ public class Igromania {
         if (!attr.isEmpty()) if (!attr.get(0).contains("PC")) return null;*/
 
         attr = excerpt.extractExcerptsFromText(block, "<div class=\"release_name\">", "</div>");
-        System.out.println(attr.get(0));
+        
         if (!attr.isEmpty()) attributes.add(attr.get(0).replaceAll("\\&\\#\\d+;", "A").replaceAll(";", " "));
         else attributes.add("");
 
@@ -77,7 +80,7 @@ public class Igromania {
         else attributes.add("");
 
         attr = excerpt.extractExcerptsFromText(block, "<div class=\"release_data\">", "</div>");
-        if (!attr.isEmpty()) attributes.add(attr.get(0));
+        if (!attr.isEmpty()) attributes.add(dateFormatter(attr.get(0)));
         else attributes.add("");
 
         attr = excerpt.extractExcerptsFromText(block, "<span class=\"rate_box rate_im\">", "</span>");
@@ -95,6 +98,35 @@ public class Igromania {
         return attributes;
     }
 
+    public String dateFormatter (String badDate) {
+        if ("Дата выхода неизвестна".equals(badDate)) return "";
+        
+        SimpleDateFormat from = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat to = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+        Date docDate = null;
+        
+        try {
+            docDate = from.parse(badDate);
+            return to.format(docDate);
+        } catch (ParseException e) {
+            try {
+                SimpleDateFormat from2 = new SimpleDateFormat("MMMM yyyy");
+                docDate = from2.parse(badDate);
+                return to.format(docDate);
+            } catch (ParseException e2) {
+                try {
+                    SimpleDateFormat from3 = new SimpleDateFormat("yyyy");
+                    badDate = badDate.replaceAll("[^\\d]", "");
+                    docDate = from3.parse(badDate);
+                    return to.format(docDate);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                    return to.format(new Date());
+                }
+            }
+        }
+    }
+    
     public static void main(String[] args) {
         long time = System.nanoTime();
         List<List<String>> games = new Igromania().createList();

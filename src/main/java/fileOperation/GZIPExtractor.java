@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import listCreators.Igromania;
+
 public class GZIPExtractor {
 
     private final int bufferSize = 1024;
@@ -62,16 +64,19 @@ public class GZIPExtractor {
         URL url = GZIPExtractor.class.getClassLoader().getResource("Games.csv.gz");
         List<String> list = new GZIPExtractor().fromGzipToMemoryAsList(url.getPath());
 
-        int max = 0;
-        String name = "";
+        Igromania igromania = new Igromania();
+        WriterToFile writer = new WriterToFile("C:/games.csv");
         for (String string : list) {
             String[] split = string.split(";");
-            if (split[1].length() > max) {
-                max = split[1].length();
-                name = split[1];
+            split[2] = igromania.dateFormatter(split[2]);
+            split[3] = split[3].replaceAll(",", ".");
+            split[4] = split[4].replaceAll(",", ".");
+            for (int i = 0; i < split.length; i++) {
+                writer.write(split[i]);
+                if (i != split.length - 1) writer.write(";");
             }
-            if (split[2].isEmpty()) System.out.println(split[0]);
+            writer.writeLine();
         }
-        System.out.println(max + "\n" + name);
+        writer.close();
     }
 }

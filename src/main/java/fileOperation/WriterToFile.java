@@ -130,9 +130,13 @@ public class WriterToFile {
      * Закрывает все потоки вводы-вывода
      */
     public void close() {
-        try {
-            if (bufferedWriter != null) bufferedWriter.close();
-            if (writer != null) writer.close();
+        if (bufferedWriter != null) try {
+            bufferedWriter.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        if (writer != null) try {
+             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
