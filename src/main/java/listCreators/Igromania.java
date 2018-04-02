@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import dataBase.postgre.PostgreSQLWork;
+import fileOperation.GZIPCreator;
 import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
 import parsers.ExcerptFromText;
@@ -84,11 +86,11 @@ public class Igromania {
         else attributes.add("");
 
         attr = excerpt.extractExcerptsFromText(block, "<span class=\"rate_box rate_im\">", "</span>");
-        if (!attr.isEmpty()) attributes.add(attr.get(0).replace("<span class=\"rate_s\">", ""));
+        if (!attr.isEmpty()) attributes.add(attr.get(0).replace("<span class=\"rate_s\">", "").replace(",", "."));
         else attributes.add("");
 
         attr = excerpt.extractExcerptsFromText(block, "<span class=\"rate_box rate_user\">", "</span>");
-        if (!attr.isEmpty()) attributes.add(attr.get(0).replace("<span class=\"rate_s\">", ""));
+        if (!attr.isEmpty()) attributes.add(attr.get(0).replace("<span class=\"rate_s\">", "").replace(",", "."));
         else attributes.add("");
         
         attr = excerpt.extractExcerptsFromText(block, "<a href=\"", "\"");
@@ -128,14 +130,20 @@ public class Igromania {
     }
     
     public static void main(String[] args) {
+        String path = "Games.csv";
         long time = System.nanoTime();
         List<List<String>> games = new Igromania().createList();
-        print(games);
         System.out.println((System.nanoTime() - time) / 1000000000.0 / 60 / 60);
+        write(games, path);
+        
+        PostgreSQLWork.main(path);
+        
+        GZIPCreator gzip = new GZIPCreator();
+        gzip.gzipIt(path);
     }
 
-    private static void print(List<List<String>> games) {
-        WriterToFile writer = new WriterToFile("Games.csv");
+    private static void write(List<List<String>> games, String path) {
+        WriterToFile writer = new WriterToFile(path);
         for (List<String> list : games) {
             for (String string : list) {
                 writer.write(string + ";");

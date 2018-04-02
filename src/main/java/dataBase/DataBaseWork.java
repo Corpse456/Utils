@@ -20,6 +20,14 @@ public interface DataBaseWork {
     boolean listToDataBase(List<String[]> list, String tableName);
 
     /**
+     * @param path to csv-file
+     * @param tableName - name of table to insert
+     * @return <b>true</b> if operation was successful;</br>
+     *         <b>false</b> otherwise
+     */
+    boolean csvToDataBase(String path, String tableName, String delimiter);
+    
+    /**
      * @param tableName - the name of the table with which operations will be performed
      * @param values the values of columns
      * @return

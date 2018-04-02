@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dataBase.DataBaseWork;
+import fileOperation.ReaderFromFile;
 
 /**
  * Operation with Postrge DB
@@ -25,13 +26,13 @@ public class PostgreSQLWork implements DataBaseWork {
     private String password = "admin";
     private Connection conn;
     private Statement stat;
-    
+
     /**
      * @param dbUrl - data base URL with table name
      * @param user - username
      * @param pass - password
      */
-    public PostgreSQLWork (String dbUrl, String user, String pass) {
+    public PostgreSQLWork(String dbUrl, String user, String pass) {
         this.dbUrl = dbUrl;
         this.user = user;
         this.password = pass;
@@ -39,15 +40,16 @@ public class PostgreSQLWork implements DataBaseWork {
     }
 
     /**
-     * @param dataBaseName - the name of the date base with which operations will be performed
+     * @param dataBaseName - the name of the date base with which operations will be
+     *            performed
      */
-    public PostgreSQLWork (String dataBaseName) {
+    public PostgreSQLWork(String dataBaseName) {
         dbUrl = dbUrl + dataBaseName;
         openConnection();
     }
 
     /**
-     *  opens a connection to the database
+     * opens a connection to the database
      */
     private void openConnection() {
         try {
@@ -56,6 +58,18 @@ public class PostgreSQLWork implements DataBaseWork {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    @Override
+    public boolean csvToDataBase(String path, String tableName, String delimiter) {
+        ReaderFromFile reader = new ReaderFromFile(path);
+        List<String[]> content = new ArrayList<>();
+        
+        while (reader.isReady()) {
+            content.add(reader.readLine().split(delimiter));
+        }
+        
+        return listToDataBase(content, tableName);
     }
 
     @Override
@@ -67,18 +81,18 @@ public class PostgreSQLWork implements DataBaseWork {
         }
         return true;
     }
-    
+
     @Override
-    public boolean insertInto(String tableName, String ...values) {
+    public boolean insertInto(String tableName, String... values) {
         List<String> columnNames = columnNamesWithoutSerial(tableName);
         String query = queryShaper(tableName, columnNames, values);
         return customQuery(query);
     }
 
     @Override
-    public boolean customQuery (String query) {
+    public boolean customQuery(String query) {
         int execute = 0;
-                
+
         try {
             execute = stat.executeUpdate(query);
         } catch (SQLException e) {
@@ -95,15 +109,15 @@ public class PostgreSQLWork implements DataBaseWork {
      * @param values
      * @return
      */
-    private String queryShaper (String tableName, List<String> columnNames, String ...values) {
+    private String queryShaper(String tableName, List<String> columnNames, String... values) {
         StringBuilder into = new StringBuilder();
         StringBuilder value = new StringBuilder();
-        
+
         into.append("INSERT INTO ");
         into.append(tableName);
         into.append("(");
         value.append(") values ('");
-        
+
         for (int i = 0; i < columnNames.size(); i++) {
             if (!values[i].isEmpty()) {
                 into.append(columnNames.get(i));
@@ -111,46 +125,46 @@ public class PostgreSQLWork implements DataBaseWork {
                 if (i != columnNames.size() - 1) {
                     into.append(", ");
                     value.append("', '");
-                } 
+                }
             }
         }
         into.append(value.toString());
         into.append("');");
         return into.toString();
     }
-    
+
     @Override
-    public List<String> columnNames (String tableName) {
+    public List<String> columnNames(String tableName) {
         List<String> columnNames = new ArrayList<>();
         String query = SELECT_COLUMN_NAME + tableName + "'";
-        
+
         List<String> columnWithDefault = executeCustomQueryFirstColumn(query);
         for (String line : columnWithDefault) {
             columnNames.add(line);
         }
         return columnNames;
     }
-    
-    private List<String> columnNamesWithoutSerial (String tableName) {
+
+    private List<String> columnNamesWithoutSerial(String tableName) {
         List<String> columnNames = new ArrayList<>();
         String query = SELECT_COLUMN_NAME_WITH_DEFAULT + tableName + "'";
-        
+
         List<List<String>> columnWithDefault = executeCustomQuery(query);
         for (List<String> list : columnWithDefault) {
             if (list.get(1) == null || !list.get(1).contains("nextval")) columnNames.add(list.get(0));
         }
         return columnNames;
     }
-    
+
     @Override
     public List<List<String>> executeCustomQuery(String query) {
         List<List<String>> answer = new ArrayList<>();
-        
-        try (ResultSet res = stat.executeQuery(query)){
+
+        try (ResultSet res = stat.executeQuery(query)) {
             while (res.next()) {
                 List<String> row = new ArrayList<>();
                 int colAmount = res.getMetaData().getColumnCount();
-                
+
                 for (int i = 1; i <= colAmount; i++) {
                     row.add(res.getString(i));
                 }
@@ -161,12 +175,12 @@ public class PostgreSQLWork implements DataBaseWork {
         }
         return answer;
     }
-    
+
     @Override
     public List<String> executeCustomQueryFirstColumn(String query) {
         List<String> answer = new ArrayList<>();
-        
-        try (ResultSet res = stat.executeQuery(query)){
+
+        try (ResultSet res = stat.executeQuery(query)) {
             while (res.next()) {
                 answer.add(res.getString(1));
             }
@@ -175,7 +189,7 @@ public class PostgreSQLWork implements DataBaseWork {
         }
         return answer;
     }
-      
+
     @Override
     public boolean eraseAll(String tableName) {
         String query = "DELETE FROM " + tableName;
@@ -190,7 +204,7 @@ public class PostgreSQLWork implements DataBaseWork {
     }
 
     @Override
-    public void close () {
+    public void close() {
         if (stat != null) try {
             stat.close();
         } catch (SQLException e) {
@@ -202,17 +216,20 @@ public class PostgreSQLWork implements DataBaseWork {
             e.printStackTrace();
         }
     }
-    
-    public static void main(String[] args) {
-        PostgreSQLWork db = new PostgreSQLWork("Games");
+
+    public static void main(String ...args) {
+        List<String> list = new ReaderFromFile(args[0]).readAllAsLIst();
         
-        List<List<String>> list = db.executeCustomQuery("SELECT title FROM games WHERE rate_users > 8 and rate_im > 8 and rel_date > '2015-01-01' order by rate_users");
-        db.close();
-        
-        for (List<String> list2 : list) {
-            for (String string : list2) {
-                System.out.println(string);
+        PostgreSQLWork db = new PostgreSQLWork("Games"); 
+        long time = System.currentTimeMillis();
+        for (String string : list) {
+            boolean done = db.insertInto("games", string.split(";"));
+            if (!done) {
+                System.out.println("Hren");
+                break;
             }
         }
+        db.close();
+        System.out.println(System.currentTimeMillis() - time / 1000.0 / 60);
     }
 }
