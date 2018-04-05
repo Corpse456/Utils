@@ -74,25 +74,31 @@ public class Igromania {
 
         attr = excerpt.extractExcerptsFromText(block, "<div class=\"release_name\">", "</div>");
         
+        //the name of the game
         if (!attr.isEmpty()) attributes.add(attr.get(0).replaceAll("\\&\\#\\d+;", "A").replaceAll(";", " "));
         else attributes.add("");
 
+        //genre
         attr = excerpt.extractExcerptsFromText(block, "<div class=\"genre\">", "</div>");
         if (!attr.isEmpty()) attributes.add(attr.get(0));
         else attributes.add("");
 
+        //release date
         attr = excerpt.extractExcerptsFromText(block, "<div class=\"release_data\">", "</div>");
         if (!attr.isEmpty()) attributes.add(dateFormatter(attr.get(0)));
         else attributes.add("");
 
+        //rating by igromania
         attr = excerpt.extractExcerptsFromText(block, "<span class=\"rate_box rate_im\">", "</span>");
         if (!attr.isEmpty()) attributes.add(attr.get(0).replace("<span class=\"rate_s\">", "").replace(",", "."));
         else attributes.add("");
-
+        
+        //rating by users
         attr = excerpt.extractExcerptsFromText(block, "<span class=\"rate_box rate_user\">", "</span>");
         if (!attr.isEmpty()) attributes.add(attr.get(0).replace("<span class=\"rate_s\">", "").replace(",", "."));
         else attributes.add("");
         
+        //link
         attr = excerpt.extractExcerptsFromText(block, "<a href=\"", "\"");
         if (!attr.isEmpty()) attributes.add("https://www.igromania.ru/" + attr.get(0));
         else attributes.add("");
