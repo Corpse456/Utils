@@ -53,8 +53,8 @@ public class Igromania {
     }
 
     /**
-     * @param content - содержимое странички Игромании с базой игр
-     * @return List String блоков посвящённых игре
+     * @param content - the contents of the Igromania page with a base of games
+     * @return List String blocks of dedicated games
      */
     private List<String> gameBox(String content) {
         ExcerptFromText excerpt = new ExcerptFromText();
