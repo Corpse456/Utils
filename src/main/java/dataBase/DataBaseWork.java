@@ -17,7 +17,7 @@ public interface DataBaseWork {
      *         <b>false</b> otherwise
      *         
      */
-    boolean listToDataBase(List<String[]> list, String tableName);
+    boolean insertlistToDataBase(List<String[]> list, String tableName);
 
     /**
      * @param path to csv-file

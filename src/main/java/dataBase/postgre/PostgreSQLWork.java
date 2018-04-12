@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import dataBase.DataBaseWork;
 import fileOperation.ReaderFromFile;
@@ -69,11 +70,16 @@ public class PostgreSQLWork implements DataBaseWork {
             content.add(reader.readLine().split(delimiter));
         }
         
-        return listToDataBase(content, tableName);
+        return insertlistToDataBase(content, tableName);
     }
 
+    public void insertlistToDataBase(Set<String> autors, String tableName) {
+        // TODO Auto-generated method stub
+        
+    }
+    
     @Override
-    public boolean listToDataBase(List<String[]> list, String tableName) {
+    public boolean insertlistToDataBase(List<String[]> list, String tableName) {
         List<String> columnNames = columnNamesWithoutSerial(tableName);
         for (String[] strings : list) {
             String query = queryShaper(tableName, columnNames, strings);
@@ -109,28 +115,35 @@ public class PostgreSQLWork implements DataBaseWork {
      * @param values
      * @return
      */
-    private String queryShaper(String tableName, List<String> columnNames, String... values) {
-        StringBuilder into = new StringBuilder();
+    private String queryShaper(String tableName, List<String> columnNames, List<String> values) {
+        StringBuilder query = new StringBuilder();
         StringBuilder value = new StringBuilder();
 
-        into.append("INSERT INTO ");
-        into.append(tableName);
-        into.append("(");
-        value.append(") values ('");
+        query.append("INSERT INTO ");
+        query.append(tableName);
 
-        for (int i = 0; i < columnNames.size(); i++) {
-            if (!values[i].isEmpty()) {
-                into.append(columnNames.get(i));
-                value.append(values[i].replaceAll("'", "''"));
-                if (i != columnNames.size() - 1) {
-                    into.append(", ");
-                    value.append("', '");
-                }
+        inBraces(columnNames, query);
+        
+        query.append(" values ");
+        if (!values[i].isEmpty()) {
+            value.append(values[i].replaceAll("'", "''"));
+        }
+        value.append("', '");
+        
+        query.append(value.toString());
+        query.append("');");
+        return query.toString();
+    }
+
+    private void inBraces(List<String> values, StringBuilder query) {
+        query.append("(");
+        for (int i = 0; i < values.size(); i++) {
+            query.append(values.get(i).replaceAll("'", "''"));
+            if (i != values.size() - 1) {
+                query.append(", ");
             }
         }
-        into.append(value.toString());
-        into.append("');");
-        return into.toString();
+        query.append(")");
     }
 
     @Override
