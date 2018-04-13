@@ -117,33 +117,26 @@ public class PostgreSQLWork implements DataBaseWork {
      */
     private String queryShaper(String tableName, List<String> columnNames, List<String> values) {
         StringBuilder query = new StringBuilder();
-        StringBuilder value = new StringBuilder();
 
         query.append("INSERT INTO ");
         query.append(tableName);
-
-        inBraces(columnNames, query);
-        
+        inBraces(columnNames, query, "");
         query.append(" values ");
-        if (!values[i].isEmpty()) {
-            value.append(values[i].replaceAll("'", "''"));
-        }
-        value.append("', '");
+        inBraces(values, query, "'");
+        query.append(";");
         
-        query.append(value.toString());
-        query.append("');");
         return query.toString();
     }
 
-    private void inBraces(List<String> values, StringBuilder query) {
-        query.append("(");
+    private void inBraces(List<String> values, StringBuilder query, String quotes) {
+        query.append("(" + quotes);
         for (int i = 0; i < values.size(); i++) {
-            query.append(values.get(i).replaceAll("'", "''"));
+            if (!values.get(i).isEmpty()) query.append(values.get(i).replaceAll("'", "''"));
             if (i != values.size() - 1) {
-                query.append(", ");
+                query.append(quotes + ", " + quotes);
             }
         }
-        query.append(")");
+        query.append(quotes + ")");
     }
 
     @Override
