@@ -178,6 +178,7 @@ public class PostgreSQLWork implements DataBaseWork {
                 answer.add(row);
             }
         } catch (SQLException e) {
+            System.out.println(query);
             e.printStackTrace();
         }
         return answer;
