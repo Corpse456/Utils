@@ -33,9 +33,9 @@ public class GamesCataloging {
             File disc = new File(DISC_LETTER);
             writer.write(discAtributes(disc));
             for (File f : disc.listFiles()) {
-                if (isGameFolder(f)) {
-                    goodNameApplier(f);
-                    writer.writeLine(f.getName() + "," + calculateSize(f));
+                if (isGame(f)) {
+                    String name = goodNameApplier(f);
+                    writer.writeLine(name + "," + calculateSize(f));
                 }
             }
         } catch (Exception e) {
@@ -49,12 +49,24 @@ public class GamesCataloging {
 
     /**
      * @param f - имя папки, для которой необходимо найти имя
+     * @return 
      * @return дата выпуска игры
      */
-    private void goodNameApplier(File f) {
-        System.out.println(f.getName());
+    private String goodNameApplier(File f) {
+        String name = f.getName();
+        String changedName = name;
+        System.out.println(name);
+        if (f.isFile()) {
+            int lastIndexOf = changedName.lastIndexOf(".");
+            if (lastIndexOf > 0) changedName = changedName.substring(0, lastIndexOf);
+        }
+        changedName = changedName.replaceAll("\\[.*]", "");
+        changedName = changedName.toLowerCase().replaceAll("repack", "");
+        changedName = changedName.replaceAll("_", " ");
+        System.out.println(changedName);
+        
         HtmlExecutor exec = new HtmlExecutor();
-        Map<String, String> googleAnswer = exec.findInGoogle("Википедия " + f.getName());
+        Map<String, String> googleAnswer = exec.findInGoogle("Википедия " + name);
         
         Collection<String> googleLinks = googleAnswer.values();
 
@@ -63,16 +75,19 @@ public class GamesCataloging {
             if (link.contains("wikipedia.org/wiki") && !link.contains(series)) {
                 String newName = wikiExecutor(link);
                 newName = newName.replace("(игра, ", "(");
+                newName = newName.replace("(игра)", "");
                 newName = newName.replaceAll("[^\\w)(]", " ").replaceAll("  ", " ");
                 
-                if (!f.getName().equals(newName)) {
-                    String newNameAndPath = f.getAbsolutePath().replace(f.getName(), newName);
+                String newNameAndPath = null;
+                if (!name.equals(newName)) {
+                    newNameAndPath = f.getAbsolutePath().replace(name, newName);
                     System.out.println(newNameAndPath);
-                    f.renameTo(new File(newNameAndPath));
+                    //f.renameTo(new File(newNameAndPath));
                 }
-                return;
+                return newNameAndPath;
             }
         }
+        return null;
     }
 
     private String wikiExecutor(String link) {
@@ -83,6 +98,7 @@ public class GamesCataloging {
         ExcerptFromText excerpt = new ExcerptFromText();
         if (link.contains("ru.wikipedia.org")) {
             title = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" — Википедия", "");
+            System.out.println(title);
         } else {
             title = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" - Wikipedia", "");
         }
@@ -115,14 +131,13 @@ public class GamesCataloging {
         return size;
     }
 
-    private boolean isGameFolder(File f) {
-        if (!f.isDirectory()) return false;
+    private boolean isGame(File f) {
         if ("$RECYCLE.BIN".equals(f.getName()) || "System Volume Information".equals(f.getName())) return false;
         return true;
     }
 
     public static void main(String[] args) {
-        GamesCataloging catalogs = new GamesCataloging("g:", "D:/Games.exe/One.csv");
+        GamesCataloging catalogs = new GamesCataloging("g:", "D:/Games.exe/Two.csv");
         if (catalogs.createList()) System.out.println("Done");
     }
 }

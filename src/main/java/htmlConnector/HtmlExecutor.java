@@ -103,7 +103,7 @@ public class HtmlExecutor {
             List<String> titleList = excerpt.extractExcerptsFromText(s, ">", "</a>");
             String title = !titleList.isEmpty() ? titleList.get(0) : "";
             
-            if (!link.isEmpty()) titleAndLinks.put(title , link);
+            if (!link.isEmpty()) titleAndLinks.put(title, link);
         }
         return titleAndLinks;
     }
