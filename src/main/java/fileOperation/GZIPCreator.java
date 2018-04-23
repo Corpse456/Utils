@@ -5,20 +5,31 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.zip.GZIPOutputStream;
 
 public class GZIPCreator {
 
     private final int bufferSize = 1024;
+    private String newName = "";
+    
+    public void gzipIt(URL fileName, String newFolder) {
+        gzipIt(fileName.getPath(), newFolder);
+    }
     
     public void gzipIt(String fileName, String newFolder) {
-        String newPath = newFolder + new File(fileName).getName();
-        gzipIt(newPath);
+        newName = newFolder + new File(fileName).getName();
+        gzipIt(fileName);
     }
 
+    public void gzipIt(URL fileName) {
+        gzipIt(fileName.getPath());
+    }
+    
     public void gzipIt(String fileName) {
         byte[] buffer = new byte[bufferSize];
-        String newName = fileName + ".gz";
+        if (newName.isEmpty()) newName = fileName + ".gz";
+        else newName += ".gz";
         
         try {
             try (FileInputStream input = new FileInputStream(fileName);
@@ -37,6 +48,7 @@ public class GZIPCreator {
     }
     
     public static void main(String[] args) {
-        new GZIPCreator().gzipIt("d:\\Java\\Utils\\src\\main\\resources\\Games.csv");
+        new GZIPCreator().gzipIt(GZIPCreator.class.getClassLoader().getResource("BelarusCities.csv"), "C:/");
+        System.out.println("Done");
     }
 }

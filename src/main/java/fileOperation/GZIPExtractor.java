@@ -38,6 +38,10 @@ public class GZIPExtractor {
         return newName;
     }
 
+    public String fromGzipToMemory(URL fileName) {
+        return fromGzipToMemory(fileName.getPath());
+    }
+    
     public String fromGzipToMemory(String fileName) {
         StringBuilder content = new StringBuilder();
         List<String> contentList = fromGzipToMemoryAsList(fileName);
@@ -48,6 +52,10 @@ public class GZIPExtractor {
         return content.toString();
     }
 
+    public List<String> fromGzipToMemoryAsList(URL fileName) {
+        return fromGzipToMemoryAsList(fileName.getPath());
+    }
+    
     public List<String> fromGzipToMemoryAsList(String fileName) {
         String filePath = unGZIP(fileName);
 
