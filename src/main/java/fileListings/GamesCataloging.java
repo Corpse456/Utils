@@ -13,6 +13,7 @@ public class GamesCataloging {
 
     private final String DISC_LETTER;
     private final String PATH;
+    private final String[] EXEPTIONS = { "Космические рейнджеры", "Братья Пилоты 8", "Pharaoh & Cleopatra" };
 
     /**
      * @param disc - буква диска
@@ -66,7 +67,7 @@ public class GamesCataloging {
         System.out.println(changedName);
         
         HtmlExecutor exec = new HtmlExecutor();
-        Map<String, String> googleAnswer = exec.findInGoogle("Википедия " + name);
+        Map<String, String> googleAnswer = exec.findInGoogle("Википедия " + changedName);
         
         Collection<String> googleLinks = googleAnswer.values();
 
@@ -74,9 +75,9 @@ public class GamesCataloging {
         for (String link : googleLinks) {
             if (link.contains("wikipedia.org/wiki") && !link.contains(series)) {
                 String newName = wikiExecutor(link);
-                newName = newName.replace("(игра, ", "(");
+                //newName = newName.replace("(игра, ", "(");
                 newName = newName.replace("(игра)", "");
-                newName = newName.replaceAll("[^\\w)(]", " ").replaceAll("  ", " ");
+                newName = newName.replaceAll(":", " ").replaceAll("  ", " ");
                 
                 String newNameAndPath = null;
                 if (!name.equals(newName)) {
@@ -94,14 +95,19 @@ public class GamesCataloging {
         HtmlExecutor exec = new HtmlExecutor();
         String wikiContent = exec.contentExecutor(link);
 
-        String title = "";
         ExcerptFromText excerpt = new ExcerptFromText();
+        String title = excerpt.TitleFromHtmlPage(wikiContent);
+        String wiki = "";
+        
         if (link.contains("ru.wikipedia.org")) {
-            title = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" — Википедия", "");
-            System.out.println(title);
+            wiki = " — Википедия";
+        } else if (link.contains("be.wikipedia.org")) {
+            wiki = " — Вікіпедыя";
         } else {
-            title = excerpt.TitleFromHtmlPage(wikiContent).replaceAll(" - Wikipedia", "");
+            wiki = " - Wikipedia";
         }
+        title = title.replaceAll(wiki, "");
+        System.out.println(title);
 
         return title;
     }
@@ -139,5 +145,7 @@ public class GamesCataloging {
     public static void main(String[] args) {
         GamesCataloging catalogs = new GamesCataloging("g:", "D:/Games.exe/Two.csv");
         if (catalogs.createList()) System.out.println("Done");
+        /*String name = new GamesCataloging("g:", "D:/Games.exe/Two.csv").goodNameApplier(new File("g:/Космические рейнджеры"));
+        System.out.println(name);*/
     }
 }

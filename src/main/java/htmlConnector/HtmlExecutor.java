@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import parsers.CP1251toUTF8;
 import parsers.ExcerptFromText;
@@ -109,9 +108,12 @@ public class HtmlExecutor {
     }
     
     public static void main(String[] args) {
-        Map<String, String> finded = new HtmlExecutor().findInGoogle("Википедия Rise of the Tomb Raider by xatab");
-        for (Entry<String, String> entry : finded.entrySet()) {
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
+        Map<String, String> finded = new HtmlExecutor().findInGoogle("Википедия tesv - skyrim ru");
+        String next = finded.values().iterator().next();
+        
+        ExcerptFromText excerpt = new ExcerptFromText();
+        String title = excerpt.TitleFromLink(next);
+        
+        System.out.println(title);
     }
 }
