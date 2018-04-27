@@ -1,7 +1,9 @@
 package fileListings;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import fileOperation.WriterToFile;
@@ -11,9 +13,9 @@ import parsers.ExcerptFromText;
 
 public class GamesCataloging {
 
-    private final String DISC_LETTER;
-    private final String PATH;
-    private final String[] EXEPTIONS = { "Космические рейнджеры", "Братья Пилоты 8", "Pharaoh & Cleopatra" };
+    private String DISC_LETTER;
+    private String PATH;
+    private final List<String> exceptions = Arrays.asList("Братья Пилоты - по следам полосатого слона", "Pharaoh & Cleopatra");
 
     /**
      * @param disc - буква диска
@@ -22,6 +24,9 @@ public class GamesCataloging {
     public GamesCataloging(String disc, String path) {
         DISC_LETTER = disc;
         PATH = path;
+    }
+    
+    public GamesCataloging () {
     }
 
     /**
@@ -54,13 +59,23 @@ public class GamesCataloging {
      * @return дата выпуска игры
      */
     private String goodNameApplier(File f) {
+        
         String name = f.getName();
         String changedName = name;
         System.out.println(name);
+        
+        // if f - is file, remember extension
+        String extension = "";
         if (f.isFile()) {
             int lastIndexOf = changedName.lastIndexOf(".");
-            if (lastIndexOf > 0) changedName = changedName.substring(0, lastIndexOf);
+            if (lastIndexOf > 0) {
+                extension = changedName.substring(lastIndexOf, changedName.length());
+                changedName = changedName.substring(0, lastIndexOf);
+            }
         }
+        if (exceptions.contains(changedName)) return name;
+        
+        //replace all in brackets like this - []
         changedName = changedName.replaceAll("\\[.*]", "");
         changedName = changedName.toLowerCase().replaceAll("repack", "");
         changedName = changedName.replaceAll("_", " ");
@@ -75,20 +90,22 @@ public class GamesCataloging {
         for (String link : googleLinks) {
             if (link.contains("wikipedia.org/wiki") && !link.contains(series)) {
                 String newName = wikiExecutor(link);
-                //newName = newName.replace("(игра, ", "(");
-                newName = newName.replace("(игра)", "");
-                newName = newName.replaceAll(":", " ").replaceAll("  ", " ");
+                newName = newName.replace(" (игра)", "");
+                //replace ":" - invalid character in file name
+                newName = newName.replaceAll(":", "-").replaceAll("  ", " ");
+                newName += extension;
                 
                 String newNameAndPath = null;
                 if (!name.equals(newName)) {
                     newNameAndPath = f.getAbsolutePath().replace(name, newName);
                     System.out.println(newNameAndPath);
-                    //f.renameTo(new File(newNameAndPath));
+                    f.renameTo(new File(newNameAndPath));
+                    return newName;
                 }
-                return newNameAndPath;
+                break;
             }
         }
-        return null;
+        return name;
     }
 
     private String wikiExecutor(String link) {
@@ -127,11 +144,12 @@ public class GamesCataloging {
      * @return
      */
     public long calculateSize(File f) {
+        if (f.isFile()) return f.length();
+        
         long size = 0;
         if (f.listFiles() != null) {
             for (File f1 : f.listFiles()) {
-                if (f1.isFile()) size += f1.length();
-                if (f1.isDirectory()) size += calculateSize(f1);
+                size += calculateSize(f1);
             }
         }
         return size;
@@ -145,7 +163,7 @@ public class GamesCataloging {
     public static void main(String[] args) {
         GamesCataloging catalogs = new GamesCataloging("g:", "D:/Games.exe/Two.csv");
         if (catalogs.createList()) System.out.println("Done");
-        /*String name = new GamesCataloging("g:", "D:/Games.exe/Two.csv").goodNameApplier(new File("g:/Космические рейнджеры"));
+        /*String name = new GamesCataloging().goodNameApplier(new File("g:/Космические рейнджеры"));
         System.out.println(name);*/
     }
 }
