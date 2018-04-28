@@ -15,7 +15,7 @@ public class GamesCataloging {
 
     private String DISC_LETTER;
     private String PATH;
-    private final List<String> exceptions = Arrays.asList("Братья Пилоты - по следам полосатого слона", "Pharaoh & Cleopatra");
+    private final List<String> exceptions = Arrays.asList("The witcher", "Fallout 2 Restoration Project 2.3.3", "Cradle", "Братья Пилоты - по следам полосатого слона", "Pharaoh & Cleopatra");
 
     /**
      * @param disc - буква диска
@@ -40,8 +40,9 @@ public class GamesCataloging {
             writer.write(discAtributes(disc));
             for (File f : disc.listFiles()) {
                 if (isGame(f)) {
+                    long size = calculateSize(f);
                     String name = goodNameApplier(f);
-                    writer.writeLine(name + "," + calculateSize(f));
+                    writer.writeLine(name + "," + size);
                 }
             }
         } catch (Exception e) {
@@ -77,7 +78,7 @@ public class GamesCataloging {
         
         //replace all in brackets like this - []
         changedName = changedName.replaceAll("\\[.*]", "");
-        changedName = changedName.toLowerCase().replaceAll("repack", "");
+        changedName = changedName.toLowerCase().replaceAll("repack", "").replaceAll("codex", "").replaceAll("unigamers", "").replaceAll("r.g.", "");
         changedName = changedName.replaceAll("_", " ");
         System.out.println(changedName);
         
@@ -90,9 +91,11 @@ public class GamesCataloging {
         for (String link : googleLinks) {
             if (link.contains("wikipedia.org/wiki") && !link.contains(series)) {
                 String newName = wikiExecutor(link);
+                //replace type like "(game, 2014)" for (2014)
+                newName = newName.replace("(игра, ", "(");
                 newName = newName.replace(" (игра)", "");
                 //replace ":" - invalid character in file name
-                newName = newName.replaceAll(":", "-").replaceAll("  ", " ");
+                newName = newName.replaceAll(":", " -").replaceAll("  ", " ");
                 newName += extension;
                 
                 String newNameAndPath = null;
@@ -124,7 +127,6 @@ public class GamesCataloging {
             wiki = " - Wikipedia";
         }
         title = title.replaceAll(wiki, "");
-        System.out.println(title);
 
         return title;
     }
@@ -161,9 +163,7 @@ public class GamesCataloging {
     }
 
     public static void main(String[] args) {
-        GamesCataloging catalogs = new GamesCataloging("g:", "D:/Games.exe/Two.csv");
+        GamesCataloging catalogs = new GamesCataloging("g:", "D:/Games.exe/Three.csv");
         if (catalogs.createList()) System.out.println("Done");
-        /*String name = new GamesCataloging().goodNameApplier(new File("g:/Космические рейнджеры"));
-        System.out.println(name);*/
     }
 }
