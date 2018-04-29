@@ -1,37 +1,48 @@
 ECHO OFF
 cd Crib
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
 cd AngryChess
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
 cd Test
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
 cd Utils
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
 cd BigProjects
 cd Calculator
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
 cd Notebook
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
 cd ProceduralCHess
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
 cd..
 cd Study
 cd Homeworks
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
 cd Hotels
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
 cd Lessons
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
 cd Tasks
-git pull
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
 cd..
