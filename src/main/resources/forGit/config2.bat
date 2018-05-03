@@ -1,4 +1,11 @@
 ECHO OFF
+
+cd..
+cd..
+cd..
+cd..
+cd..
+
 cd Crib
 git config user.name "Alexander Neznaev"
 git config user.email Corpsetrup@gmail.com
