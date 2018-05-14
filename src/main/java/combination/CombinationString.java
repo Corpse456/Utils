@@ -1,6 +1,5 @@
 package combination;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -8,61 +7,64 @@ import fileOperation.WriterToFile;
 
 public class CombinationString {
 
-    private ArrayList<String> variants = new ArrayList<>();
+    private ArrayList<String> variants = new ArrayList<>(20000000);
     private String[] array;
-    private int n;
-    
+    private int length;
+
     public static void main (String[] args) {
-        CombinationString comb = new CombinationString();
-        String[] mass = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+        String[] mass = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "A" };
+        
         long time = System.currentTimeMillis();
+        CombinationString comb = new CombinationString();
         ArrayList<String> combinateIt = comb.combinateIt(mass);
         System.out.println((System.currentTimeMillis() - time) / 1000.0);
-        
-        WriterToFile writer = new WriterToFile(new File("C:/comb.txt"));
-        writer.write(combinateIt);;
+
+        WriterToFile writer = new WriterToFile("C:/comb.txt");
+        writer.write(combinateIt);
         writer.close();
     }
 
     public ArrayList<String> combinateIt (String[] mass) {
         array = mass;
-        n = array.length;
-        
+        length = array.length;
+
         Arrays.sort(array);
-        
-        oneOptionAdd();
-        while (Set()) oneOptionAdd();
-        
+
+        do {
+            oneOptionAdd();
+        } while (Set());
+
         return variants;
     }
 
     private boolean Set () {
-        int i = n - 2;
+        int i = length - 2;
         while (i != -1 && array[i].compareTo(array[i + 1]) >= 0) i--;
-        
+
         if (i == -1) return false;
 
-        int m = n - 1;
+        int m = length - 1;
         while (array[i].compareTo(array[m]) >= 0) m--;
 
         swap(i, m);
 
-        int b = i + 1;
-        int c = n - 1;
-
-        while (b < c) {
-            swap(b, c);
-            b++;
-            c--;
-        }
+        sortAfterI(i + 1, length - 1);
 
         return true;
     }
 
-    private void swap (int i, int m) {
-        String temp = array[i];
-        array[i] = array[m];
-        array[m] = temp;
+    private void sortAfterI (int startIndex, int endIndex) {
+        while (startIndex < endIndex) {
+            swap(startIndex, endIndex);
+            startIndex++;
+            endIndex--;
+        }
+    }
+
+    private void swap (int x, int y) {
+        String temp = array[x];
+        array[x] = array[y];
+        array[y] = temp;
     }
 
     private void oneOptionAdd () {

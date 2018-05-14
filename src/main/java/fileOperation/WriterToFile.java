@@ -20,21 +20,32 @@ public class WriterToFile {
 
     public WriterToFile(String path) {
         file = new File(path);
-        writerCreator();
+        writerCreator(false);
     }
 
     public WriterToFile(File f) {
         file = f;
-        writerCreator();
+        writerCreator(false);
+    }
+    
+    public WriterToFile(String path, boolean append) {
+        file = new File(path);
+        writerCreator(append);
+    }
+    
+    public WriterToFile(File f, boolean append) {
+        file = f;
+        writerCreator(append);
     }
 
     /**
+     * @param append - add to file or write a new
      * 
      */
-    private void writerCreator() {
+    private void writerCreator(boolean append) {
         if (!file.isFile() || file.exists()) createFile();
         try {
-            writer = new FileWriter(file);
+            writer = new FileWriter(file, append);
         } catch (IOException e) {
             e.printStackTrace();
         }
