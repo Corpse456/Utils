@@ -1,15 +1,16 @@
 package fileAttributes;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class FileAmount {
     private int amount;
     private CopyOnWriteArrayList<Thread> listThread;
-    
+
     public int calc (String path) {
         File[] catalog = new File(path).listFiles();
-        
+
         return counter(catalog);
     }
 
@@ -17,29 +18,30 @@ public class FileAmount {
         listThread = new CopyOnWriteArrayList<Thread>();
         amount = 0;
         for (File file : catalog) {
-            if (file.isDirectory()) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        amount += counter(file.listFiles());
-                        System.out.println("after " + listThread.size());
-                        listThread.remove(listThread.size() - 1);
-                    }
-                });
+            if (file.isDirectory() && file.listFiles() != null) {
+                // amount += counter(file.listFiles());
+                Thread thread = new Thread( () -> amount += counter(file.listFiles()));
                 listThread.add(thread);
-                System.out.println(listThread.size());
                 thread.start();
-            }
-            else amount++;
+            } else amount++;
         }
-        
-        while(listThread.size() > 0);
-        
+
+        boolean alive;
+        System.out.println("ListSize: " + listThread.size());
+        do {
+            alive = false;
+            for (Thread t : listThread) {
+                if (t.isAlive()) alive = true;
+            }
+        } while (alive);
+
         return amount;
     }
-    
+
     public static void main (String[] args) {
-        int calc = new FileAmount().calc("d:\\Java\\Study\\Lessons\\src\\main\\java\\lesson50\\");
-        System.out.println(calc);
+        long time = System.nanoTime();
+        int calc = new FileAmount().calc("d:\\");
+        System.err.println("time: " + (System.nanoTime() - time));
+        System.err.println(calc);
     }
 }

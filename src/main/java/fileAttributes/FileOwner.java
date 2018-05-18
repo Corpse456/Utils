@@ -10,6 +10,8 @@ import java.nio.file.attribute.UserPrincipal;
 import java.util.ArrayList;
 import java.util.List;
 
+import fileListings.GamesCataloging;
+
 public class FileOwner {
     
     private String owner;
@@ -30,15 +32,16 @@ public class FileOwner {
             if (file.isDirectory()) scanFilesInFolder(file.listFiles());
             else if (owner.equals(getOwner(file))) {
                 files.add(file);
+                System.out.println(file.getAbsolutePath());
             }
         }
     }
 
-    private String getOwner (File file) {
+    public String getOwner (File file) {
         return getOwner(file.getAbsolutePath());
     }
 
-    private String getOwner (String stringPath) {
+    public String getOwner (String stringPath) {
         Path path = Paths.get(stringPath);
         FileOwnerAttributeView ownerAttributeView = Files.getFileAttributeView(path, FileOwnerAttributeView.class);
 
@@ -46,16 +49,20 @@ public class FileOwner {
         try {
             owner = ownerAttributeView.getOwner();
         } catch (IOException e) {
-            System.out.println(stringPath);
+            System.err.println(stringPath);
         }
         return owner.getName();
     }
     
     public static void main (String[] args) {
         FileOwner fileOwner = new FileOwner();
-        List<File> files = fileOwner.getListFilesOfCurrentOwner("z:\\ASU\\Common\\", "MINSK\\Neznaev_AI");
+        List<File> files = fileOwner.getListFilesOfCurrentOwner("z:\\ASU\\Common", "MINSK\\Busko_MY");
+        
+        GamesCataloging game = new GamesCataloging();
+        long size = 0;
         for (File file : files) {
-            System.out.println(file.getAbsolutePath());
+            size += game.calculateSize(file);
         }
+        System.out.println(size);
     }
 }
