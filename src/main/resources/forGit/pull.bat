@@ -7,49 +7,38 @@ cd..
 cd..
 
 cd Crib
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
 cd AngryChess
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
 cd Test
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
 cd Utils
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
 cd BigProjects
 cd Calculator
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
 cd Notebook
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
 cd ProceduralCHess
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
 cd..
 cd Study
 cd Homeworks
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
 cd Hotels
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
 cd Lessons
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
 cd Tasks
-git config user.name "Alexander Neznaev"
-git config user.email Corpsetrup@gmail.com
+git pull
 cd..
