@@ -19,15 +19,23 @@ public class FolderProperties {
     }
     
     /**
-     * @param f - файл или папка, для которго необходимо посчитать размер
-     * @return
+     * @param path to file or folder for which needs to calculate the size
+     * @return <b>long</b> size
      */
-    public long calculateSize(File f) {
-        if (f.isFile()) return f.length();
+    public long calculateSize(String path) {
+        return calculateSize(new File(path));
+    }
+    
+    /**
+     * @param file for which needs to calculate the size
+     * @return <b>long</b> size
+     */
+    public long calculateSize(File file) {
+        if (file.isFile()) return file.length();
         
         long size = 0;
-        if (f.listFiles() != null) {
-            for (File f1 : f.listFiles()) {
+        if (file.listFiles() != null) {
+            for (File f1 : file.listFiles()) {
                 size += calculateSize(f1);
             }
         }
@@ -51,5 +59,8 @@ public class FolderProperties {
         int calc = new FolderProperties().fileAmount("z:\\Common\\ОАСУ\\Пи-трубы (1) с 24.05.xls");
         System.err.println("time: " + (System.nanoTime() - time));
         System.err.println(calc);
+        
+        long calculateSize = new FolderProperties().calculateSize(new File("z:\\ASU\\Common\\"));
+        System.out.println(calculateSize);
     }
 }
