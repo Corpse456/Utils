@@ -3,7 +3,7 @@ package combination;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import fileOperation.WriterToFile;
+import workWithFiles.fileIO.WriterToFile;
 
 public class CombinationString {
 

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fileOperation.ReaderFromFile;
 import htmlConnector.HtmlExecutor;
+import workWithFiles.fileIO.ReaderFromFile;
 
 public class ExcerptFromText {
 

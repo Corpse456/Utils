@@ -2,8 +2,8 @@ package listCreators;
 
 import java.io.IOException;
 
-import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
+import workWithFiles.fileIO.WriterToFile;
 
 public class Onliner {
 

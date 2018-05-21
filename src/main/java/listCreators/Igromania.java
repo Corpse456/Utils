@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Locale;
 
 import dataBase.postgre.PostgreSQLWork;
-import fileOperation.GZIPCreator;
-import fileOperation.WriterToFile;
 import htmlConnector.HtmlExecutor;
 import parsers.ExcerptFromText;
+import workWithFiles.fileIO.GZIPCreator;
+import workWithFiles.fileIO.WriterToFile;
 
 public class Igromania {
 

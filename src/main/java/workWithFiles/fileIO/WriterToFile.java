@@ -1,4 +1,4 @@
-package fileOperation;
+package workWithFiles.fileIO;
 
 import java.io.BufferedWriter;
 import java.io.File;

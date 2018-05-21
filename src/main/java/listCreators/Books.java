@@ -3,8 +3,8 @@ package listCreators;
 import java.util.List;
 
 import constant.Delimiters;
-import fileOperation.WriterToFile;
 import parsers.ExcerptFromText;
+import workWithFiles.fileIO.WriterToFile;
 
 public class Books {
 

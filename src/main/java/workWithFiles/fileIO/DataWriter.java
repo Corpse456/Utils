@@ -1,4 +1,4 @@
-package fileOperation;
+package workWithFiles.fileIO;
 
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;

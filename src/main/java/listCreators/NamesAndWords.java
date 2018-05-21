@@ -4,8 +4,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import fileOperation.GZIPExtractor;
-import fileOperation.ReaderFromFile;
+import workWithFiles.fileIO.GZIPExtractor;
+import workWithFiles.fileIO.ReaderFromFile;
 
 public class NamesAndWords {
 

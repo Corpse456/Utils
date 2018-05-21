@@ -7,8 +7,8 @@ package textChangers;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import fileOperation.ReaderFromFile;
-import fileOperation.WriterToFile;
+import workWithFiles.fileIO.ReaderFromFile;
+import workWithFiles.fileIO.WriterToFile;
 
 public class WithoutCoincidence {
 

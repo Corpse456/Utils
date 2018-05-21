@@ -9,9 +9,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import fileOperation.ReaderFromFile;
-import fileOperation.WriterToFile;
 import parsers.ExcerptFromText;
+import workWithFiles.fileIO.ReaderFromFile;
+import workWithFiles.fileIO.WriterToFile;
 
 /**
  * @author Alxander Neznaev

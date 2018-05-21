@@ -3,7 +3,7 @@ package parsers;
 import java.util.HashMap;
 import java.util.Map;
 
-import fileOperation.ReaderFromFile;
+import workWithFiles.fileIO.ReaderFromFile;
 
 public class CP1251toUTF8 {
 

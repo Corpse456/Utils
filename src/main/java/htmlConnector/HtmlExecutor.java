@@ -106,6 +106,24 @@ public class HtmlExecutor {
         }
         return titleAndLinks;
     }
+
+    public String wikiExecutor(String link) {
+        String wikiContent = contentExecutor(link);
+
+        String title = new ExcerptFromText().TitleFromHtmlPage(wikiContent);
+        String wiki = "";
+        
+        if (link.contains("ru.wikipedia.org")) {
+            wiki = " — Википедия";
+        } else if (link.contains("be.wikipedia.org")) {
+            wiki = " — Вікіпедыя";
+        } else {
+            wiki = " - Wikipedia";
+        }
+        title = title.replaceAll(wiki, "");
+
+        return title;
+    }
     
     public static void main(String[] args) {
         Map<String, String> finded = new HtmlExecutor().findInGoogle("Википедия tesv - skyrim ru");

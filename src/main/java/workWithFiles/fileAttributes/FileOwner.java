@@ -1,4 +1,4 @@
-package fileAttributes;
+package workWithFiles.fileAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,8 +9,6 @@ import java.nio.file.attribute.FileOwnerAttributeView;
 import java.nio.file.attribute.UserPrincipal;
 import java.util.ArrayList;
 import java.util.List;
-
-import fileListings.GamesCataloging;
 
 public class FileOwner {
     
@@ -56,13 +54,9 @@ public class FileOwner {
     
     public static void main (String[] args) {
         FileOwner fileOwner = new FileOwner();
-        List<File> files = fileOwner.getListFilesOfCurrentOwner("z:\\ASU\\Common", "MINSK\\Busko_MY");
         
-        GamesCataloging game = new GamesCataloging();
-        long size = 0;
-        for (File file : files) {
-            size += game.calculateSize(file);
-        }
-        System.out.println(size);
+        fileOwner.getListFilesOfCurrentOwner("z:\\ASU\\Common\\", "MINSK\\Neznaev_AI");
+        
+        System.out.println("Done");
     }
 }

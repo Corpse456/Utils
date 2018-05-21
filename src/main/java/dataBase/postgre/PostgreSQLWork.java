@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import dataBase.DataBaseWork;
-import fileOperation.ReaderFromFile;
+import workWithFiles.fileIO.ReaderFromFile;
 
 /**
  * Operation with Postrge DB

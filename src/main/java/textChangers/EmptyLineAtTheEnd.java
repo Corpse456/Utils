@@ -3,8 +3,8 @@ package textChangers;
 import java.io.File;
 import java.util.List;
 
-import fileOperation.ReaderFromFile;
-import fileOperation.WriterToFile;
+import workWithFiles.fileIO.ReaderFromFile;
+import workWithFiles.fileIO.WriterToFile;
 
 /**
  * Add empty line for all of java files in directory and subirectory
