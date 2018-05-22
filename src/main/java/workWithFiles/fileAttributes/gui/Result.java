@@ -45,6 +45,7 @@ public class Result extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         //высота не работает
         table.setMaximumSize(new Dimension((int) (screenSize.getWidth() / 1.5), (int) (screenSize.getHeight() * 0.7)));
+        table.setAutoscrolls(true);
         scrollPane = new JScrollPane(table);
         scrollPane.setBounds(table.getBounds());
         //доработать Scroll

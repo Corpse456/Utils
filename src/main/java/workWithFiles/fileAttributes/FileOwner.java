@@ -37,7 +37,7 @@ public class FileOwner {
         .collect(Collectors.toList())*/
         
         for (File file : listFiles) {
-            if (file.isDirectory()) scanFilesInFolder(file.listFiles());
+            if (file.isDirectory() && file.listFiles() != null) scanFilesInFolder(file.listFiles());
             else {
                 String ownerName = getOwner(file);
                 String[] nameAndDomain = ownerName.split("\\\\");
@@ -72,7 +72,7 @@ public class FileOwner {
     
     public static void main (String[] args) {
         FileOwner fileOwner = new FileOwner();
-        System.out.println(fileOwner.getOwner("z:\\ASU\\Common\\205\\КАРТРИДЖИ ЗАКУПКА_2-КВАРТАЛ.doc"));
+        System.out.println(fileOwner.getOwner("d:\\Neznaev\\Maven.bat"));
         fileOwner.getListFilesOfCurrentOwner("z:\\ASU\\Common\\205\\", "Neznaev_AI");
         
         System.out.println("Done");
