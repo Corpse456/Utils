@@ -56,11 +56,11 @@ public class FolderProperties {
 
     public static void main (String[] args) {
         long time = System.nanoTime();
-        int calc = new FolderProperties().fileAmount("z:\\Common\\ОАСУ\\Пи-трубы (1) с 24.05.xls");
+        int calc = new FolderProperties().fileAmount("z:\\");
         System.err.println("time: " + (System.nanoTime() - time));
         System.err.println(calc);
         
-        long calculateSize = new FolderProperties().calculateSize(new File("z:\\ASU\\Common\\"));
-        System.out.println(calculateSize);
+        /*long calculateSize = new FolderProperties().calculateSize(new File("z:\\ASU\\Common\\"));
+        System.out.println(calculateSize);*/
     }
 }

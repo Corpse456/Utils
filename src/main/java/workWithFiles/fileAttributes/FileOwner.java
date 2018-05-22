@@ -13,24 +13,32 @@ import java.util.List;
 public class FileOwner {
     
     private String owner;
-    private List<File> files;
+    private List<String> files;
 
-    public List<File> getListFilesOfCurrentOwner (String path, String owner) {
+    public String[] getListFilesOfCurrentOwner (String path, String owner) {
         this.owner = owner;
         files = new ArrayList<>();
         File[] content = new File(path).listFiles();
-        
+
         scanFilesInFolder(content);
         
-        return files;
+        return files.toArray(new String[files.size()]);
     }
     
     private void scanFilesInFolder (File[] listFiles) {
         for (File file : listFiles) {
             if (file.isDirectory()) scanFilesInFolder(file.listFiles());
-            else if (owner.equals(getOwner(file))) {
-                files.add(file);
-                System.out.println(file.getAbsolutePath());
+            else {
+                String ownerName = getOwner(file);
+                String[] nameAndDomain = ownerName.split("\\\\");
+                if (nameAndDomain.length < 2) continue;
+                
+                ownerName = nameAndDomain[1];
+                
+                if (owner.toLowerCase().equals(ownerName.toLowerCase())) {
+                    files.add(file.getAbsolutePath());
+                    System.out.println(file.getAbsolutePath());
+                }
             }
         }
     }
@@ -54,8 +62,8 @@ public class FileOwner {
     
     public static void main (String[] args) {
         FileOwner fileOwner = new FileOwner();
-        
-        fileOwner.getListFilesOfCurrentOwner("z:\\ASU\\Common\\", "MINSK\\Neznaev_AI");
+        System.out.println(fileOwner.getOwner("z:\\ASU\\Common\\205\\КАРТРИДЖИ ЗАКУПКА_2-КВАРТАЛ.doc"));
+        fileOwner.getListFilesOfCurrentOwner("z:\\ASU\\Common\\205\\", "Neznaev_AI");
         
         System.out.println("Done");
     }
