@@ -26,6 +26,16 @@ public class FileOwner {
     }
     
     private void scanFilesInFolder (File[] listFiles) {
+        /*Files.walk(Paths.get("ваш каталог тут"))
+        .filter(Files::isRegularFile)
+        .map(Path::toFile)
+        .collect(Collectors.toList())
+   Или если вам нужны только пути, то просто
+
+   Files.walk(Paths.get("ваш каталог тут"))
+        .filter(Files::isRegularFile)
+        .collect(Collectors.toList())*/
+        
         for (File file : listFiles) {
             if (file.isDirectory()) scanFilesInFolder(file.listFiles());
             else {
