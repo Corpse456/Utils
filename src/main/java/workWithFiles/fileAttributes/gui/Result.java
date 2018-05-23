@@ -93,12 +93,13 @@ public class Result extends JFrame {
 
         layout.setHorizontalGroup(layout.createParallelGroup(Alignment.CENTER)
                 .addComponent(result)
-                .addComponent(table));
+                .addComponent(scrollPane));
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addComponent(result)
-                .addComponent(table));
+                .addComponent(scrollPane));
         
         //добавить кнопки
+        //добавить полосу загрузки
     }
 
     public void run () {
