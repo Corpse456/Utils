@@ -11,12 +11,13 @@ import java.util.stream.Collectors;
 public class ListFiles {
     
     public static void main (String[] args) throws IOException {
+        long time = System.nanoTime();
         List<File> collect = Files.walk(Paths.get("z:\\"))
         .filter(Files::isRegularFile)
         .map(Path::toFile)
         .collect(Collectors.toList());
         /
-        System.out.println(collect.size());
+        System.out.println((System.nanoTime() - time) / 1000000000.0 + collect.size());
         //collect.forEach(e -> System.out.println(e));
     }
 }

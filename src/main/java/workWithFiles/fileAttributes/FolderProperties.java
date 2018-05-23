@@ -11,11 +11,26 @@ public class FolderProperties {
         
         if (file.isDirectory()) {
             File[] catalog = file.listFiles();
+            //вызвать counter, затем пройтись по списку складывая значения в нём
             int amount = counter(catalog);
             return amount;
         }
         
         return 0;
+    }
+    
+    private int counter (File[] catalog) {
+        int amount = 0;
+        
+        for (File file : catalog) {
+            if (file.isDirectory() && file.listFiles() != null) {
+                //не amount+= , а просто рекурсивный вызов
+                amount += counter(file.listFiles());
+            } else amount++;
+        }
+        //не возвращать, а добавлять в потокобезопасный список, если не равно 0
+        //!!!!!или потокобезопасное сложение с переменной!!!!
+        return amount;
     }
     
     /**
@@ -40,18 +55,6 @@ public class FolderProperties {
             }
         }
         return size;
-    }
-
-    private int counter (File[] catalog) {
-        int amount = 0;
-        
-        for (File file : catalog) {
-            if (file.isDirectory() && file.listFiles() != null) {
-                amount += counter(file.listFiles());
-            } else amount++;
-        }
-
-        return amount;
     }
 
     public static void main (String[] args) {
