@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileOwner {
-    
+
     private String owner;
     private List<String> files;
 
@@ -21,34 +21,23 @@ public class FileOwner {
         File[] content = new File(path).listFiles();
 
         scanFilesInFolder(content);
-        
+
         return files.toArray(new String[files.size()]);
     }
-    
-    private void scanFilesInFolder (File[] listFiles) {
-        /*Files.walk(Paths.get("ваш каталог тут"))
-        .filter(Files::isRegularFile)
-        .map(Path::toFile)
-        .collect(Collectors.toList())
-   Или если вам нужны только пути, то просто
 
-   Files.walk(Paths.get("ваш каталог тут"))
-        .filter(Files::isRegularFile)
-        .collect(Collectors.toList())*/
-        
+    private void scanFilesInFolder (File[] listFiles) {
         for (File file : listFiles) {
             if (file.isDirectory() && file.listFiles() != null) scanFilesInFolder(file.listFiles());
-            else {
-                String ownerName = getOwner(file);
-                String[] nameAndDomain = ownerName.split("\\\\");
-                if (nameAndDomain.length < 2) continue;
-                
-                ownerName = nameAndDomain[1];
-                
-                if (owner.toLowerCase().equals(ownerName.toLowerCase())) {
-                    files.add(file.getAbsolutePath());
-                    System.out.println(file.getAbsolutePath());
-                }
+            
+            String ownerName = getOwner(file);
+            String[] nameAndDomain = ownerName.split("\\\\");
+            if (nameAndDomain.length < 2) continue;
+
+            ownerName = nameAndDomain[1];
+
+            if (owner.toLowerCase().equals(ownerName.toLowerCase())) {
+                files.add(file.getAbsolutePath());
+                System.out.println(file.getAbsolutePath());
             }
         }
     }
@@ -69,12 +58,12 @@ public class FileOwner {
         }
         return owner.getName();
     }
-    
+
     public static void main (String[] args) {
         FileOwner fileOwner = new FileOwner();
-        System.out.println(fileOwner.getOwner("d:\\Neznaev\\Maven.bat"));
-        fileOwner.getListFilesOfCurrentOwner("z:\\ASU\\Common\\205\\", "Neznaev_AI");
-        
+        System.out.println(fileOwner.getOwner("d:\\System Volume Information"));
+        // fileOwner.getListFilesOfCurrentOwner("z:\\ASU\\Common\\205\\", "Neznaev_AI");
+
         System.out.println("Done");
     }
 }
