@@ -3,6 +3,7 @@ git clone https://github.com/Corpse456/Utils.git
 git clone https://github.com/GitUser-J2817/AngryChess
 git clone https://github.com/Corpse456/Test.git
 git clone https://github.com/Corpse456/Crib.git
+git clone https://github.com/Corpse456/FileOwnerDeleter.git
 mkdir BigProjects
 cd BigProjects
 git clone https://github.com/Corpse456/Calculator.git

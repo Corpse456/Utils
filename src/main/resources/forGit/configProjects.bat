@@ -22,6 +22,10 @@ cd Utils
 git config user.name "Alexander Neznaev"
 git config user.email Corpsetrup@gmail.com
 cd..
+cd FileOwnerDeleter
+git config user.name "Alexander Neznaev"
+git config user.email Corpsetrup@gmail.com
+cd..
 cd BigProjects
 cd Calculator
 git config user.name "Alexander Neznaev"

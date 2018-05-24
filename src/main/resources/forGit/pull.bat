@@ -18,6 +18,9 @@ cd..
 cd Utils
 git pull
 cd..
+cd FileOwnerDeleter
+git pull
+cd..
 cd BigProjects
 cd Calculator
 git pull

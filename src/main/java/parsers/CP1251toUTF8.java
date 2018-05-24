@@ -28,4 +28,9 @@ public class CP1251toUTF8 {
         }
         return convertedString.toString();
     }
+
+    public static void main (String[] args) {
+        String convert = new CP1251toUTF8().convert("Прывитанне");
+        System.out.println(convert);
+    }
 }
