@@ -197,6 +197,23 @@ public class PostgreSQLWork implements DataBaseWork {
         }
         return answer;
     }
+    
+    @Override
+    public int findColumnsOfSomeName (String tableName, String column, String name, String ...columnNames) {
+        String columnName = "";
+        for (int i = 0; i < columnNames.length; i++) {
+            columnName += columnNames[i];
+            
+            if (i != columnNames.length - 1) columnName += ",";
+        }
+        
+        String query = "SELECT " + columnName + " FROM " + tableName + " WHERE " + column + "='" + name + "'";
+         
+        List<List<String>> answer = executeCustomQuery(query);
+        answer.forEach(list -> list.forEach(string -> System.out.println(string)));
+        
+        return 0;
+    }
 
     @Override
     public boolean eraseAll (String tableName) {

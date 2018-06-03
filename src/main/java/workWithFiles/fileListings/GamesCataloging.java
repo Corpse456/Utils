@@ -11,6 +11,7 @@ import workWithFiles.fileIO.WriterToFile;
 
 public class GamesCataloging {
 
+    public static final String DELIMETER = ",";
     private String DISC_LETTER;
     private String PATH;
 
@@ -30,16 +31,29 @@ public class GamesCataloging {
      * @return
      */
     public boolean createList() {
+        return createList(true);
+    }
+        
+    /**
+     * @param rename - find or not name of the game in google
+     * @return
+     */
+    public boolean createList(boolean rename) {
         WriterToFile writer = null;
         try {
             writer = new WriterToFile(PATH);
             File disc = new File(DISC_LETTER);
+            
             writer.write(discAtributes(disc));
+            
             for (File f : disc.listFiles()) {
                 if (isGame(f)) {
                     long size = new FolderProperties().calculateSize(f);
-                    String name = goodNameApplier(f);
-                    writer.writeLine(name + "," + size);
+                    
+                    String name = f.getName();
+                    if (rename) name = goodNameApplier(f);
+                    
+                    writer.writeLine(name + DELIMETER + size + DELIMETER + f.lastModified());
                 }
             }
         } catch (Exception e) {
@@ -112,8 +126,7 @@ public class GamesCataloging {
      * @return
      */
     public String discAtributes(File disc) {
-        String string = disc.getPath() + "\r\n";
-        string += disc.getFreeSpace() + "\r\n";
+        String string = disc.getFreeSpace() + "\r\n";
         string += disc.getTotalSpace() + "\r\n";
         return string;
     }
@@ -126,6 +139,6 @@ public class GamesCataloging {
 
     public static void main(String[] args) {
         GamesCataloging catalogs = new GamesCataloging("g:", "D:/Games.exe/Three.csv");
-        if (catalogs.createList()) System.out.println("Done");
+        if (catalogs.createList(false)) System.out.println("Done");
     }
 }
