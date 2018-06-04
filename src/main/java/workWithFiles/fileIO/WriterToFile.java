@@ -18,47 +18,57 @@ public class WriterToFile {
     private Writer writer = null;
     private BufferedWriter bufferedWriter = null;
 
+    /**
+     * @param path where nedd to save
+     */
     public WriterToFile(String path) {
         file = new File(path);
         writerCreator(false);
     }
 
+    /**
+     * @param f - file where nedd to save
+     */
     public WriterToFile(File f) {
         file = f;
         writerCreator(false);
     }
     
+    /**
+     * @param path where nedd to save
+     * @param append true if need to add to exists file</br>
+     *               false - write a new 
+     */
     public WriterToFile(String path, boolean append) {
         file = new File(path);
         writerCreator(append);
     }
     
+    /**
+     * @param f - file where nedd to save
+     * @param append true if need to add to exists file</br>
+     *               false - write a new 
+     */
     public WriterToFile(File f, boolean append) {
         file = f;
         writerCreator(append);
     }
 
-    /**
-     * @param append - add to file or write a new
-     * 
-     */
     private void writerCreator(boolean append) {
-        if (!file.isFile() || file.exists()) createFile();
+        if (!file.isFile() || (!append && file.exists())) createFile();
+        
         try {
             writer = new FileWriter(file, append);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
         bufferedWriter = new BufferedWriter(writer);
     }
 
-    /**
-     * путь к файлу задайётся параметром path
-     * 
-     * @param path
-     */
     private void createFile() {
         file.mkdirs();
+        
         if (!file.isFile() || file.exists()) {
             file.delete();
             try {
@@ -116,7 +126,7 @@ public class WriterToFile {
     public <N> void write(List<N> list) {
         for (int i = 0; i < list.size(); i++) {
             if (i != list.size() - 1) writeLine(list.get(i).toString());
-            else write(list.get(i).toString());
+            else write(list.get(i) + ",");
         }
     }
 
@@ -134,7 +144,7 @@ public class WriterToFile {
      * @param map добавляемая в файл
      */
     public <C, N> void write(Map<C, N> map) {
-        write(map, ",");
+        write(map, "=");
     }
 
     /**
