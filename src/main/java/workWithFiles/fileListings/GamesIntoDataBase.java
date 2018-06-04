@@ -46,10 +46,11 @@ public class GamesIntoDataBase {
             
             while(reader.isReady()) {
                 String[] game = reader.readLine().split(GamesCataloging.DELIMETER);
+                
                 String id = findGameId(postgre, game[0]);
                 if (id.isEmpty()) continue;
                 
-                postgre.insertInto(GAMES_TABLE, id, dateFormatter(game), game[1], discName);
+                postgre.insertInto(GAMES_TABLE, id, dateFormatter(game), game[1], findDiscId(postgre, discName));
             }
             
             reader.close();
@@ -57,13 +58,18 @@ public class GamesIntoDataBase {
         postgre.close();
     }
 
+    private static String findDiscId (PostgreSQLWork postgre, String name) {
+        List<List<String>> columns = postgre.findColumnsOfSomeName("discs", "title", name, "id");
+        return columns.get(0).get(0);
+    }
+    
     private static String findGameId (PostgreSQLWork postgre, String name) {
         int lastIndexOf = name.lastIndexOf(".");
         if (lastIndexOf > 0) {
             name = name.substring(0, lastIndexOf);
         }
         
-        List<List<String>> columns = postgre.findColumnsOfSomeName("games", "title", name, "id");
+        List<List<String>> columns = postgre.findColumnsOfSomeName("games", "disc_name", name, "id");
         try {
             return columns.get(0).get(0);
         } catch (IndexOutOfBoundsException e) {
