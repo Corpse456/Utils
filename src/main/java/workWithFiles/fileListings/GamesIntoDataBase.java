@@ -59,7 +59,7 @@ public class GamesIntoDataBase {
     }
 
     private static String findDiscId (PostgreSQLWork postgre, String name) {
-        List<List<String>> columns = postgre.findColumnsOfSomeName("discs", "title", name, "id");
+        List<List<String>> columns = postgre.findColumnsOfSomeName("discs", "disc_name", name, "id");
         return columns.get(0).get(0);
     }
     
@@ -69,7 +69,7 @@ public class GamesIntoDataBase {
             name = name.substring(0, lastIndexOf);
         }
         
-        List<List<String>> columns = postgre.findColumnsOfSomeName("games", "disc_name", name, "id");
+        List<List<String>> columns = postgre.findColumnsOfSomeName("games", "title", name, "id");
         try {
             return columns.get(0).get(0);
         } catch (IndexOutOfBoundsException e) {
