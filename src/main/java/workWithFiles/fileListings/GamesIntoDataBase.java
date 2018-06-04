@@ -46,12 +46,30 @@ public class GamesIntoDataBase {
             
             while(reader.isReady()) {
                 String[] game = reader.readLine().split(GamesCataloging.DELIMETER);
-                postgre.insertInto(GAMES_TABLE, game[0], dateFormatter(game), game[1], discName);
+                String id = findGameId(postgre, game[0]);
+                if (id.isEmpty()) continue;
+                
+                postgre.insertInto(GAMES_TABLE, id, dateFormatter(game), game[1], discName);
             }
             
             reader.close();
         });        
         postgre.close();
+    }
+
+    private static String findGameId (PostgreSQLWork postgre, String name) {
+        int lastIndexOf = name.lastIndexOf(".");
+        if (lastIndexOf > 0) {
+            name = name.substring(0, lastIndexOf);
+        }
+        
+        List<List<String>> columns = postgre.findColumnsOfSomeName("games", "title", name, "id");
+        try {
+            return columns.get(0).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println(name);
+            return "";
+        }
     }
 
     private static String dateFormatter (String[] game) {

@@ -199,7 +199,7 @@ public class PostgreSQLWork implements DataBaseWork {
     }
     
     @Override
-    public int findColumnsOfSomeName (String tableName, String column, String name, String ...columnNames) {
+    public List<List<String>> findColumnsOfSomeName (String tableName, String column, String name, String ...columnNames) {
         String columnName = "";
         for (int i = 0; i < columnNames.length; i++) {
             columnName += columnNames[i];
@@ -207,12 +207,14 @@ public class PostgreSQLWork implements DataBaseWork {
             if (i != columnNames.length - 1) columnName += ",";
         }
         
-        String query = "SELECT " + columnName + " FROM " + tableName + " WHERE " + column + "='" + name + "'";
+        name = name.replace(" ", "%").replaceAll("'", "''");
+        
+        String query = "SELECT " + columnName + " FROM " + tableName + " WHERE " + column + " like '" + name + "'";
+        System.out.println(query);
          
         List<List<String>> answer = executeCustomQuery(query);
-        answer.forEach(list -> list.forEach(string -> System.out.println(string)));
         
-        return 0;
+        return answer;
     }
 
     @Override

@@ -66,7 +66,7 @@ public interface DataBaseWork {
      * @param name - the element whose id must be found
      * @return
      */
-    public int findColumnsOfSomeName(String tableName, String column, String name, String ...columnName);
+    public List<List<String>> findColumnsOfSomeName(String tableName, String column, String name, String ...columnName);
 
     /**
      * @param tableName - the name of the table with which operations will be performed
