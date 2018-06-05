@@ -16,6 +16,13 @@
   </properties>
   
   <dependencies>
+ 	<!-- Selenium -->
+	<dependency>
+		<groupId>org.seleniumhq.selenium</groupId>
+		<artifactId>selenium-java</artifactId>
+		<version>3.4.0</version>
+	</dependency>
+	
   	<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 	<dependency>
     	<groupId>org.postgresql</groupId>
