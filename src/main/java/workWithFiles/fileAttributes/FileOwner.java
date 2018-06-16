@@ -94,7 +94,7 @@ public class FileOwner {
 
     public static void main (String[] args) {
         FileOwner fileOwner = new FileOwner();
-        List<Owner> findAllOwners = fileOwner.findAllOwners("z:\\");
+        List<Owner> findAllOwners = fileOwner.findAllOwners("d:\\Me\\JAVA\\Utils\\");
         findAllOwners.sort((o1, o2) -> o1.getSize().compareTo(o2.getSize()));
         
         for (Owner owner : findAllOwners) {
