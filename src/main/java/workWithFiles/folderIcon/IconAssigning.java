@@ -25,7 +25,6 @@ public class IconAssigning {
         File[] listFiles = folder.listFiles();
 
         for (File file : listFiles) {
-            System.out.println(file);
             if (!file.isDirectory()) continue;
             
             String fileName = currentFolderFinder(file.getAbsolutePath() + "\\");
@@ -40,9 +39,11 @@ public class IconAssigning {
             Path path = Paths.get(newDesktopIni);
             try {
                 Files.setAttribute(path, "dos:hidden", true);
+                Files.setAttribute(Paths.get(file.getAbsolutePath()), "dos:readonly", true);
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
+            System.out.println(file);
         }
     }
 
