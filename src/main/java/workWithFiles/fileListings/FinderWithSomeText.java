@@ -33,6 +33,6 @@ public class FinderWithSomeText {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		new FinderWithSomeText().find("/opt/workspace/pvengine/pvengine_unit/", ".java", "Master Property Category");
+		new FinderWithSomeText().find("/opt/workspace/pvengine/", ".java", "Go to current description");
 	}
 }
