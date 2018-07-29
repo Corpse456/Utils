@@ -38,22 +38,22 @@ public class CombinationString {
     }
 
     private boolean Set () {
-        int i = length - 2;
-        while (i != -1 && array[i].compareTo(array[i + 1]) >= 0) i--;
+        int leftBorder = length - 2;
+        while (leftBorder != -1 && array[leftBorder].compareTo(array[leftBorder + 1]) >= 0) leftBorder--;
 
-        if (i == -1) return false;
+        if (leftBorder == -1) return false;
 
-        int m = length - 1;
-        while (array[i].compareTo(array[m]) >= 0) m--;
+        int rigthBorder = length - 1;
+        while (array[leftBorder].compareTo(array[rigthBorder]) >= 0) rigthBorder--;
 
-        swap(i, m);
+        swap(leftBorder, rigthBorder);
 
-        sortAfterI(i + 1, length - 1);
+        sortAfterLeftBorder(leftBorder + 1, length - 1);
 
         return true;
     }
 
-    private void sortAfterI (int startIndex, int endIndex) {
+    private void sortAfterLeftBorder (int startIndex, int endIndex) {
         while (startIndex < endIndex) {
             swap(startIndex, endIndex);
             startIndex++;
