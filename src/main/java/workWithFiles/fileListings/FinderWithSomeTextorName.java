@@ -25,7 +25,7 @@ public class FinderWithSomeTextorName {
 					ReaderFromFile reader = new ReaderFromFile(f);
 					String content = reader.readAll();
 					
-					if (content.contains(text)) System.out.println(f.getAbsolutePath());
+					if (content.toLowerCase().contains(text.toLowerCase())) System.out.println(f.getAbsolutePath());
 				}
 			}
 		}
@@ -45,11 +45,13 @@ public class FinderWithSomeTextorName {
 		for (File f : folder) {
 			if (f.isDirectory() && f.listFiles() != null) findName(f.listFiles(), name);
 			
-			else if (f.getName().contains(name)) System.out.println(f.getAbsolutePath());
+			else if (f.getName().toLowerCase().contains(name.toLowerCase())) System.out.println(f.getAbsolutePath());
 		}
 	}
 	
 	public static void main(String[] args) throws IOException {
-		new FinderWithSomeTextorName().findContent("/opt/workspace/pvengine/", ".java", "publish_description.properties");
+		new FinderWithSomeTextorName().findContent("/opt/workspace/", ".sh", "");
+		//new FinderWithSomeTextorName().findName("/home/neznaev", "chrome");
+		System.out.println("Done");
 	}
 }

@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import dataBase.postgre.PostgreSQLWork;
+import dataBase.postgre.PostgreSQL;
 import htmlConnector.HtmlExecutor;
 import parsers.ExcerptFromText;
 import workWithFiles.fileIO.GZIPCreator;
@@ -142,7 +142,7 @@ public class Igromania {
         System.out.println((System.nanoTime() - time) / 1000000000.0 / 60 / 60);
         write(games, path);
         
-        PostgreSQLWork.main(path);
+        PostgreSQL.main(path);
         
         GZIPCreator gzip = new GZIPCreator();
         gzip.gzipIt(path);
