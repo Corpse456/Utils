@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import dataBase.postgre.PostgreSQLWork;
+import dataBase.postgre.PostgreSQL;
 import workWithFiles.fileIO.ReaderFromFile;
 
 public class GamesIntoDataBase {
@@ -33,7 +33,7 @@ public class GamesIntoDataBase {
                 .map(Path::toFile)
                 .collect(Collectors.toList());
         
-        PostgreSQLWork postgre = new PostgreSQLWork("Games");
+        PostgreSQL postgre = new PostgreSQL("Games");
         collect.forEach(f -> {
             String discName = f.getName();
             discName = discName.substring(0, discName.length() - CSV.length());
@@ -58,12 +58,12 @@ public class GamesIntoDataBase {
         postgre.close();
     }
 
-    private static String findDiscId (PostgreSQLWork postgre, String name) {
+    private static String findDiscId (PostgreSQL postgre, String name) {
         List<List<String>> columns = postgre.findColumnsOfSomeName("discs", "disc_name", name, "id");
         return columns.get(0).get(0);
     }
     
-    private static String findGameId (PostgreSQLWork postgre, String name) {
+    private static String findGameId (PostgreSQL postgre, String name) {
         int lastIndexOf = name.lastIndexOf(".");
         if (lastIndexOf > 0) {
             name = name.substring(0, lastIndexOf);

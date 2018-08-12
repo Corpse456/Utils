@@ -18,7 +18,7 @@ import workWithFiles.fileIO.ReaderFromFile;
  * @author Neznaev_AI
  *
  */
-public class PostgreSQLWork implements DataBaseWork {
+public class PostgreSQL implements DataBaseWork {
 
     private static final String SELECT_COLUMN_NAME_WITH_DEFAULT = "SELECT column_name, column_default FROM information_schema.columns WHERE table_name = '";
     private static final String SELECT_COLUMN_NAME = "SELECT column_name FROM information_schema.columns WHERE table_name = '";
@@ -33,8 +33,8 @@ public class PostgreSQLWork implements DataBaseWork {
      * @param user - username
      * @param pass - password
      */
-    public PostgreSQLWork (String dbUrl, String user, String pass) {
-        this.dbUrl = dbUrl;
+    public PostgreSQL (String dbUrl, String user, String pass) {
+        this.dbUrl += dbUrl;
         this.user = user;
         this.password = pass;
         openConnection();
@@ -44,7 +44,7 @@ public class PostgreSQLWork implements DataBaseWork {
      * @param dataBaseName - the name of the date base with which operations
      *            will be performed
      */
-    public PostgreSQLWork (String dataBaseName) {
+    public PostgreSQL (String dataBaseName) {
         dbUrl = dbUrl + dataBaseName;
         openConnection();
     }
@@ -247,7 +247,7 @@ public class PostgreSQLWork implements DataBaseWork {
     public static void main (String ...args) {
         List<String> list = new ReaderFromFile(args[0]).readAllAsLIst();
 
-        PostgreSQLWork db = new PostgreSQLWork("Games");
+        PostgreSQL db = new PostgreSQL("Games");
         long time = System.currentTimeMillis();
         for (String string : list) {
             boolean done = db.insertInto("games", string.split(";"));
