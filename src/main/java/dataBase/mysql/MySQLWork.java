@@ -8,7 +8,7 @@ import java.util.List;
 
 import dataBase.DataBaseWork;
 
-public class MySQL  implements DataBaseWork {
+public class MySQLWork  implements DataBaseWork {
 	
 	private String dbUrl = "jdbc:mysql://localhost:3306/propertyview";
     private String user = "propertyview";
@@ -21,7 +21,7 @@ public class MySQL  implements DataBaseWork {
      * @param user - username
      * @param pass - password
      */
-    public MySQL (String dbUrl, String user, String pass) {
+    public MySQLWork (String dbUrl, String user, String pass) {
         this.dbUrl += dbUrl;
         this.user = user;
         this.password = pass;
