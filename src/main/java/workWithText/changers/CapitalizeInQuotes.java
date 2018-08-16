@@ -1,4 +1,4 @@
-package textChangers;
+package workWithText.changers;
 
 import java.util.Locale;
 import java.util.regex.Matcher;

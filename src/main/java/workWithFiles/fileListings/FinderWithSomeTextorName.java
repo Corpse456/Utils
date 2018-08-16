@@ -45,13 +45,13 @@ public class FinderWithSomeTextorName {
 		for (File f : folder) {
 			if (f.isDirectory() && f.listFiles() != null) findName(f.listFiles(), name);
 			
-			else if (f.getName().toLowerCase().contains(name.toLowerCase())) System.out.println(f.getAbsolutePath());
+			else if (f.getName().contains(name)) System.out.println(f.getAbsolutePath());
 		}
 	}
 	
 	public static void main(String[] args) throws IOException {
-		new FinderWithSomeTextorName().findContent("/opt/workspace/", ".sh", "");
-		//new FinderWithSomeTextorName().findName("/home/neznaev", "chrome");
+		new FinderWithSomeTextorName().findContent("/opt/workspace/", ".java", "Sign out");
+//		new FinderWithSomeTextorName().findName("/home/neznaev", "teamview");
 		System.out.println("Done");
 	}
 }

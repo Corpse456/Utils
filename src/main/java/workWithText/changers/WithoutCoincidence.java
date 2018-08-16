@@ -2,7 +2,7 @@
  * Совмещает содержимое двух текстовых фалов не дублируя записи
  */
 
-package textChangers;
+package workWithText.changers;
 
 import java.util.Iterator;
 import java.util.TreeSet;
