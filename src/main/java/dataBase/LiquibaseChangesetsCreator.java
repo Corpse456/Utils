@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,9 +28,13 @@ public class LiquibaseChangesetsCreator {
 	}
 
 	private void createTable(File f) {
+		List<String> annotations = new ArrayList<>();
 		ReaderFromFile reader = new ReaderFromFile(f);
 		while(reader.isReady()) {
 			String currentLine = reader.readLine();
+			if (currentLine.startsWith("@")) {
+				annotations.add(currentLine.replaceAll(regex, replacement));
+			}
 		}
 	}
 
