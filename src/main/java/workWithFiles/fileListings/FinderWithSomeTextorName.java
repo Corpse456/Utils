@@ -50,7 +50,7 @@ public class FinderWithSomeTextorName {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		new FinderWithSomeTextorName().findContent("/opt/workspace/", ".java", "Sign out");
+		new FinderWithSomeTextorName().findContent("/opt/workspace/", ".java", "MDS_USERS");
 //		new FinderWithSomeTextorName().findName("/home/neznaev", "teamview");
 		System.out.println("Done");
 	}

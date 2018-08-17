@@ -18,7 +18,7 @@ import workWithFiles.fileIO.ReaderFromFile;
  * @author Neznaev_AI
  *
  */
-public class PostgreSQL implements DataBaseWork {
+public class PostgreSQL extends DataBaseWork {
 
     private static final String SELECT_COLUMN_NAME_WITH_DEFAULT = "SELECT column_name, column_default FROM information_schema.columns WHERE table_name = '";
     private static final String SELECT_COLUMN_NAME = "SELECT column_name FROM information_schema.columns WHERE table_name = '";
@@ -57,7 +57,8 @@ public class PostgreSQL implements DataBaseWork {
             conn = DriverManager.getConnection(dbUrl, user, password);
             stat = conn.createStatement();
         } catch (SQLException e) {
-            e.printStackTrace();
+        	System.err.println("SQL problem:");
+            System.out.println(e.getMessage());
         }
     }
 
