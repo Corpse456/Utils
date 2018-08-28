@@ -29,6 +29,7 @@ public class FinderWithSomeTextorName {
 				}
 			}
 		}
+		System.out.println("Done");
 	}
 	
 	public void findName(String path, String name) {
@@ -50,8 +51,7 @@ public class FinderWithSomeTextorName {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		new FinderWithSomeTextorName().findContent("/opt/workspace/", ".java", "MDS_USERS");
-//		new FinderWithSomeTextorName().findName("/home/neznaev", "teamview");
-		System.out.println("Done");
+		new FinderWithSomeTextorName().findContent("/opt/workspace/pvengine/pvengine_unit/src/test/java/com/generation_p/pv/pvengine/selenium/mp", ".java", "assign");
+		//new FinderWithSomeTextorName().findName("/opt/workspace/", "driver");
 	}
 }
