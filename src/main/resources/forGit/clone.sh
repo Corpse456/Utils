@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 ECHO
 git clone https://github.com/GitUser-J2817/AngryChess
 git clone https://github.com/Corpse456/Test.git
