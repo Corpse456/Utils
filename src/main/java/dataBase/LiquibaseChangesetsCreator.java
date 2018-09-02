@@ -57,7 +57,7 @@ public class LiquibaseChangesetsCreator {
         for (int i = 0; i < fieldParametr.length; i++) {
             if (ACCESS_TYPES.contains(fieldParametr[i])) {
                 currentEntity.setType(fieldParametr[i + 1]);
-                currentEntity.setName(fieldParametr[i + 2]);
+                currentEntity.setName(fieldParametr[i + 2].replace(";", ""));
                 fields.add(currentEntity);
                 return;
             }
