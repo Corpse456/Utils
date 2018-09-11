@@ -1,9 +1,9 @@
 <scheme name="Corpse" version="142" parent_scheme="Darcula">
   <metaInfo>
-    <property name="created">2018-09-06T11:25:48</property>
+    <property name="created">2018-09-11T14:45:17</property>
     <property name="ide">idea</property>
     <property name="ideVersion">2018.2.2.0.0</property>
-    <property name="modified">2018-09-06T11:26:25</property>
+    <property name="modified">2018-09-11T14:45:44</property>
     <property name="originalScheme">Corpse</property>
   </metaInfo>
   <attributes>
