@@ -1,4 +1,4 @@
-package textChangers;
+package workWithText.changers;
 
 import java.io.File;
 import java.util.List;

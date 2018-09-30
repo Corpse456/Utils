@@ -12,6 +12,7 @@ import dataBase.postgre.PostgreSQL;
 import htmlConnector.HtmlExecutor;
 import parsers.ExcerptFromText;
 import workWithFiles.fileIO.GZIPCreator;
+import workWithFiles.fileIO.ReaderFromFile;
 import workWithFiles.fileIO.WriterToFile;
 
 public class Igromania {
@@ -142,10 +143,26 @@ public class Igromania {
         System.out.println((System.nanoTime() - time) / 1000000000.0 / 60 / 60);
         write(games, path);
         
-        PostgreSQL.main(path);
+        insert(path);
         
         GZIPCreator gzip = new GZIPCreator();
         gzip.gzipIt(path);
+    }
+    
+    private static void insert (String args) {
+        List<String> list = new ReaderFromFile(args).readAllAsLIst();
+
+        PostgreSQL db = new PostgreSQL("Games");
+        long time = System.currentTimeMillis();
+        for (String string : list) {
+            boolean done = db.insertInto("games", string.split(";"));
+            if (!done) {
+                System.out.println("Hren");
+                break;
+            }
+        }
+        db.close();
+        System.out.println(System.currentTimeMillis() - time / 1000.0 / 60);
     }
 
     private static void write(List<List<String>> games, String path) {

@@ -1,0 +1,1295 @@
+{
+	"info": {
+		"_postman_id": "4b078363-8361-448b-9ac5-99987ab0d4f7",
+		"name": "wtn",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "company_crud",
+			"item": [
+				{
+					"name": "authorize_user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "af4d9a43-2435-440f-8c9c-8eb0a140620f",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Authorize user\", function() {",
+									"   pm.response.to.have.status(200);",
+									"   ",
+									"   var authToken = pm.response.headers.get(\"Authorization\");",
+									"   ",
+									"   pm.expect(authToken).to.not.be.empty;",
+									"   ",
+									"   pm.globals.set(\"authToken\", pm.response.headers.get(\"Authorization\"));",
+									"   ",
+									"   /*TODO: We should use user UUID from response*/",
+									"   pm.globals.set(\"userId\", \"8c3bb758-964e-11e8-b19f-4cedfb3cae05\");",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6cf0a9ea-6c22-4625-a25c-7cd2604835cd",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"{{userEmail}}\",\n\t\"password\": \"{{userPassword}}\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post_company",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "cce257d8-8f6a-4236-9c4e-9d2b5ab9fcc1",
+								"type": "text/javascript",
+								"exec": [
+									"pm.globals.set(\"companyToCreateJSON\", JSON.stringify(",
+									"{",
+									"  \"about\": \"About company\",",
+									"  \"address\": {",
+									"    \"buildingNumber\": \"Test Building\",",
+									"    \"city\": \"Test city\",",
+									"    \"country\": {",
+									"      \"id\": 1",
+									"    },",
+									"    \"street\": \"Test street\",",
+									"    \"zipCode\": 220011",
+									"  },",
+									"  \"administratorId\": globals.userId,",
+									"  \"businessTypes\": [",
+									"    \"ACCOMMODATION_APART_HOTEL\"",
+									"  ],",
+									"  \"destinations\": [",
+									"    {",
+									"      \"id\": 100",
+									"    }",
+									"  ],",
+									"  \"industrySegment\": \"ACCOMMODATION\",",
+									"  \"industryType\": \"TRAVEL_INDUSTRY\",",
+									"  \"languageCodes\": [",
+									"    \"eng\"",
+									"  ],",
+									"  \"marketSegments\": [",
+									"    \"ACTIVITY\"",
+									"  ],",
+									"  \"mobilePhone\": \"12321231\",",
+									"  \"name\": \"Test company\",",
+									"  \"numberOfEmployee\": 5,",
+									"  \"operationHours\": \"10-11\",",
+									"  \"settings\": {",
+									"    \"notificationSettings\": {",
+									"      \"membershipPlanShouldBePaid\": true,",
+									"      \"membershipPlanWasPaid\": true,",
+									"      \"popularHolidayCongratulations\": true,",
+									"      \"someoneSendsRequestForConnection\": true,",
+									"      \"someoneStartsToFollow\": true,",
+									"      \"userSentRequestToBeAPartOfTeam\": true",
+									"    },",
+									"    \"privacySettings\": {",
+									"        \"allowMyFollowingContactMe\": true",
+									"    }",
+									"  },",
+									"  \"siteUrl\": \"http://test.com\",",
+									"  \"skype\": \"test.skype.com\",",
+									"  \"socialMedia\": {",
+									"    \"facebookLink\": \"http://test.facebook.com\",",
+									"    \"instagramLink\": \"http://test.instagramm.com\",",
+									"    \"linkedInLink\": \"http://test.linkedin.com\",",
+									"    \"otherLink\": \"http://test.otherlink.com\",",
+									"    \"snapchatUsername\": \"snap test\",",
+									"    \"twitterLink\": \"http://test.twitter.com\",",
+									"    \"weiboUsername\": \"weibo test\",",
+									"    \"youtubeLink\": \"http://test.youtube.com\"",
+									"  },",
+									"  \"tourismTypes\": [",
+									"    \"ACCOMMODATION_ACADEMIC_TRAVEL\"",
+									"  ],",
+									"  \"workEmail\": \"work@test.com\",",
+									"  \"workPhone\": \"123131321\",",
+									"  \"yearOfEstablishment\": \"2018-11-11\",",
+									"  \"logoBase64\": \"7+Kh7r3or2YOTSfOKmyh+Bpq6UBhIYaUURUZf46VuYGzykN1YOGJne2mL7H5c2HSQfGDPq7\"",
+									"}));"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "0c2fe4e7-1d5d-4cbb-86f0-a38e6c13dacc",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Created company is OK\", function() {",
+									"   pm.response.to.have.status(200);",
+									"   pm.globals.set(\"createdCompanyId\", pm.response.text());",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{companyToCreateJSON}}"
+						},
+						"url": {
+							"raw": "{{host}}/company",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search_company",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "cce257d8-8f6a-4236-9c4e-9d2b5ab9fcc1",
+								"type": "text/javascript",
+								"exec": [
+									"pm.globals.set(\"companyToCreateJSON\", JSON.stringify(",
+									"{",
+									"  \"about\": \"About company\",",
+									"  \"address\": {",
+									"    \"buildingNumber\": \"Test Building\",",
+									"    \"city\": \"Test city\",",
+									"    \"country\": {",
+									"      \"id\": 1",
+									"    },",
+									"    \"street\": \"Test street\",",
+									"    \"zipCode\": 220011",
+									"  },",
+									"  \"administratorId\": globals.userId,",
+									"  \"businessTypes\": [",
+									"    \"ACCOMMODATION_APART_HOTEL\"",
+									"  ],",
+									"  \"destinations\": [",
+									"    {",
+									"      \"id\": 100",
+									"    }",
+									"  ],",
+									"  \"industrySegment\": \"ACCOMMODATION\",",
+									"  \"industryType\": \"TRAVEL_INDUSTRY\",",
+									"  \"languageCodes\": [",
+									"    \"eng\"",
+									"  ],",
+									"  \"marketSegments\": [",
+									"    \"ACTIVITY\"",
+									"  ],",
+									"  \"mobilePhone\": \"12321231\",",
+									"  \"name\": \"Test company\",",
+									"  \"numberOfEmployee\": 5,",
+									"  \"operationHours\": \"10-11\",",
+									"  \"settings\": {",
+									"    \"notificationSettings\": {",
+									"      \"membershipPlanShouldBePaid\": true,",
+									"      \"membershipPlanWasPaid\": true,",
+									"      \"popularHolidayCongratulations\": true,",
+									"      \"someoneSendsRequestForConnection\": true,",
+									"      \"someoneStartsToFollow\": true,",
+									"      \"userSentRequestToBeAPartOfTeam\": true",
+									"    },",
+									"    \"privacySettings\": {",
+									"        \"allowMyFollowingContactMe\": true",
+									"    }",
+									"  },",
+									"  \"siteUrl\": \"http://test.com\",",
+									"  \"skype\": \"test.skype.com\",",
+									"  \"socialMedia\": {",
+									"    \"facebookLink\": \"http://test.facebook.com\",",
+									"    \"instagramLink\": \"http://test.instagramm.com\",",
+									"    \"linkedInLink\": \"http://test.linkedin.com\",",
+									"    \"otherLink\": \"http://test.otherlink.com\",",
+									"    \"snapchatUsername\": \"snap test\",",
+									"    \"twitterLink\": \"http://test.twitter.com\",",
+									"    \"weiboUsername\": \"weibo test\",",
+									"    \"youtubeLink\": \"http://test.youtube.com\"",
+									"  },",
+									"  \"tourismTypes\": [",
+									"    \"ACCOMMODATION_ACADEMIC_TRAVEL\"",
+									"  ],",
+									"  \"workEmail\": \"work@test.com\",",
+									"  \"workPhone\": \"123131321\",",
+									"  \"yearOfEstablishment\": \"2018-11-11\",",
+									"  \"logoBase64\": \"7+Kh7r3or2YOTSfOKmyh+Bpq6UBhIYaUURUZf46VuYGzykN1YOGJne2mL7H5c2HSQfGDPq7\"",
+									"}));"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "0c2fe4e7-1d5d-4cbb-86f0-a38e6c13dacc",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Created company is OK\", function() {",
+									"   pm.response.to.have.status(200);",
+									"   pm.globals.set(\"createdCompanyId\", pm.response.text());",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{companyToCreateJSON}}"
+						},
+						"url": {
+							"raw": "{{host}}/company",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_company_by_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f7430d51-b9a7-4a84-8bd7-90df87b86b04",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Successfully created test\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3c9c8cdc-3f69-45b6-9afc-3f5d85e23bb3",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/company/{{createdCompanyId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company",
+								"{{createdCompanyId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_company_preview",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3dcf4f44-f347-4916-bb10-b368219b96b0",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Is company preview status OK\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/company/{{createdCompanyId}}/preview",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company",
+								"{{createdCompanyId}}",
+								"preview"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put_company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "90895368-fd95-44b5-8f74-4676f80d01a1",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Put is OK\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Has changed name value\", function() {",
+									"    ",
+									"    eval(globals.storeCompany)(globals.createdCompanyId, 'companyAfterPut');",
+									"    pm.expect(globals.companyAfterPut).to.have.property('about', 'About after put');",
+									"})"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ec7992a-0469-4223-bd25-fba62a4c25f7",
+								"type": "text/javascript",
+								"exec": [
+									"pm.globals.set(\"companyToPutJSON\", JSON.stringify(",
+									"{",
+									"  \"about\": \"About after put\",",
+									"  \"address\": {",
+									"    \"buildingNumber\": \"Test Building\",",
+									"    \"city\": \"Test city\",",
+									"    \"country\": {",
+									"      \"id\": 1",
+									"    },",
+									"    \"street\": \"Test street\",",
+									"    \"zipCode\": 220011",
+									"  },",
+									"  \"administratorId\": \"{{userId}}\",",
+									"  \"businessTypes\": [",
+									"    \"ACCOMMODATION_APART_HOTEL\"",
+									"  ],",
+									"  \"destinations\": [",
+									"    {",
+									"      \"id\": 100",
+									"    }",
+									"  ],",
+									"  \"industrySegment\": \"ACCOMMODATION\",",
+									"  \"industryType\": \"TRAVEL_INDUSTRY\",",
+									"  \"languageCodes\": [",
+									"    \"eng\"",
+									"  ],",
+									"  \"marketSegments\": [",
+									"    \"ACTIVITY\"",
+									"  ],",
+									"  \"mobilePhone\": \"12321231\",",
+									"  \"name\": \"Test company\",",
+									"  \"numberOfEmployee\": 5,",
+									"  \"operationHours\": \"10-11\",",
+									"  \"settings\": {",
+									"    \"notificationSettings\": {",
+									"      \"membershipPlanShouldBePaid\": true,",
+									"      \"membershipPlanWasPaid\": true,",
+									"      \"popularHolidayCongratulations\": true,",
+									"      \"someoneSendsRequestForConnection\": true,",
+									"      \"someoneStartsToFollow\": true,",
+									"      \"userSentRequestToBeAPartOfTeam\": true",
+									"    },",
+									"    \"privacySettings\": {}",
+									"  },",
+									"  \"siteUrl\": \"http://test.com\",",
+									"  \"skype\": \"test.skype.com\",",
+									"  \"socialMedia\": {",
+									"    \"facebookLink\": \"http://test.facebook.com\",",
+									"    \"instagramLink\": \"http://test.instagramm.com\",",
+									"    \"linkedInLink\": \"http://test.linkedin.com\",",
+									"    \"otherLink\": \"http://test.otherlink.com\",",
+									"    \"snapchatUsername\": \"snap test\",",
+									"    \"twitterLink\": \"http://test.twitter.com\",",
+									"    \"weiboUsername\": \"weibo test\",",
+									"    \"youtubeLink\": \"http://test.youtube.com\"",
+									"  },",
+									"  \"tourismTypes\": [",
+									"    \"ACCOMMODATION_ACADEMIC_TRAVEL\"",
+									"  ],",
+									"  \"workEmail\": \"work@test.com\",",
+									"  \"workPhone\": \"123131321\",",
+									"  \"yearOfEstablishment\": \"2018-11-11\",",
+									"  \"logoBase64\": \"7+Kh7r3or2YOTSfOKmyh+Bpq6UBhIYaUURUZf46VuYGzykN1YOGJne2mL7H5c2HSQfGDPq7\"",
+									"}));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{companyToPutJSON}}"
+						},
+						"url": {
+							"raw": "{{host}}/company/{{createdCompanyId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company",
+								"{{createdCompanyId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch_company",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4919140e-6050-4f31-b2ec-ad094dbc00b3",
+								"type": "text/javascript",
+								"exec": [
+									"console.log(\"BEFOR COMPANY PATCH\");",
+									"",
+									"pm.globals.set(\"patchCompanyRequestBody\", JSON.stringify(",
+									"{",
+									"  \"logoBase64\": \"Field after patch\"",
+									"}));",
+									"",
+									"console.log(\"before get\");",
+									"",
+									"eval(globals.storeCompany)(globals.createdCompanyId, 'companyBeforePatch');",
+									"",
+									"console.log(\"after get\", globals.companyBeforePatch);"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "335a5ed2-9518-44fa-bc1c-918acb398ccd",
+								"type": "text/javascript",
+								"exec": [
+									"var _ =require(\"lodash\");",
+									"",
+									"pm.test(\"Patch is OK\", function() {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"Patch is applied, 'about' has been changed, another fields has not been changed\", function() {",
+									"    ",
+									"    eval(globals.storeCompany)(globals.createdCompanyId, 'companyAfterPatch', function(){",
+									"         pm.expect(globals.companyAfterPatch).to.have.property('about'); ",
+									"         globals.companyAfterPatch.about = globals.companyBeforePatch.about;",
+									"         pm.expect(_.isEqual(globals.companyAfterPatch, globals.companyBeforePatch)).to.be.true;",
+									"    });",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{patchCompanyRequestBody}}"
+						},
+						"url": {
+							"raw": "{{host}}/company/{{createdCompanyId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company",
+								"{{createdCompanyId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6de4e563-d2d8-40c5-a70f-a77ec57e092b",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Delete created company returns OK\", function() {",
+									"    pm.response.to.have.status('OK');",
+									"})",
+									"",
+									"pm.test(\"Can't get deleted company\", function() {",
+									"    eval(globals.storeCompany)(globals.createdCompanyId, 'deletedCompany', function(){",
+									"        globals.previousStoreCompanyRes.to.have.code(404); ",
+									"    });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/company/{{createdCompanyId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company",
+								"{{createdCompanyId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{authToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c535b398-3e99-4005-bdd8-4f70f6c3e71a",
+						"type": "text/javascript",
+						"exec": [
+							"postman.setGlobalVariable(\"storeCompany\", (companyId, globalVariableName, callback) => {",
+							"    ",
+							"    const header = \"Authorization:\" + globals.authToken;",
+							"    const url = environment.host + '/company/' + companyId;",
+							"    const getRequest = {",
+							"        url: url,",
+							"        method: 'GET',",
+							"        header: header",
+							"    };",
+							"    ",
+							"    pm.sendRequest(getRequest, function(err, res) {",
+							"        pm.globals.set('previousStoreCompanyRes', res);",
+							"        pm.globals.set(globalVariableName, res.json());",
+							"        ",
+							"        if(callback) {",
+							"            callback(err, res);   ",
+							"        }",
+							"    });",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9cea8f0a-198d-4717-9d09-3de3f6ceb56e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "public",
+			"item": [
+				{
+					"name": "get_membership_plan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/public/membership_plans",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"public",
+								"membership_plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_dictionary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user_crud",
+			"item": [
+				{
+					"name": "authorize_user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "af4d9a43-2435-440f-8c9c-8eb0a140620f",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Authorize user\", function() {",
+									"   pm.response.to.have.status(200);",
+									"   ",
+									"   var authToken = pm.response.headers.get(\"Authorization\");",
+									"   ",
+									"   pm.expect(authToken).to.not.be.empty;",
+									"   ",
+									"   pm.globals.set(\"authToken\", pm.response.headers.get(\"Authorization\"));",
+									"   ",
+									"   /*TODO: We should use user UUID from response*/",
+									"   pm.globals.set(\"userId\", \"8c3bb758-964e-11e8-b19f-4cedfb3cae05\");",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6cf0a9ea-6c22-4625-a25c-7cd2604835cd",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"{{userEmail}}\",\n\t\"password\": \"{{userPassword}}\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch_membership_plan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/user/{{userId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch_educationPath",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"educationPath\": [\n    {\n      \"nameOfPlace\": \"bgu\",\n      \"subjects\": \"math\",\n      \"city\": \"minsk\",\n      \"country\": {\n        \"id\": 200\n      },\n      \"startDate\": \"2018-08-01\",\n      \"endDate\": \"2018-08-15\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/user/{{userId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch_careerPath",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"careerPath\": [\n    {\n      \"city\": \"string\",\n      \"companyName\": \"string\",\n      \"country\": {\n        \"id\": 0\n      },\n      \"endDate\": \"string\",\n      \"position\": \"string\",\n      \"startDate\": \"string\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{user}}/user/{{userId}}",
+							"host": [
+								"{{user}}"
+							],
+							"path": [
+								"user",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "email_change",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"user@worldtravelnation.ru\",\n\t\"password\": \"{{userPassword}}\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/user/{{userId}}/email",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"{{userId}}",
+								"email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "password_change",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"oldPassword\": \"{{userPassword}}\"\n\t\"newPassword\": \"password\",\n}"
+						},
+						"url": {
+							"raw": "{{host}}/user/{{userId}}/password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"user",
+								"{{userId}}",
+								"password"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{authToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "85a87cfc-3502-4d35-9c3c-2e9f005ce4b6",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9f07353e-9962-417e-a339-2333acf9cd8f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "fam",
+			"item": [
+				{
+					"name": "authorize_user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "af4d9a43-2435-440f-8c9c-8eb0a140620f",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Authorize user\", function() {",
+									"   pm.response.to.have.status(200);",
+									"   ",
+									"   var authToken = pm.response.headers.get(\"Authorization\");",
+									"   ",
+									"   pm.expect(authToken).to.not.be.empty;",
+									"   ",
+									"   pm.globals.set(\"authToken\", pm.response.headers.get(\"Authorization\"));",
+									"   ",
+									"   /*TODO: We should use user UUID from response*/",
+									"   pm.globals.set(\"userId\", \"8c3bb758-964e-11e8-b19f-4cedfb3cae05\");",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6cf0a9ea-6c22-4625-a25c-7cd2604835cd",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"{{userEmail}}\",\n\t\"password\": \"{{userPassword}}\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fam_search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "af4d9a43-2435-440f-8c9c-8eb0a140620f",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Authorize user\", function() {",
+									"   pm.response.to.have.status(200);",
+									"   ",
+									"   var authToken = pm.response.headers.get(\"Authorization\");",
+									"   ",
+									"   pm.expect(authToken).to.not.be.empty;",
+									"   ",
+									"   pm.globals.set(\"authToken\", pm.response.headers.get(\"Authorization\"));",
+									"   ",
+									"   /*TODO: We should use user UUID from response*/",
+									"   pm.globals.set(\"userId\", \"8c3bb758-964e-11e8-b19f-4cedfb3cae05\");",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6cf0a9ea-6c22-4625-a25c-7cd2604835cd",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyQHdvcmxkdHJhdmVsbmF0aW9uLmNvbTo4YzNiYjc1OC05NjRlLTExZTgtYjE5Zi00Y2VkZmIzY2FlMDU6Uk9MRV9VU0VSIiwiZXhwIjoxNTM4ODMzNzQ5fQ.xd0jshzmWXp5WB32ef3pQqTnnS-nsvIc3c0SRsFk-XsfHXnUH-adB_MNIDZ6tHsQHHaFBqNJ-rZy-y1je2mnZg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"limit\": 1\n}"
+						},
+						"url": {
+							"raw": "{{host}}/fam/search",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"fam",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fam_get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "af4d9a43-2435-440f-8c9c-8eb0a140620f",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Authorize user\", function() {",
+									"   pm.response.to.have.status(200);",
+									"   ",
+									"   var authToken = pm.response.headers.get(\"Authorization\");",
+									"   ",
+									"   pm.expect(authToken).to.not.be.empty;",
+									"   ",
+									"   pm.globals.set(\"authToken\", pm.response.headers.get(\"Authorization\"));",
+									"   ",
+									"   /*TODO: We should use user UUID from response*/",
+									"   pm.globals.set(\"userId\", \"8c3bb758-964e-11e8-b19f-4cedfb3cae05\");",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6cf0a9ea-6c22-4625-a25c-7cd2604835cd",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyQHdvcmxkdHJhdmVsbmF0aW9uLmNvbTo4YzNiYjc1OC05NjRlLTExZTgtYjE5Zi00Y2VkZmIzY2FlMDU6Uk9MRV9VU0VSIiwiZXhwIjoxNTM4ODMzNzQ5fQ.xd0jshzmWXp5WB32ef3pQqTnnS-nsvIc3c0SRsFk-XsfHXnUH-adB_MNIDZ6tHsQHHaFBqNJ-rZy-y1je2mnZg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"limit\": 1\n}"
+						},
+						"url": {
+							"raw": "{{host}}/fam/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"fam",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fam_delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "af4d9a43-2435-440f-8c9c-8eb0a140620f",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Authorize user\", function() {",
+									"   pm.response.to.have.status(200);",
+									"   ",
+									"   var authToken = pm.response.headers.get(\"Authorization\");",
+									"   ",
+									"   pm.expect(authToken).to.not.be.empty;",
+									"   ",
+									"   pm.globals.set(\"authToken\", pm.response.headers.get(\"Authorization\"));",
+									"   ",
+									"   /*TODO: We should use user UUID from response*/",
+									"   pm.globals.set(\"userId\", \"8c3bb758-964e-11e8-b19f-4cedfb3cae05\");",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6cf0a9ea-6c22-4625-a25c-7cd2604835cd",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyQHdvcmxkdHJhdmVsbmF0aW9uLmNvbTo4YzNiYjc1OC05NjRlLTExZTgtYjE5Zi00Y2VkZmIzY2FlMDU6Uk9MRV9VU0VSIiwiZXhwIjoxNTM4ODMzNzQ5fQ.xd0jshzmWXp5WB32ef3pQqTnnS-nsvIc3c0SRsFk-XsfHXnUH-adB_MNIDZ6tHsQHHaFBqNJ-rZy-y1je2mnZg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/fam/10",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"fam",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fam_create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 123,\n    \"companyId\": 1,\n    \"companyName\": \"Test company name\",\n    \"description\": {\n        \"title\": \"Title of this fam\",\n        \"destination\": \"Some destination\",\n        \"countries\": [\n            {\n                \"id\": 200,\n                \"name\": \"Belarus\"\n            }\n        ],\n        \"description\": \"Description of this fam\"\n    },\n    \"extrasDescription\": {\n        \"description\": \"Fam description\"\n    },\n    \"dates\": {\n        \"departureDate\": \"2018-09-07\",\n        \"returnDate\": \"2019-01-01\",\n        \"duration\": null\n    },\n    \"rates\": [\n        {\n            \"price\": 0,\n            \"description\": \"Description # 1\",\n            \"currencyCode\": \"EUR\"\n        },\n        {\n            \"price\": 6,\n            \"description\": \"Description # 2\",\n            \"currencyCode\": \"EUR\"\n        },\n        {\n            \"price\": 12,\n            \"description\": \"Description # 3\",\n            \"currencyCode\": \"EUR\"\n        },\n        {\n            \"price\": 18,\n            \"description\": \"Description # 4\",\n            \"currencyCode\": \"EUR\"\n        },\n        {\n            \"price\": 24,\n            \"description\": \"Description # 5\",\n            \"currencyCode\": \"EUR\"\n        },\n        {\n            \"price\": 30,\n            \"description\": \"Description # 6\",\n            \"currencyCode\": \"EUR\"\n        },\n        {\n            \"price\": 36,\n            \"description\": \"Description # 7\",\n            \"currencyCode\": \"EUR\"\n        },\n        {\n            \"price\": 42,\n            \"description\": \"Description # 8\",\n            \"currencyCode\": \"EUR\"\n        },\n        {\n            \"price\": 48,\n            \"description\": \"Description # 9\",\n            \"currencyCode\": \"EUR\"\n        },\n        {\n            \"price\": 54,\n            \"description\": \"Description # 10\",\n            \"currencyCode\": \"EUR\"\n        }\n    ],\n    \"previewPictures\": {\n        \"famPicture\": \"https://www.google.by/search?q=picture&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjCs8O335bdAhWSmLQKHfssCIsQ_AUICigB&biw=1920&bih=990#imgrc=ei9FqDl_Y7pkQM:\",\n        \"moodPicture\": \"https://www.google.by/search?q=picture&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjCs8O335bdAhWSmLQKHfssCIsQ_AUICigB&biw=1920&bih=990#imgrc=bDqTf-17X-NM3M:\"\n    },\n    \"features\": {\n        \"description\": \"Fam feature text\"\n    },\n    \"accommodations\": [\n        {\n            \"description\": \"This is a accommodation number 1 description\",\n            \"link\": \"http://somefakelink.com\"\n        },\n        {\n            \"description\": \"This is a accommodation number 2 description\",\n            \"link\": \"http://somefakelink.com\"\n        },\n        {\n            \"description\": \"This is a accommodation number 3 description\",\n            \"link\": \"http://somefakelink.com\"\n        },\n        {\n            \"description\": \"This is a accommodation number 4 description\",\n            \"link\": \"http://somefakelink.com\"\n        },\n        {\n            \"description\": \"This is a accommodation number 5 description\",\n            \"link\": \"http://somefakelink.com\"\n        },\n        {\n            \"description\": \"This is a accommodation number 6 description\",\n            \"link\": \"http://somefakelink.com\"\n        },\n        {\n            \"description\": \"This is a accommodation number 7 description\",\n            \"link\": \"http://somefakelink.com\"\n        },\n        {\n            \"description\": \"This is a accommodation number 8 description\",\n            \"link\": \"http://somefakelink.com\"\n        },\n        {\n            \"description\": \"This is a accommodation number 9 description\",\n            \"link\": \"http://somefakelink.com\"\n        },\n        {\n            \"description\": \"This is a accommodation number 10 description\",\n            \"link\": \"http://somefakelink.com\"\n        }\n    ],\n    \"conditions\": {\n        \"description\": \"Fam condition description\"\n    },\n    \"days\": [\n        {\n            \"number\": 0,\n            \"description\": \"Fay #1\"\n        },\n        {\n            \"number\": 0,\n            \"description\": \"Fay #2\"\n        },\n        {\n            \"number\": 0,\n            \"description\": \"Fay #3\"\n        },\n        {\n            \"number\": 0,\n            \"description\": \"Fay #4\"\n        },\n        {\n            \"number\": 0,\n            \"description\": \"Fay #5\"\n        }\n    ],\n    \"famStatus\": {\n        \"label\": \"Online\",\n        \"value\": \"ONLINE\"\n    },\n    \"creationDate\": \"2018-08-26T15:51:59\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/fam",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"fam"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{authToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "96ac9adb-8116-4003-b911-626b9edaa9dc",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "86bc4572-ee75-49fd-afd9-83c26711cba0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}

@@ -29,6 +29,7 @@ public class FinderWithSomeTextorName {
 				}
 			}
 		}
+		System.out.println("Done");
 	}
 	
 	public void findName(String path, String name) {
@@ -45,13 +46,12 @@ public class FinderWithSomeTextorName {
 		for (File f : folder) {
 			if (f.isDirectory() && f.listFiles() != null) findName(f.listFiles(), name);
 			
-			else if (f.getName().toLowerCase().contains(name.toLowerCase())) System.out.println(f.getAbsolutePath());
+			else if (f.getName().contains(name)) System.out.println(f.getAbsolutePath());
 		}
 	}
 	
 	public static void main(String[] args) throws IOException {
-		new FinderWithSomeTextorName().findContent("/opt/workspace/", ".sh", "");
-		//new FinderWithSomeTextorName().findName("/home/neznaev", "chrome");
-		System.out.println("Done");
+		new FinderWithSomeTextorName().findContent("/opt/workspace/pvengine/pvengine_unit/src/test/java/com/generation_p/pv/pvengine/selenium/mp", ".java", "assign");
+		//new FinderWithSomeTextorName().findName("/opt/workspace/", "driver");
 	}
 }
