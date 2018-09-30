@@ -23,9 +23,9 @@ public class LinksFromSkypeDilogs {
     private ConcurrentLinkedQueue<Integer> queue = new ConcurrentLinkedQueue<>();
     private int count = 0;
 
-    public Map<String, String> extractLinks(String path, String from, String startString, String to, String endString) {
+    public Map<String, String> extractLinks(String path, String from, String to) {
         ExcerptFromText excerpt = new ExcerptFromText();
-        List<String> links = excerpt.extractExcerptsFromFile(path, from, startString, to, endString);
+        List<String> links = excerpt.extractExcerptsFromFile(path, from, to);
 
         return extractTitle(links);
     }
@@ -42,7 +42,7 @@ public class LinksFromSkypeDilogs {
                     
                     String title = doc != null ? doc.title() : "";
                     
-                    if (title.isEmpty()) { try { title = new ExcerptFromText().TitleFromLink(link); } catch (Exception e) {} }
+                    if (title.isEmpty()) { try { title = new ExcerptFromText().titleFromLink(link); } catch (Exception e) {} }
                     
                     if (title.isEmpty()) title = "NoTitle" + count++;
                     result.put(title, link);
