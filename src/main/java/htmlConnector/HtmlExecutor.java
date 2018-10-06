@@ -110,7 +110,7 @@ public class HtmlExecutor {
     public String wikiExecutor(String link) {
         String wikiContent = contentExecutor(link);
 
-        String title = new ExcerptFromText().TitleFromHtmlPage(wikiContent);
+        String title = new ExcerptFromText().titleFromHtmlPage(wikiContent);
         String wiki = "";
         
         if (link.contains("ru.wikipedia.org")) {
@@ -130,7 +130,7 @@ public class HtmlExecutor {
         String next = finded.values().iterator().next();
         
         ExcerptFromText excerpt = new ExcerptFromText();
-        String title = excerpt.TitleFromLink(next);
+        String title = excerpt.titleFromLink(next);
         
         System.out.println(title);
     }
