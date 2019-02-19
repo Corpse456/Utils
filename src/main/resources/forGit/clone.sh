@@ -1,5 +1,5 @@
 #!/bin/bash
-ECHO
+cd /opt/workspace
 git clone https://github.com/GitUser-J2817/AngryChess
 git clone https://github.com/Corpse456/Test.git
 git clone https://github.com/Corpse456/Crib.git
