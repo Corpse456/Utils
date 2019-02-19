@@ -1,12 +1,13 @@
 <scheme name="Corpse" version="142" parent_scheme="Darcula">
   <metaInfo>
-    <property name="created">2019-02-19T16:01:39</property>
+    <property name="created">2019-02-19T16:08:28</property>
     <property name="ide">idea</property>
     <property name="ideVersion">2018.1.4.0.0</property>
-    <property name="modified">2019-02-19T16:02:04</property>
+    <property name="modified">2019-02-19T16:08:44</property>
     <property name="originalScheme">Corpse</property>
   </metaInfo>
   <colors>
+    <option name="CARET_ROW_COLOR" value="7e7e7e" />
     <option name="SELECTION_BACKGROUND" value="696968" />
   </colors>
   <attributes>
