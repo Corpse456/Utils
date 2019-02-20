@@ -1,9 +1,9 @@
 <scheme name="Corpse" version="142" parent_scheme="Darcula">
   <metaInfo>
-    <property name="created">2019-02-19T16:11:25</property>
+    <property name="created">2019-02-20T15:56:03</property>
     <property name="ide">idea</property>
     <property name="ideVersion">2018.1.4.0.0</property>
-    <property name="modified">2019-02-19T16:11:48</property>
+    <property name="modified">2019-02-20T15:56:22</property>
     <property name="originalScheme">Corpse</property>
   </metaInfo>
   <colors>
@@ -73,6 +73,13 @@
     <option name="ENUM_NAME_ATTRIBUTES">
       <value>
         <option name="FOREGROUND" value="cc81ba" />
+      </value>
+    </option>
+    <option name="IDENTIFIER_UNDER_CARET_ATTRIBUTES">
+      <value>
+        <option name="BACKGROUND" value="919190" />
+        <option name="ERROR_STRIPE_COLOR" value="36b13" />
+        <option name="EFFECT_TYPE" value="1" />
       </value>
     </option>
     <option name="IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES">
