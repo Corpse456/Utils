@@ -28,7 +28,7 @@ import static com.itextpdf.text.Element.ALIGN_LEFT;
 
 public class PDFWriter {
 
-    private final static String PATH = "Ambassador.pdf";
+    private final static String PATH = System.getProperty("java.io.tmpdir") + "Ambassador.pdf";
     private final Document document;
     private final ByteArrayOutputStream os;
     private final static int BETWEEN = 20;
