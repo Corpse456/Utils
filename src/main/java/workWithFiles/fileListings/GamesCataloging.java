@@ -1,13 +1,13 @@
 package workWithFiles.fileListings;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Map;
-
 import htmlConnector.HtmlExecutor;
 import parsers.CP1251toUTF8;
 import workWithFiles.fileAttributes.FolderProperties;
 import workWithFiles.fileIO.WriterToFile;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.Map;
 
 public class GamesCataloging {
 
@@ -23,8 +23,8 @@ public class GamesCataloging {
         DISC_LETTER = disc;
         PATH = path;
     }
-    
-    public GamesCataloging () {
+
+    public GamesCataloging() {
     }
 
     /**
@@ -33,7 +33,7 @@ public class GamesCataloging {
     public boolean createList() {
         return createList(true);
     }
-        
+
     /**
      * @param rename - find or not name of the game in google
      * @return
@@ -43,16 +43,18 @@ public class GamesCataloging {
         try {
             writer = new WriterToFile(PATH);
             File disc = new File(DISC_LETTER);
-            
+
             writer.write(discAtributes(disc));
-            
+
             for (File f : disc.listFiles()) {
                 if (isGame(f)) {
                     long size = new FolderProperties().calculateSize(f);
-                    
+
                     String name = f.getName();
-                    if (rename) name = goodNameApplier(f);
-                    
+                    if (rename) {
+                        name = goodNameApplier(f);
+                    }
+
                     writer.writeLine(name + DELIMETER + size + DELIMETER + f.lastModified());
                 }
             }
@@ -60,22 +62,23 @@ public class GamesCataloging {
             e.printStackTrace();
             return false;
         } finally {
-            writer.close();
+            if (writer != null) {
+                writer.close();
+            }
         }
         return true;
     }
 
     /**
      * @param f - имя папки, для которой необходимо найти имя
-     * @return 
      * @return дата выпуска игры
      */
     private String goodNameApplier(File f) {
-        
+
         String name = f.getName();
         String changedName = name;
         System.out.println(name);
-        
+
         // if f - is file, remember extension
         String extension = "";
         if (f.isFile()) {
@@ -85,16 +88,18 @@ public class GamesCataloging {
                 changedName = changedName.substring(0, lastIndexOf);
             }
         }
-        
+
         //replace all in brackets like this - []
         changedName = changedName.replaceAll("\\[.*]", "");
-        changedName = changedName.toLowerCase().replaceAll("repack", "").replaceAll("codex", "").replaceAll("unigamers", "").replaceAll("r.g.", "");
+        changedName =
+            changedName.toLowerCase().replaceAll("repack", "").replaceAll("codex", "").replaceAll("unigamers", "")
+                .replaceAll("r.g.", "");
         changedName = changedName.replaceAll("_", " ");
         System.out.println(changedName);
-        
+
         HtmlExecutor exec = new HtmlExecutor();
         Map<String, String> googleAnswer = exec.findInGoogle("Википедия " + changedName);
-        
+
         Collection<String> googleLinks = googleAnswer.values();
 
         String series = new CP1251toUTF8().convert("серия");
@@ -107,7 +112,7 @@ public class GamesCataloging {
                 //replace ":" - invalid character in file name
                 newName = newName.replaceAll(":", " -").replaceAll("  ", " ");
                 newName += extension;
-                
+
                 String newNameAndPath = null;
                 if (!name.equals(newName)) {
                     newNameAndPath = f.getAbsolutePath().replace(name, newName);
@@ -133,12 +138,16 @@ public class GamesCataloging {
 
 
     private boolean isGame(File f) {
-        if ("$RECYCLE.BIN".equals(f.getName()) || "System Volume Information".equals(f.getName())) return false;
+        if ("$RECYCLE.BIN".equals(f.getName()) || "System Volume Information".equals(f.getName())) {
+            return false;
+        }
         return true;
     }
 
     public static void main(String[] args) {
         GamesCataloging catalogs = new GamesCataloging("g:", "D:/Games.exe/Three.csv");
-        if (catalogs.createList(false)) System.out.println("Done");
+        if (catalogs.createList(false)) {
+            System.out.println("Done");
+        }
     }
 }
