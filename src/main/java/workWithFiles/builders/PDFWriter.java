@@ -182,5 +182,15 @@ currentDirFile = .
 helper = D:\Me\JAVA\Utils\.
 currentDirFile.getCanonicalPath() = D:\Me\JAVA\Utils
 currentDir = D:*/
+
+        /*file = /tmp/Ambassador.pdf
+java.io.tmpdir = /tmp
+user.dir = /opt/workspace/Utils
+currentDirFile =
+helper = /opt/workspace/Utils
+currentDirFile.getName() =
+replace = /opt/workspace/Utils
+currentDirFile.getCanonicalPath() = /opt/workspace/Utils
+currentDir = */
     }
 }
