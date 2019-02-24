@@ -28,7 +28,7 @@ import static com.itextpdf.text.Element.ALIGN_LEFT;
 
 public class PDFWriter {
 
-    private final static String PATH = System.getProperty("java.io.tmpdir") + "Ambassador.pdf";
+    private final static String PATH = System.getProperty("java.io.tmpdir") + "/Ambassador.pdf";
     private final Document document;
     private final ByteArrayOutputStream os;
     private final static int BETWEEN = 20;
@@ -165,10 +165,12 @@ public class PDFWriter {
 
         System.out.println("user.dir = " + System.getProperty("user.dir"));
 
-        File currentDirFile = new File(".");
+        File currentDirFile = new File("");
         System.out.println("currentDirFile = " + currentDirFile);
         String helper = currentDirFile.getAbsolutePath();
         System.out.println("helper = " + helper);
+        System.out.println("currentDirFile.getName() = " + currentDirFile.getName());
+        System.out.println("replace = " + helper.replaceAll(currentDirFile.getName(), ""));
         System.out.println("currentDirFile.getCanonicalPath() = " + currentDirFile.getCanonicalPath());
         String currentDir = helper.substring(0, helper.length() - currentDirFile.getCanonicalPath().length());
         System.out.println("currentDir = " + currentDir);
