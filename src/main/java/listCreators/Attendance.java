@@ -6,9 +6,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
+import static java.time.format.DateTimeFormatter.ofPattern;
+import static java.util.Locale.ENGLISH;
+
 public class Attendance {
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+    private static final DateTimeFormatter DATE_FORMATTER = ofPattern("yyyy-MM-dd", ENGLISH);
     private final static String PATH = "https://spirit.generation-p.com/attendance";
 
     private void execute() {
