@@ -78,7 +78,7 @@ public class ExcerptFromText {
      */
     public List<String> extractExcerptsFromURL (String path, String from, String to) {
         HtmlExecutor exec = new HtmlExecutor();
-        String content = exec.contentExecutor(path);
+        String content = exec.contentGetExecutor(path);
 
         return extract(content, from, to);
     }

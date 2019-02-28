@@ -13,7 +13,7 @@ public class Onliner {
     public static void main(String[] args) throws IOException {
         HtmlExecutor exec = new HtmlExecutor();
         exec.setCookie(COOKIE);
-        String content = exec.contentExecutor(PATH);
+        String content = exec.contentGetExecutor(PATH);
         // System.out.println(content);
         WriterToFile writer = new WriterToFile("C:/onliner.html");
         writer.write(content);

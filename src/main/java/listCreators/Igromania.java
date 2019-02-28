@@ -35,7 +35,7 @@ public class Igromania {
 
     private void nextPage(int i) {
         HtmlExecutor exec = new HtmlExecutor();
-        String content = exec.contentExecutor(startPath + i + endPath);
+        String content = exec.contentGetExecutor(startPath + i + endPath);
         
         List<String> attribute = gameBox(content);
         for (String block : attribute) {
