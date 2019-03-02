@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -29,16 +30,16 @@ public class Attendance {
     private static final String AFTER = "<\\/td><td>" + FLOUR + "<\\/td>";
     private static final String TIME_REGEXP = "\\d:";
     private static final int SECONDS_IN_8 = 60 * 60 * 8;
-    private static final String CREDENTIAL_PATH = System.getProperty("java.io.tmpdir") + "attendance.csv";
+    private static final String CREDENTIAL_PATH = System.getProperty("java.io.tmpdir") + "/attendance.csv";
 
     private void execute(final String lastName, final String flour) {
-        LocalDate startOfMonth = LocalDate.now().minusDays(1).withDayOfMonth(1);
+        LocalDate startOfMonth = LocalDate.now().minusDays(7).withDayOfMonth(1);
         final int currentMonth = startOfMonth.getMonthValue();
 
         int jobDays = 0;
         int totalSeconds = 0;
         while (currentMonth == startOfMonth.getMonthValue()) {
-            final String time = getForDayStub(lastName, FLOUR + flour, startOfMonth);
+            final String time = getForDay(lastName, FLOUR + flour, startOfMonth);
             if (time != null) {
                 final int[] split = Stream.of(time.split(":")).mapToInt(Integer::parseInt).toArray();
                 totalSeconds += split[0] * 3600 + split[1] * 60 + split[2];
@@ -72,6 +73,12 @@ public class Attendance {
         map.put("calendar", date.format(DATE_FORMATTER));
         map.put("user", lastName);
         String content = exec.contentPostExecutor(PATH, map);
+        try {
+            final FileWriter writer = new FileWriter("content" + LocalDateTime.now());
+            writer.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         final String afterTotal = content.split("TOTAL")[1];
         final ExcerptFromText excerpt = new ExcerptFromText();
