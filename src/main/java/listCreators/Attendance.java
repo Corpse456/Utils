@@ -39,7 +39,7 @@ public class Attendance {
         int jobDays = 0;
         int totalSeconds = 0;
         while (currentMonth == startOfMonth.getMonthValue()) {
-            final String time = getForDay(lastName, FLOUR + flour, startOfMonth);
+            final String time = getForDayStub(lastName, FLOUR + flour, startOfMonth);
             if (time != null) {
                 final int[] split = Stream.of(time.split(":")).mapToInt(Integer::parseInt).toArray();
                 totalSeconds += split[0] * 3600 + split[1] * 60 + split[2];
