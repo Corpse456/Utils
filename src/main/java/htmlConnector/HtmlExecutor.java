@@ -87,6 +87,7 @@ public class HtmlExecutor {
 
             if (cookie != null) {
                 connection.setRequestProperty("Cookie", cookie);
+                connection.setRequestProperty("Authorization", "Basic bmV6bmFldjpGYWxsb3V0NzY=");
             }
             connection.setRequestProperty("User-Agent",
                                           "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36");
