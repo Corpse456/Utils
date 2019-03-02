@@ -23,7 +23,7 @@ public class Attendance {
     private static final DateTimeFormatter DATE_FORMATTER = ofPattern("yyyy-MM-dd", ENGLISH);
     private final static String PATH = "https://spirit.generation-p.com/attendance";
     private static final String LAST_NAME = "lastName";
-    private static final String BEFORE = LAST_NAME + "</td><td></td><td></td><td>";
+    private static final String BEFORE = LAST_NAME + "<\\/td><td><\\/td><td><\\/td><td>";
     private static final String FLOUR = "Flour";
     private static final String AFTER = "<\\/td><td>" + FLOUR + "<\\/td>";
     private static final String TIME_REGEXP = "\\d:";
