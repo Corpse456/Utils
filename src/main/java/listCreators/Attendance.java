@@ -76,6 +76,7 @@ public class Attendance {
         try {
             final FileWriter writer = new FileWriter("content" + System.currentTimeMillis());
             writer.write(content);
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
