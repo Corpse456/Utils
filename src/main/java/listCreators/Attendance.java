@@ -74,7 +74,7 @@ public class Attendance {
         map.put("user", lastName);
         String content = exec.contentPostExecutor(PATH, map);
         try {
-            final FileWriter writer = new FileWriter("content" + LocalDateTime.now());
+            final FileWriter writer = new FileWriter("content" + System.currentTimeMillis());
             writer.write(content);
         } catch (IOException e) {
             e.printStackTrace();
