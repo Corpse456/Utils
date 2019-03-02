@@ -8,12 +8,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Stream;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -60,13 +58,33 @@ public class Attendance {
     }
 
     private String getForDayStub(final String lastName, final String flour, final LocalDate date) {
-        if (Math.random() < 0.2) {
+        /*if (Math.random() < 0.2) {
+            return null;
+        }*/
+        try {
+            final BufferedReader bufferedReader = new BufferedReader(new FileReader("conten" + date.getDayOfMonth()));
+            final StringBuilder stringBuilder = new StringBuilder();
+            while (bufferedReader.ready()) {
+                stringBuilder.append(bufferedReader.readLine());
+            }
+            final String afterTotal = stringBuilder.toString().split("TOTAL")[1];
+            final ExcerptFromText excerpt = new ExcerptFromText();
+
+            final List<String> excerpts =
+                excerpt.extractExcerptsFromText(afterTotal, BEFORE.replace(LAST_NAME, lastName),
+                                                AFTER.replace(FLOUR, flour), TIME_REGEXP);
+            if (excerpts.isEmpty()) {
+                return null;
+            }
+            return excerpts.get(0);
+        } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
-        final Random random = new Random();
-        return random.nextInt(4) + 6 + ":" + random.nextInt(60) + ":" + random.nextInt(60);
+        /*final Random random = new Random();
+        return random.nextInt(4) + 6 + ":" + random.nextInt(60) + ":" + random.nextInt(60);*/
     }
-    
+
     private String getForDay(final String lastName, final String flour, final LocalDate date) {
         HtmlExecutor exec = new HtmlExecutor();
         final HashMap<String, String> map = new HashMap<>();
