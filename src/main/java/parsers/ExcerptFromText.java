@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 public class ExcerptFromText {
 
     private static final String CONTENT_REGXP = "\\s\\S";
+    private static final String LENGTH = "*";
 
     /**
      * @param content
@@ -44,7 +45,7 @@ public class ExcerptFromText {
      * @return
      */
     public List<String> extractExcerptsFromText(String content, String from, String to) {
-        return extract(content, from, to, CONTENT_REGXP);
+        return extract(content, from, to, CONTENT_REGXP, "*");
     }
 
     /**
@@ -55,7 +56,7 @@ public class ExcerptFromText {
      * @return
      */
     public List<String> extractExcerptsFromText(String content, String from, String to, final String contentRegxp) {
-        return extract(content, from, to, contentRegxp);
+        return extract(content, from, to, contentRegxp, LENGTH);
     }
 
     /**
@@ -68,7 +69,7 @@ public class ExcerptFromText {
         ReaderFromFile reader = new ReaderFromFile(file);
         String content = reader.readAll();
 
-        return extract(content, from, to, CONTENT_REGXP);
+        return extract(content, from, to, CONTENT_REGXP, LENGTH);
     }
 
     /**
@@ -91,13 +92,17 @@ public class ExcerptFromText {
         HtmlExecutor exec = new HtmlExecutor();
         String content = exec.contentGetExecutor(path);
 
-        return extract(content, from, to, CONTENT_REGXP);
+        return extract(content, from, to, CONTENT_REGXP, LENGTH);
     }
 
-    private static List<String> extract(String content, String from, String to, final String contentRegxp) {
+    public static List<String> extract(final String content,
+                                       final String from,
+                                       final String to,
+                                       final String contentRegexp,
+                                       final String length) {
         List<String> matches = new ArrayList<>();
 
-        String pattern = "(?<=" + from + ")([" + contentRegxp + "]*?)(?=" + to + ")";
+        String pattern = "(?<=" + from + ")([" + contentRegexp + "]" + length + "?)(?=" + to + ")";
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(content);
 
