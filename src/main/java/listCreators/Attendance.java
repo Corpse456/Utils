@@ -31,7 +31,7 @@ public class Attendance {
     private static final String CREDENTIAL_PATH = System.getProperty("java.io.tmpdir") + "/attendance.csv";
 
     private void execute(final String lastName, final String flour) {
-        LocalDate startOfMonth = LocalDate.now().minusMonths(1).withDayOfMonth(1);
+        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
         final int currentMonth = startOfMonth.getMonthValue();
 
         int jobDays = 0;
