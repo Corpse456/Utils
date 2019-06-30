@@ -1,6 +1,6 @@
 package htmlConnector;
 
-import parsers.CP1251toUTF8;
+import com.google.gson.Gson;
 import parsers.ExcerptFromText;
 
 import java.io.BufferedReader;
@@ -9,12 +9,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.LinkedHashMap;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class HtmlExecutor {
 
+    private static final String GOOGLE = "https://www.googleapis.com/customsearch/v1?key=";
+    private static final String API_KEY = "AIzaSyBzrncKHG5QvdgxVLnUaFnvJguMNGWGVgE";
+    private static final String SEARCH_ENGINE = "016782248932805790950:fxjqnp1ffvw";
+    private static final String SEARCH_URL = GOOGLE + API_KEY + "&cx=" + SEARCH_ENGINE + "&q=";
     private String encoding = "UTF-8";
     private HttpURLConnection connection;
     private String cookie = null;
@@ -45,7 +50,7 @@ public class HtmlExecutor {
                 connection.setRequestProperty("Cookie", cookie);
             }
             connection.setRequestProperty("User-Agent",
-                                          "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36");
+                                          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36");
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), encoding));
 
             String inputLine;
@@ -150,29 +155,16 @@ public class HtmlExecutor {
      * @param text - текст, который необходимо найти в гугл
      * @return - Map описаний ссылок и самих сссылок (title, link)
      */
-    public Map<String, String> findInGoogle(String text) {
-        text = text.replaceAll(" ", "+");
-        CP1251toUTF8 converter = new CP1251toUTF8();
-        text = converter.convert(text);
-
-        String answer = contentGetExecutor("https://www.google.by/search?q=" + text + "\"&num=10\"");
-
-        ExcerptFromText excerpt = new ExcerptFromText();
-        List<String> links = excerpt.extractExcerptsFromText(answer, "<h3 class=\"r\">", "</h3>");
-
-        Map<String, String> titleAndLinks = new LinkedHashMap<>();
-        for (String s : links) {
-            List<String> linkList = excerpt.extractExcerptsFromText(s, "<a href=\"", "\"");
-            String link = !linkList.isEmpty() ? linkList.get(0) : "";
-
-            List<String> titleList = excerpt.extractExcerptsFromText(s, ">", "</a>");
-            String title = !titleList.isEmpty() ? titleList.get(0) : "";
-
-            if (!link.isEmpty()) {
-                titleAndLinks.put(title, link);
-            }
+    public List<GoogleResult.Item> findInGoogle(final String text) {
+        InputStreamReader reader = null;
+        try {
+            URL url = new URL(SEARCH_URL + URLEncoder.encode(text, encoding));
+            reader = new InputStreamReader(url.openStream(), encoding);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return titleAndLinks;
+
+        return new Gson().fromJson(reader, GoogleResult.class).getItems();
     }
 
     public String wikiExecutor(String link) {
@@ -194,12 +186,7 @@ public class HtmlExecutor {
     }
 
     public static void main(String[] args) {
-        Map<String, String> finded = new HtmlExecutor().findInGoogle("Википедия tesv - skyrim ru");
-        String next = finded.values().iterator().next();
-
-        ExcerptFromText excerpt = new ExcerptFromText();
-        String title = excerpt.titleFromLink(next);
-
-        System.out.println(title);
+        List<GoogleResult.Item> found = new HtmlExecutor().findInGoogle("Википедия tesv - skyrim ru");
+        found.forEach(m -> System.out.println(m.getTitle()));
     }
 }

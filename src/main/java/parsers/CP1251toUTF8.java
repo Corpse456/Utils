@@ -11,7 +11,7 @@ public class CP1251toUTF8 {
 
     public CP1251toUTF8() {
         alphabet = new HashMap<>();
-        ReaderFromFile reader = new ReaderFromFile(CP1251toUTF8.class.getClassLoader().getResource("RussionSymbols.csv"));
+        ReaderFromFile reader = new ReaderFromFile(CP1251toUTF8.class.getClassLoader().getResource("RussianSymbols.csv"));
         while (reader.isReady()) {
             String[] current = reader.readLine().split(",");
             alphabet.put(current[1], current[0]);
