@@ -1,26 +1,31 @@
 package workWithFiles.fileListings;
 
 import htmlConnector.HtmlExecutor;
+import org.apache.commons.lang3.StringUtils;
 import parsers.CP1251toUTF8;
 import workWithFiles.fileAttributes.FolderProperties;
 import workWithFiles.fileIO.WriterToFile;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class GamesCataloging {
 
-    public static final String DELIMETER = ",";
+    static final String DELIMETER = ",";
     private String DISC_LETTER;
     private String PATH;
+    private static final List<String> EXCLUDES = Arrays.asList("$RECYCLE.BIN", "System Volume Information", "My");
 
     /**
      * @param disc - буква диска
      * @param path - путь для фала с именами
      */
     public GamesCataloging(String disc, String path) {
-        DISC_LETTER = disc;
+        DISC_LETTER = disc + ":";
         PATH = path;
     }
 
@@ -47,12 +52,13 @@ public class GamesCataloging {
             writer.write(discAtributes(disc));
 
             for (File f : disc.listFiles()) {
-                if (isGame(f)) {
+                if (!EXCLUDES.contains(f.getName())) {
                     long size = new FolderProperties().calculateSize(f);
 
                     String name = f.getName();
                     if (rename) {
                         name = goodNameApplier(f);
+                        Thread.sleep(1000);
                     }
 
                     writer.writeLine(name + DELIMETER + size + DELIMETER + f.lastModified());
@@ -74,7 +80,6 @@ public class GamesCataloging {
      * @return дата выпуска игры
      */
     private String goodNameApplier(File f) {
-
         String name = f.getName();
         String changedName = name;
         System.out.println(name);
@@ -113,17 +118,25 @@ public class GamesCataloging {
                 newName = newName.replaceAll(":", " -").replaceAll("  ", " ");
                 newName += extension;
 
-                String newNameAndPath = null;
+                String newNameAndPath;
                 if (!name.equals(newName)) {
                     newNameAndPath = f.getAbsolutePath().replace(name, newName);
                     System.out.println(newNameAndPath);
-                    f.renameTo(new File(newNameAndPath));
+                    rename(f, newNameAndPath);
                     return newName;
                 }
                 break;
             }
         }
         return name;
+    }
+
+    private void rename(final File f, final String newNameAndPath) {
+        System.err.println(f.getAbsolutePath() + " will be renamed to " + newNameAndPath);
+        String input = new Scanner(System.in).nextLine();
+        if (StringUtils.isNotEmpty(input) && "y".equals(input.toLowerCase())) {
+            f.renameTo(new File(newNameAndPath));
+        }
     }
 
     /**
@@ -136,17 +149,9 @@ public class GamesCataloging {
         return string;
     }
 
-
-    private boolean isGame(File f) {
-        if ("$RECYCLE.BIN".equals(f.getName()) || "System Volume Information".equals(f.getName())) {
-            return false;
-        }
-        return true;
-    }
-
     public static void main(String[] args) {
-        GamesCataloging catalogs = new GamesCataloging("g:", "D:/Games.exe/Three.csv");
-        if (catalogs.createList(false)) {
+        GamesCataloging catalogs = new GamesCataloging("x", "D:/Games.exe/Four.csv");
+        if (catalogs.createList(true)) {
             System.out.println("Done");
         }
     }

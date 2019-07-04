@@ -1,5 +1,8 @@
 package htmlConnector;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import parsers.CP1251toUTF8;
 import parsers.ExcerptFromText;
 
@@ -7,8 +10,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -155,22 +161,13 @@ public class HtmlExecutor {
         CP1251toUTF8 converter = new CP1251toUTF8();
         text = converter.convert(text);
 
-        String answer = contentGetExecutor("https://www.google.by/search?q=" + text + "\"&num=10\"");
+        String answer = contentGetExecutor("https://www.google.by/search?q=" + text + "&num=20" + "&ie=UTF-8");
 
-        ExcerptFromText excerpt = new ExcerptFromText();
-        List<String> links = excerpt.extractExcerptsFromText(answer, "<h3 class=\"r\">", "</h3>");
+        final Elements results = Jsoup.parse(answer).getElementsByTag("h3");
 
         Map<String, String> titleAndLinks = new LinkedHashMap<>();
-        for (String s : links) {
-            List<String> linkList = excerpt.extractExcerptsFromText(s, "<a href=\"", "\"");
-            String link = !linkList.isEmpty() ? linkList.get(0) : "";
-
-            List<String> titleList = excerpt.extractExcerptsFromText(s, ">", "</a>");
-            String title = !titleList.isEmpty() ? titleList.get(0) : "";
-
-            if (!link.isEmpty()) {
-                titleAndLinks.put(title, link);
-            }
+        for (Element result : results) {
+            titleAndLinks.put(result.text(), results.get(0).parent().attributes().get("href"));
         }
         return titleAndLinks;
     }
@@ -194,8 +191,8 @@ public class HtmlExecutor {
     }
 
     public static void main(String[] args) {
-        Map<String, String> finded = new HtmlExecutor().findInGoogle("Википедия tesv - skyrim ru");
-        String next = finded.values().iterator().next();
+        Map<String, String> found = new HtmlExecutor().findInGoogle("Википедия tesv - skyrim ru");
+        String next = found.values().iterator().next();
 
         ExcerptFromText excerpt = new ExcerptFromText();
         String title = excerpt.titleFromLink(next);
