@@ -1,7 +1,9 @@
 package workWithFiles.xml;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -19,6 +21,11 @@ public class XMLContentChanger {
     private static final String TAGNAME = "propertiesContent";
 
     public static void main(String[] args) throws Exception {
+        final String[] arg = {"d:/config.xml"};
+        convert(arg);
+    }
+
+    public static void convert(String[] args) throws Exception {
         for (final String xml : args) {
             convert(xml);
         }
@@ -67,8 +74,11 @@ public class XMLContentChanger {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         dbFactory.setIgnoringComments(true);
+        dbFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         dbFactory.setIgnoringElementContentWhitespace(true);
-        return dBuilder.parse(inputFile);
+        final Document document = dBuilder.parse(inputFile);
+        document.getDocumentElement().normalize();
+        return document;
     }
 
     private static String getTagData(final Document doc) {

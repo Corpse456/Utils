@@ -58,7 +58,6 @@ public class GamesCataloging {
                     String name = f.getName();
                     if (rename) {
                         name = goodNameApplier(f);
-                        Thread.sleep(1000);
                     }
 
                     writer.writeLine(name + DELIMETER + size + DELIMETER + f.lastModified());
@@ -151,7 +150,7 @@ public class GamesCataloging {
 
     public static void main(String[] args) {
         GamesCataloging catalogs = new GamesCataloging("x", "D:/Games.exe/Four.csv");
-        if (catalogs.createList(true)) {
+        if (catalogs.createList(false)) {
             System.out.println("Done");
         }
     }
