@@ -1,62 +1,76 @@
 package workWithFiles.xml;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class XMLContentChanger {
 
-    private static final String TAGNAME = "propertiesContent";
+    private static final String START_TAG = "<propertiesContent>";
+    private static final String END_TAG = "</propertiesContent>";
 
     public static void main(String[] args) throws Exception {
-        final String[] arg = {"d:/config.xml"};
-        convert(arg);
-    }
-
-    public static void convert(String[] args) throws Exception {
         for (final String xml : args) {
             convert(xml);
         }
     }
 
     private static void convert(String xmlName) throws Exception {
-        final Document document = getDocument(xmlName);
-        String[] properties = getTagData(document).split("\n");
+        final StringBuilder result = new StringBuilder();
+        final BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(xmlName)));
 
-        final String propertyAsString = getProperties(properties);
-        setTagData(document, propertyAsString);
+        while (bufferedReader.ready()) {
+            String line = bufferedReader.readLine();
 
-        saveXml(xmlName, document);
-    }
-
-    private static String getProperties(final String[] properties) {
-        final Properties propertiesToSave = new Properties();
-        for (final String property : properties) {
-            final String[] splitted = property.split("=");
-            propertiesToSave.put(getStringReformatted(splitted[0]), getStringReformatted(splitted[1]));
+            if (line.contains(START_TAG)) {
+                appendProperties(result, bufferedReader, line);
+            } else {
+                result.append(line).append("\n");
+            }
         }
-        return getPropertyAsString(propertiesToSave);
+        bufferedReader.close();
+
+        final String newName = xmlName.replace(".xml", "_New.xml");
+        try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(newName)))) {
+            bufferedWriter.write(result.toString());
+        }
     }
 
-    private static void saveXml(final String xmlName, final Document document) throws TransformerException {
-        document.setXmlStandalone(true);
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(document);
-        StreamResult result = new StreamResult(new File(xmlName.replace(".xml", "_New.xml")));
-        transformer.transform(source, result);
+    private static void appendProperties(final StringBuilder result,
+                                         final BufferedReader bufferedReader,
+                                         String line) throws IOException {
+        final List<String> prop = new ArrayList<>();
+
+        result.append(START_TAG).append("\n");
+
+        prop.add(line.split(START_TAG)[1]);
+        while (!(line = bufferedReader.readLine()).contains(END_TAG)) {
+            prop.add(line);
+        }
+        prop.add(line.replace(END_TAG, ""));
+        final String properties = getProperties(prop);
+
+        result.append(properties);
+        result.append(END_TAG).append("\n");
+    }
+
+    private static String getProperties(final List<String> properties) {
+        final Properties propertiesToSave = new Properties();
+        properties.forEach(p -> {
+            if (p.contains("=")) {
+                final String[] split = p.split("=");
+                propertiesToSave.put(getStringReformatted(split[0]), getStringReformatted(split[1]));
+            }
+        });
+        return getPropertyAsString(propertiesToSave);
     }
 
     private static String getStringReformatted(final String string) {
@@ -67,25 +81,5 @@ public class XMLContentChanger {
         StringWriter writer = new StringWriter();
         prop.list(new PrintWriter(writer));
         return writer.getBuffer().toString();
-    }
-
-    private static Document getDocument(final String xml) throws Exception {
-        File inputFile = new File(xml);
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        dbFactory.setIgnoringComments(true);
-        dbFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        dbFactory.setIgnoringElementContentWhitespace(true);
-        final Document document = dBuilder.parse(inputFile);
-        document.getDocumentElement().normalize();
-        return document;
-    }
-
-    private static String getTagData(final Document doc) {
-        return doc.getElementsByTagName(TAGNAME).item(0).getFirstChild().getNodeValue();
-    }
-
-    private static void setTagData(final Document doc, final String value) {
-        doc.getElementsByTagName(TAGNAME).item(0).getFirstChild().setNodeValue(value);
     }
 }
