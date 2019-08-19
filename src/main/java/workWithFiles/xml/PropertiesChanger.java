@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 public class PropertiesChanger {
 
     public static void main(String[] args) throws Exception {
+        for (final String arg : args) {
+            System.out.println("arg = " + arg);
+        }
         final List<String> listArgs = Arrays.asList(args);
         List<String> inputFileNames = getOptionValues("file", listArgs);
         final List<File> files = addFolder(inputFileNames);
@@ -51,10 +54,15 @@ public class PropertiesChanger {
         for (int i = propertyIndex + 1; i < args.size() && args.get(i).charAt(0) != '-'; i++) {
             list.add(args.get(i));
         }
+        if (list.isEmpty()) {
+            System.out.println("Missed argument " + property);
+            System.exit(1);
+        }
         return list;
     }
 
     private static Map<String, String> getPropertiesMap(final List<String> args) {
+        System.out.println("properties = " + args);
         final Map<String, String> properties = new HashMap<>();
         for (final String arg : args) {
             final String[] split = arg.split("=");
