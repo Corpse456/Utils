@@ -1,48 +1,71 @@
 package workWithFiles.xml;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class PropertiesChanger {
+public class PropertiesChanger2 {
 
     public static void main(String[] args) throws Exception {
-        final List<String> listArgs = Arrays.asList(args);
-        List<String> inputFiles = getOptionValues("file", listArgs);
-        List<String> propertiesList = getOptionValues("property", listArgs);
+        CommandLine cmd = getCommandLine(args);
+
+        String[] inputFiles = cmd.getOptionValues("file");
+        String[] propertiesList = cmd.getOptionValues("property");
 
         final Map<String, String> properties = getPropertiesMap(propertiesList);
 
         for (final String inputFile : inputFiles) {
             convert(inputFile, properties);
         }
-        System.out.println("Done");
     }
 
-    private static List<String> getOptionValues(final String property, final List<String> args) {
-        final List<String> list = new ArrayList<>();
-        final int propertyIndex = Integer.max(args.indexOf("--" + property), args.indexOf("-" + property.charAt(0)));
-
-        for (int i = propertyIndex + 1; i < args.size() && args.get(i).charAt(0) != '-'; i++) {
-            list.add(args.get(i));
-        }
-        return list;
-    }
-
-    private static Map<String, String> getPropertiesMap(final List<String> args) {
+    private static Map<String, String> getPropertiesMap(final String[] args) {
         final Map<String, String> properties = new HashMap<>();
         for (final String arg : args) {
             final String[] split = arg.split("=");
             properties.put(split[0], split[1]);
         }
         return properties;
+    }
+
+    private static CommandLine getCommandLine(final String[] args) {
+        Options options = new Options();
+
+        addOption(options, "File path", "file");
+        addOption(options, "Properties", "property");
+
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd = null;
+
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            formatter.printHelp("PropertiesChanger2", options);
+
+            System.exit(1);
+        }
+        return cmd;
+    }
+
+    private static void addOption(final Options options, final String description, final String longOpt) {
+        Option file = new Option(longOpt.charAt(0) + "", longOpt, true, description);
+        file.setRequired(true);
+        file.setArgs(Option.UNLIMITED_VALUES);
+        options.addOption(file);
     }
 
     private static void convert(String xmlName, final Map<String, String> properties) throws Exception {
