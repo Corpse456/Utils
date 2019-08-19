@@ -37,12 +37,16 @@ public class PropertiesChanger {
             final File file = new File(inputFileName);
             if (file.isDirectory()) {
                 files.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles()))
-                                 .filter(f -> f.getName().contains("." + type)).collect(Collectors.toList()));
+                                 .filter(f -> isContains(f.getName(), type)).collect(Collectors.toList()));
             } else {
                 files.add(file);
             }
         }
         return files;
+    }
+
+    private static boolean isContains(final String name, final String value) {
+        return name.toLowerCase().contains(("." + value).toLowerCase());
     }
 
     private static List<String> getOptionValues(final String property, final List<String> args) {
