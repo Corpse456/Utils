@@ -16,13 +16,12 @@ import java.util.stream.Collectors;
 public class PropertiesChanger {
 
     public static void main(String[] args) throws Exception {
-        for (final String arg : args) {
-            System.out.println("arg = " + arg);
-        }
         final List<String> listArgs = Arrays.asList(args);
         List<String> inputFileNames = getOptionValues("file", listArgs);
-        final List<File> files = addFolder(inputFileNames);
+        String type = getOptionValues("type", listArgs).get(0);
         List<String> propertiesList = getOptionValues("property", listArgs);
+
+        final List<File> files = addFolders(inputFileNames, type);
 
         final Map<String, String> properties = getPropertiesMap(propertiesList);
 
@@ -32,13 +31,13 @@ public class PropertiesChanger {
         System.out.println("Done");
     }
 
-    private static List<File> addFolder(final List<String> inputFileNames) {
+    private static List<File> addFolders(final List<String> inputFileNames, final String type) {
         final List<File> files = new ArrayList<>();
         for (final String inputFileName : inputFileNames) {
             final File file = new File(inputFileName);
             if (file.isDirectory()) {
                 files.addAll(Arrays.stream(Objects.requireNonNull(file.listFiles()))
-                                 .filter(f -> f.getName().contains(".properties")).collect(Collectors.toList()));
+                                 .filter(f -> f.getName().contains("." + type)).collect(Collectors.toList()));
             } else {
                 files.add(file);
             }
@@ -55,14 +54,13 @@ public class PropertiesChanger {
             list.add(args.get(i));
         }
         if (list.isEmpty()) {
-            System.out.println("Missed argument " + property);
+            System.err.println("Missed argument " + property);
             System.exit(1);
         }
         return list;
     }
 
     private static Map<String, String> getPropertiesMap(final List<String> args) {
-        System.out.println("properties = " + args);
         final Map<String, String> properties = new HashMap<>();
         for (final String arg : args) {
             final String[] split = arg.split("=");
