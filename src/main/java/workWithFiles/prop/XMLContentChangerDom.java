@@ -1,7 +1,6 @@
-package workWithFiles.xml;
+package workWithFiles.prop;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -50,7 +49,7 @@ public class XMLContentChangerDom {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(document);
-        StreamResult result = new StreamResult(new File(xmlName.replace(".xml", "_New.xml")));
+        StreamResult result = new StreamResult(new File(xmlName.replace(".prop", "_New.prop")));
         transformer.transform(source, result);
     }
 

@@ -1,4 +1,4 @@
-package workWithFiles.xml;
+package workWithFiles.prop;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

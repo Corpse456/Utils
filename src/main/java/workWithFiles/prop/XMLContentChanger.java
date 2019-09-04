@@ -1,4 +1,4 @@
-package workWithFiles.xml;
+package workWithFiles.prop;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -38,7 +38,7 @@ public class XMLContentChanger {
         }
         bufferedReader.close();
 
-        final String newName = xmlName.replace(".xml", "_New.xml");
+        final String newName = xmlName.replace(".prop", "_New.prop");
         try (final BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(newName)))) {
             bufferedWriter.write(result.toString());
         }

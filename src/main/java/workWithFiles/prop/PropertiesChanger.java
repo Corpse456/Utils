@@ -1,4 +1,4 @@
-package workWithFiles.xml;
+package workWithFiles.prop;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
