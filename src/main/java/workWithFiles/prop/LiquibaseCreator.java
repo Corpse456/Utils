@@ -117,7 +117,7 @@ public class LiquibaseCreator {
             result.append(getReplaced(id, "<![CDATA[Travel Industry Media Newsfeed (In Development)]]>", group,
                                       "TICK", "1"));
             result.append(getReplaced(id, "Placement in Search Results", group, "TICK", "1"));
-            result.append(getReplaced(id, "<b>Unlimited</b> Instant Messaging", group, "TICK", "1"));
+            result.append(getReplaced(id, "<![CDATA[<b>Unlimited</b> Instant Messaging]]>", group, "TICK", "1"));
         } else {
             result.append(getReplaced(id, "<![CDATA[Placement & Company Logo Shown in Search Results]]>", group,
                                       "TICK", "1"));
