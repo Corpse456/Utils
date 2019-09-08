@@ -200,9 +200,11 @@ public class LiquibaseCreator {
 
     private static void group11(final StringBuilder result, final Integer id) {
         final String group = "GROUP11";
-        result
-            .append(getReplaced(id, "<![CDATA[<b>50% discount for each additional Premium Profile (first year)</b>]]>",
-                                group, "STAR", "1"));
+        if (COMPANY_IDS.contains(id)) {
+            result.append(
+                getReplaced(id, "<![CDATA[<b>50% discount for each additional Premium Profile (first year)</b>]]>",
+                            group, "STAR", "1"));
+        }
     }
 
     private static String getReplaced04(final Integer id, final String feature, final String group, final String title,
