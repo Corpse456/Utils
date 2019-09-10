@@ -136,10 +136,10 @@ public class LiquibaseCreator {
     private static void group06(final StringBuilder result, final Integer id) {
         final String group = "GROUP06";
         if (BASIC_ID.equals(id)) {
-            result.append(getReplaced(id, "<![CDATA[Access to Fam trips - <b>only view</b>]]>", group,
+            result.append(getReplaced(id, "<![CDATA[Access to FAM Trips - <b>only view</b>]]>", group,
                                       "TICK", "1"));
         } else {
-            result.append(getReplaced(id, "<![CDATA[Access to Fam trips]]>", group, "TICK", "1"));
+            result.append(getReplaced(id, "<![CDATA[Access to FAM Trips]]>", group, "TICK", "1"));
         }
 
         if (PERSON_IDS.contains(id)) {
