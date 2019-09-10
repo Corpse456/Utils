@@ -6,7 +6,7 @@ import java.util.List;
 
 public class LiquibaseCreator {
 
-    private static final List<Integer> PERSON_IDS = Arrays.asList(11, 20, 122, 222, 10011, 10021);
+    private static final List<Integer> PERSON_IDS = Arrays.asList(11, 20, 122, 222, 10011, 10014, 10021);
     private static final List<Integer> COMPANY_IDS =
         Arrays.asList(13, 14, 15, 16, 17, 18, 19, 25, 26, 27, 28, 29, 110, 10012, 10013, 10022);
     private static final Integer BASIC_ID = 112;
@@ -108,16 +108,16 @@ public class LiquibaseCreator {
                                   "TICK", "1"));
         result.append(getReplaced(id, "<![CDATA[<b>Unlimited</b> Following & Followers]]>", group,
                                   "TICK", "1"));
-        result.append(getReplaced(id, "<![CDATA[<b>Unlimited</b> Member & Companies Search]]>", group,
+        result.append(getReplaced(id, "<![CDATA[<b>Unlimited</b> Member & Companies Searches]]>", group,
                                   "TICK", "1"));
-        result.append(getReplaced(id, "Placement in Search Results", group, "TICK", "1"));
 
         if (ALL_PERSONS_IDS.contains(id)) {
             result.append(getReplaced(id, "<![CDATA[Individual Newsfeed (In Development)]]>", group,
                                       "TICK", "1"));
             result.append(getReplaced(id, "<![CDATA[Travel Industry Media Newsfeed (In Development)]]>", group,
                                       "TICK", "1"));
-            result.append(getReplaced(id, "Unlimited Instant Messaging", group, "TICK", "1"));
+            result.append(getReplaced(id, "Placement in Search Results", group, "TICK", "1"));
+            result.append(getReplaced(id, "<![CDATA[<b>Unlimited</b> Instant Messaging]]>", group, "TICK", "1"));
         } else {
             result.append(getReplaced(id, "<![CDATA[Placement & Company Logo Shown in Search Results]]>", group,
                                       "TICK", "1"));
@@ -125,7 +125,6 @@ public class LiquibaseCreator {
                                       "TICK", "1"));
             result.append(getReplaced(id, "<![CDATA[<b>Unlimited</b> Instant & GROUP Messaging]]>", group,
                                       "TICK", "1"));
-            result.append(getReplaced(id, "Unlimited Instant Messaging", group, "TICK", "1"));
         }
         if (ALL_WITHOUT_BASIC_IDS.contains(id)) {
             result.append(getReplaced(id, "<![CDATA[<b>Advanced Search by Location or Categories</b>]]>", group,
@@ -201,9 +200,11 @@ public class LiquibaseCreator {
 
     private static void group11(final StringBuilder result, final Integer id) {
         final String group = "GROUP11";
-        result
-            .append(getReplaced(id, "<![CDATA[<b>50% discount for each additional Premium Profile (first year)</b>]]>",
-                                group, "STAR", "1"));
+        if (COMPANY_IDS.contains(id)) {
+            result.append(
+                getReplaced(id, "<![CDATA[<b>50% discount for each additional Premium Profile (first year)</b>]]>",
+                            group, "STAR", "1"));
+        }
     }
 
     private static String getReplaced04(final Integer id, final String feature, final String group, final String title,
