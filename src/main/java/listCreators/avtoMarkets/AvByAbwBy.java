@@ -1,6 +1,7 @@
 package listCreators.avtoMarkets;
 
 import htmlConnector.HtmlExecutor;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,17 +12,29 @@ import java.util.List;
 
 public class AvByAbwBy {
 
-    public static void main(String[] args) {
+    private static final String ABW_ADDRESS = "https://kompanii.abw.by/tip_avtohaus";
+    private static final String AV_ADDRESS = "https://av.by/company/page/";
+
+    public static void main2(String[] args) {
         final List<Company> companies = getCompaniesFromABW();
         companies.addAll(getCompaniesFromAV());
+    }
+
+    public static void main(String[] args) {
+        getCompaniesFromAV();
     }
 
     private static List<Company> getCompaniesFromAV() {
         final List<Company> companies = new ArrayList<>();
 
+        final HtmlExecutor htmlExecutor = new HtmlExecutor();
+        String content = " ";
+        for (int i = 1;  StringUtils.isNotEmpty(content); i++) {
+            content = htmlExecutor.contentGetExecutor(AV_ADDRESS + i);
+            System.out.println("content = " + content);
+        }
 
-
-        return companies ;
+        return companies;
     }
 
     private static List<Company> getCompaniesFromABW() {
@@ -49,7 +62,7 @@ public class AvByAbwBy {
 
     private static Elements getListElements() {
         final HtmlExecutor htmlExecutor = new HtmlExecutor();
-        final String content = htmlExecutor.contentGetExecutor("https://kompanii.abw.by/tip_avtohaus");
+        final String content = htmlExecutor.contentGetExecutor(ABW_ADDRESS);
         Document html = Jsoup.parse(content);
         return html.getElementsByClass("CompanyListingItem");
     }
