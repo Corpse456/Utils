@@ -1,55 +1,93 @@
 package listCreators.avtoMarkets;
 
 import htmlConnector.HtmlExecutor;
-import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Function;
 
 public class AvByAbwBy {
 
-    private static final String ABW_ADDRESS = "https://kompanii.abw.by/tip_avtohaus";
-    private static final String AV_ADDRESS = "https://av.by/company/page/";
+    private static final String AV_URL = "https://av.by/company/page/";
+    private static final String AV_ELEMENT_CLASS = "dealer-item";
+    private static final String AV_LINK_CLASS = "dealer-item-heading";
+    private static final String AV_ADDRESS_CLASS = "dealer-item-address";
 
-    public static void main2(String[] args) {
-        final List<Company> companies = getCompaniesFromABW();
-        companies.addAll(getCompaniesFromAV());
-    }
+    private static final String ABW_URL = "https://kompanii.abw.by/tip_avtohaus";
+    private static final String ABW_ELEMENT_CLASS = "CompanyListingItem";
+    private static final String ABW_ADDRESS_CLASS = "CompanyListingItem__address";
+    private static final String ABW_LINK_CLASS = "CompanyListingItem__link";
 
     public static void main(String[] args) {
-        getCompaniesFromAV();
+        final Set<Company> companies = getCompaniesFromABW();
+        companies.addAll(getCompaniesFromAV());
+        companies.forEach(System.out::println);
     }
 
-    private static List<Company> getCompaniesFromAV() {
-        final List<Company> companies = new ArrayList<>();
+    private static Set<Company> getCompaniesFromAV() {
+        final Set<Company> companies = new TreeSet<>();
 
-        final HtmlExecutor htmlExecutor = new HtmlExecutor();
-        String content = " ";
-        for (int i = 1;  StringUtils.isNotEmpty(content); i++) {
-            content = htmlExecutor.contentGetExecutor(AV_ADDRESS + i);
-            System.out.println("content = " + content);
-        }
+        int i = 0;
+        while (companies.addAll(getCompaniesFromAV(++i)));
 
         return companies;
     }
 
-    private static List<Company> getCompaniesFromABW() {
-        final List<Company> companies = new ArrayList<>();
-        final Elements companyListingItem = getListElements();
+    private static Set<Company> getCompaniesFromABW() {
+        return getCompaniesFromUrl(ABW_URL, ABW_ELEMENT_CLASS, ABW_ADDRESS_CLASS, ABW_LINK_CLASS, e -> e.childNode(2));
+    }
 
-        for (final Element element : companyListingItem) {
-            final String address = getAddress(element);
+    private static Set<Company> getCompaniesFromAV(final int i) {
+        return getCompaniesFromUrl(AV_URL + i, AV_ELEMENT_CLASS, AV_ADDRESS_CLASS, AV_LINK_CLASS,
+                                   e -> e.childNode(1).childNode(0).childNode(0));
+    }
+
+    private static Set<Company> getCompaniesFromUrl(final String url,
+                                                    final String listElementClass,
+                                                    final String addressClass,
+                                                    final String linkClass,
+                                                    final Function<Element, Node> nodeFinder) {
+        final Set<Company> companies = new TreeSet<>();
+        final Elements companyListingItems = getListElements(url, listElementClass);
+
+        for (final Element element : companyListingItems) {
+            final String address = getAddress(element, addressClass);
             if (address.contains("Минск")) {
-                final String title = getTitle(element);
+                final String title = getTitle(element, linkClass, nodeFinder);
                 final Company company = new Company(title, getAddressWithoutCity(address));
                 companies.add(company);
             }
         }
         return companies;
+    }
+
+    private static Elements getListElements(final String address, final String className) {
+        final HtmlExecutor htmlExecutor = new HtmlExecutor();
+        final String content = htmlExecutor.contentGetExecutor(address);
+        Document html = Jsoup.parse(content);
+        return html.getElementsByClass(className);
+    }
+
+    private static String getAddress(final Element element, final String className) {
+        final String addressElement = element.getElementsByClass(className).get(0).text();
+        return addressElement.trim().replaceAll("\\([^)]*\\)", "");
+    }
+
+    private static String getTitle(final Element element,
+                                   final String className,
+                                   final Function<Element, Node> nodeFinder) {
+        final Element link = element.getElementsByClass(className).get(0);
+        final Node node = nodeFinder.apply(link);
+        return node.toString().trim()
+            .replaceAll("&quot;", "\"")
+            .replaceAll("&raquo;", "\"")
+            .replaceAll("&laquo;", "\"")
+            .replaceAll("&amp;", "&");
     }
 
     private static String getAddressWithoutCity(final String address) {
@@ -58,22 +96,5 @@ public class AvByAbwBy {
             .replaceAll("г. Минск,", "")
             .replaceAll("г.Минск, ", "")
             .replaceAll("г.Минск,", "");
-    }
-
-    private static Elements getListElements() {
-        final HtmlExecutor htmlExecutor = new HtmlExecutor();
-        final String content = htmlExecutor.contentGetExecutor(ABW_ADDRESS);
-        Document html = Jsoup.parse(content);
-        return html.getElementsByClass("CompanyListingItem");
-    }
-
-    private static String getTitle(final Element element) {
-        final Elements link = element.getElementsByClass("CompanyListingItem__link");
-        return link.get(0).childNode(2).toString().trim();
-    }
-
-    private static String getAddress(final Element element) {
-        final String addressElement = element.getElementsByClass("CompanyListingItem__address").get(0).text();
-        return addressElement.trim().replaceAll("\\([^)]*\\)", "");
     }
 }
