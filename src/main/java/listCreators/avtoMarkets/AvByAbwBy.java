@@ -95,6 +95,7 @@ public class AvByAbwBy {
             .replaceAll("г. Минск, ", "")
             .replaceAll("г. Минск,", "")
             .replaceAll("г.Минск, ", "")
+            .replaceAll("г. Минск ", "")
             .replaceAll("г.Минск,", "");
     }
 }
