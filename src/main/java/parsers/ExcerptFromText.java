@@ -88,7 +88,7 @@ public class ExcerptFromText {
      * @param to
      * @return
      */
-    public List<String> extractExcerptsFromURL(String path, String from, String to) {
+    public static List<String> extractExcerptsFromURL(String path, String from, String to) {
         HtmlExecutor exec = new HtmlExecutor();
         String content = exec.contentGetExecutor(path);
 
@@ -106,6 +106,10 @@ public class ExcerptFromText {
 
     public static List<String> extractTextFromBrackets(final String content, final String bracket) {
         return extractTextFromBrackets(content, bracket, bracket);
+    }
+
+    public static boolean contains(final String content, final String startString, final String endString) {
+        return !extractExcerptsFromURL(content, startString, endString).isEmpty();
     }
 
     public static List<String> extractTextFromBrackets(final String content, final String leftBracket, final String rightBracket) {
