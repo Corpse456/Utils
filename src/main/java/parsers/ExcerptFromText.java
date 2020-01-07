@@ -88,7 +88,7 @@ public class ExcerptFromText {
      * @param to
      * @return
      */
-    public List<String> extractExcerptsFromURL(String path, String from, String to) {
+    public static List<String> extractExcerptsFromURL(String path, String from, String to) {
         HtmlExecutor exec = new HtmlExecutor();
         String content = exec.contentGetExecutor(path);
 
@@ -100,9 +100,24 @@ public class ExcerptFromText {
                                        final String to,
                                        final String contentRegexp,
                                        final String length) {
-        List<String> matches = new ArrayList<>();
-
         String pattern = "(?<=" + from + ")([" + contentRegexp + "]" + length + "?)(?=" + to + ")";
+        return extract(content, pattern);
+    }
+
+    public static List<String> extractTextFromBrackets(final String content, final String bracket) {
+        return extractTextFromBrackets(content, bracket, bracket);
+    }
+
+    public static boolean contains(final String content, final String startString, final String endString) {
+        return !extractExcerptsFromURL(content, startString, endString).isEmpty();
+    }
+
+    public static List<String> extractTextFromBrackets(final String content, final String leftBracket, final String rightBracket) {
+        return extract(content, leftBracket + "(.*?)" + rightBracket);
+    }
+
+    private static List<String> extract(final String content, final String pattern) {
+        List<String> matches = new ArrayList<>();
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(content);
 
