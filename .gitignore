@@ -13,8 +13,13 @@
 /RemoteSystemsTempFiles/*
 #
 /bin/*
+/out/*
+/log/*
+/build/*
 /target/*
 /.settings/*
+/.gradle/*
+/gradle/*
 
 # Log file
 *.log
