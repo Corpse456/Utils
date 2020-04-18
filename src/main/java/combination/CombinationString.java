@@ -11,7 +11,7 @@ public class CombinationString {
     private String[] array;
     private int length;
 
-    public static void main (String[] args) {
+    public static void main2 (String[] args) {
         String[] mass = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "A" };
         
         long time = System.currentTimeMillis();
@@ -32,12 +32,12 @@ public class CombinationString {
 
         do {
             oneOptionAdd();
-        } while (Set());
+        } while (canSet());
 
         return variants;
     }
 
-    private boolean Set () {
+    private boolean canSet() {
         int leftBorder = length - 2;
         while (leftBorder != -1 && array[leftBorder].compareTo(array[leftBorder + 1]) >= 0) leftBorder--;
 

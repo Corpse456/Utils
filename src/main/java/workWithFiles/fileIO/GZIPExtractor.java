@@ -68,7 +68,7 @@ public class GZIPExtractor {
         return content;
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         URL url = GZIPExtractor.class.getClassLoader().getResource("Games.csv.gz");
         List<String> list = new GZIPExtractor().fromGzipToMemoryAsList(url.getPath());
 
