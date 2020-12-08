@@ -2,6 +2,11 @@ pipeline {
     agent {
         label 'delphi'
     }
+    properties {
+      parameters {
+        booleanParam(name: 'UPDATE_DB', defaultValue: false, description: '')
+      }
+    }
     options { timestamps() }
     stages {
         stage('Build') {
