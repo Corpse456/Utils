@@ -17,7 +17,7 @@ pipeline {
                     }
 
                     env._DB_ACCOUNT = env.BRANCH_NAME
-                    build job: 'TECH-817_Deploy_Pipeline', parameters: [string(name: 'UPDATE_DB', value: env.UPDATE_DB), string(name: '_DB_ACCOUNT', value: '_DB_ACCOUNT')]
+                    build job: 'TECH-817_Deploy_Pipeline', parameters: [string(name: 'UPDATE_DB', value: env.UPDATE_DB), string(name: '_DB_ACCOUNT', value: env._DB_ACCOUNT)]
                 }
             }
         }
