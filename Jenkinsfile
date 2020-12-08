@@ -44,3 +44,7 @@ pipeline {
         }
     }
 }
+
+void sendEmail() {
+    emailext body: '$DEFAULT_CONTENT', to: '$EMAIL_JIS_DEV_TEAM', replyTo: '$DEFAULT_REPLYTO', subject: '$DEFAULT_SUBJECT', recipientProviders: [culprits(), requestor()]
+}
