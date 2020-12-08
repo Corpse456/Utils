@@ -2,16 +2,21 @@ pipeline {
     agent {
         label 'delphi'
     }
-    properties {
-      parameters {
-        booleanParam(name: 'UPDATE_DB', defaultValue: false, description: '')
-      }
+    options {
+        timestamps()
+
+        parameters {
+            booleanParam(name: 'UPDATE_DB', defaultValue: false, description: '')
+        }
     }
-    options { timestamps() }
     stages {
         stage('Build') {
             steps {
                 script {
+                    if ("Branch indexing" == currentBuild.getBuildCauses()?.first().shortDescription) {
+                        return
+                    }
+
                     env._DB_ACCOUNT = env.BRANCH_NAME
                     currentBuild.displayName = "#${currentBuild.number} (${_DB_ACCOUNT})"
                     prepareEnvironments()
