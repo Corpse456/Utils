@@ -5,9 +5,9 @@ pipeline {
     options {
         timestamps()
 
-        parameters {
+        parameters ([
             booleanParam(name: 'UPDATE_DB', defaultValue: false, description: '')
-        }
+        ])
     }
     stages {
         stage('Build') {
