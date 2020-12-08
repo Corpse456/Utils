@@ -8,9 +8,9 @@ static void createBranch(String accountName) {
         for (int i = 1; i < text.size(); i++) {
             branches.add(text[i].replaceAll(" ", "").replace("origin/", ""))
         }
-        if (branches.contains(accountName)) {
-            print (("git branch -d " + accountName).execute().text)
-            print (("git push origin --delete " + accountName).execute().text)
+        if (!branches.contains(accountName)) {
+            ("git checkout -b " + accountName).execute()
+            ("git push origin " + accountName).execute()
         }
     }
 }
